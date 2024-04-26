@@ -12,7 +12,7 @@ public class ExpedienteValidador
             return false;
         }
 
-        if (expediente.ID <= 0)
+        if (expediente.Id <= 0)
         {
             mensajeError = "El ID debe ser válido (Entero mayor que 0).";
             return false;
