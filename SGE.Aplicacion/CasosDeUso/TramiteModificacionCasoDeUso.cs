@@ -2,7 +2,7 @@
 
 namespace SGE.Aplicacion.CasosDeUso;
 
-public class CasoDeUsoTramiteModificacion(ITramiteRepositorio repositorio)
+public class TramiteModificacionCasoDeUso(ITramiteRepositorio repositorio)
 {
     
 }

@@ -2,7 +2,7 @@
 
 namespace SGE.Aplicacion.CasosDeUso;
 
-public class CasoDeUsoExpedienteAlta(IExpedienteRepositorio repositorio)
+public class ExpedienteAltaCasoDeUso(IExpedienteRepositorio repositorio)
 {
     
 }
