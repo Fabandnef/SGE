@@ -1,24 +1,20 @@
 ﻿using SGE.Aplicacion.Entidades;
+using SGE.Aplicacion.Excepciones;
 
 namespace SGE.Aplicacion.Validadores;
 
 public class TramiteValidador
 {
-    public bool Validar(Tramite tramite, out string mensajeError)
+    public bool Validar(Tramite tramite)
     {
-        if (string.IsNullOrEmpty(tramite.Contenido))
-        {
-            mensajeError = "El contenido de un trámite no puede estar vacío.";
-            return false;
+        if (string.IsNullOrEmpty(tramite.Contenido)) {
+            throw new ValidacionException("El contenido no puede estar vacío.");
         }
 
-        if (tramite.ID <= 0)
-        {
-            mensajeError = "El ID debe ser válido (Entero mayor que 0).";
-            return false;
+        if (tramite.ID <= 0) {
+            throw new ValidacionException("El ID debe ser válido (Entero mayor que 0).");
         }
-
-        mensajeError = "";
+        
         return true;
     }
 }
