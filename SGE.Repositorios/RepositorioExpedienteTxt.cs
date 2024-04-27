@@ -7,11 +7,19 @@ namespace SGE.Repositorios;
 public class RepositorioExpedienteTxt : IExpedienteRepositorio
 {
     private const  string RutaArchivo = "Expedientes.txt";
-    static private int    _ultimoId   = 1;
+    static private int    _ultimoId;
+
+    public RepositorioExpedienteTxt()
+    {
+        if (File.Exists(RutaArchivo) && (new FileInfo(RutaArchivo).Length > 0) && (_ultimoId == 0)) {
+            _ultimoId = ObtenerUltimoId();
+        }
+    }
+
     public void ExpedienteAlta(Expediente expediente)
     {
-        expediente.Id = _ultimoId++;
-        
+        expediente.Id = ++_ultimoId;
+
         using StreamWriter sw = new(RutaArchivo, true);
         sw.WriteLine(expediente.ToString());
     }
@@ -19,7 +27,7 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
     public void ExpedienteModificar(Expediente expedienteNuevo)
     {
         // TODO: Preguntar si podemos usar la clase "File"
-        
+
         List<string> lineas = File.ReadAllLines(RutaArchivo).ToList();
 
         int expedienteIndice = lineas.FindIndex(linea => linea.StartsWith(expedienteNuevo.Id.ToString() + '\x1F'));
@@ -53,16 +61,16 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
     {
         using StreamReader sr = new(RutaArchivo);
 
-        string?  linea = sr.ReadLine();
+        string? linea = sr.ReadLine();
 
         while (!string.IsNullOrEmpty(linea) && !linea.StartsWith(idExpediente.ToString() + '\x1F')) {
             linea = sr.ReadLine();
         }
-        
+
         if (string.IsNullOrEmpty(linea)) {
             return null;
         }
-        
+
         string[] partes = linea.Split('\x1F');
 
         Expediente expediente = new() {
@@ -78,22 +86,23 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
     }
 
     public IEnumerable<Expediente> ExpedienteListar()
-    { 
+    {
         List<Expediente> expedientes = new();
 
-        using StreamReader sr = new(RutaArchivo);
-        string? linea = sr.ReadLine();
+        using StreamReader sr    = new(RutaArchivo);
+        string?            linea = sr.ReadLine();
 
         while (linea != null) {
             string[] partes = linea.Split('\x1F');
 
             Expediente expediente = new() {
-                                              Id = int.Parse(partes[0]),
-                                              Caratula = partes[1],
-                                              FechaCreacion = DateTime.Parse(partes[2]),
-                                              UltimaModificacion = DateTime.Parse(partes[3]),
+                                              Id                          = int.Parse(partes[0]),
+                                              Caratula                    = partes[1],
+                                              FechaCreacion               = DateTime.Parse(partes[2]),
+                                              UltimaModificacion          = DateTime.Parse(partes[3]),
                                               IdUsuarioUltimaModificacion = int.Parse(partes[4]),
-                                              Estado = (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), partes[5]),
+                                              Estado =
+                                                  (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), partes[5]),
                                           };
 
             expedientes.Add(expediente);
@@ -101,5 +110,25 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         }
 
         return expedientes;
+    }
+
+    private int ObtenerUltimoId()
+    {
+        using StreamReader sr = new(RutaArchivo);
+
+        string  prevLine = "";
+        string? line     = sr.ReadLine();
+
+        while (line != null) {
+            prevLine = line;
+            line     = sr.ReadLine();
+        }
+
+        if (string.IsNullOrEmpty(prevLine)) {
+            return 0;
+        }
+
+        string[] partes = prevLine.Split('\x1F');
+        return int.Parse(partes[0]);
     }
 }
