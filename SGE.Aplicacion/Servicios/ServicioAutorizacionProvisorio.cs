@@ -5,8 +5,5 @@ namespace SGE.Aplicacion.Servicios;
 
 public class ServicioAutorizacionProvisorio : IServicioAutorizacion
 {
-    public bool PoseeElPermiso(int idUsuario, Permiso permiso)
-    {
-        return idUsuario == 1;
-    }
+    public bool PoseeElPermiso(int idUsuario, Permiso permiso) => idUsuario == 1;
 }
