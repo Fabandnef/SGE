@@ -21,11 +21,13 @@ public class Program
         RepositorioExpedienteTxt       repositorioExpediente = new();
         RepositorioTramiteTxt          repositorioTramite    = new();
         ServicioAutorizacionProvisorio servicioAutorizacion  = new();
+        EspecificacionCambioEstado     especificacionCambioEstado = new(repositorioTramite);
+        ServicioActualizacionEstado    servicioActualizacionEstado = new(repositorioExpediente, especificacionCambioEstado);
 
         ExpedienteAltaCasoDeUso expedienteAltaCasoDeUso =
             new(repositorioExpediente, expedienteValidador, servicioAutorizacion);
 
-        TramiteAltaCasoDeUso tramiteAltaCasoDeUso = new(repositorioTramite, servicioAutorizacion, tramiteValidador);
+        TramiteAltaCasoDeUso tramiteAltaCasoDeUso = new(repositorioTramite, servicioAutorizacion, servicioActualizacionEstado, tramiteValidador);
 
         List<Expediente> expedientes = [];
 
