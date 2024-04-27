@@ -18,6 +18,6 @@ public class TramiteBajaCasoDeUso(ITramiteRepositorio repositorio, IServicioAuto
             throw new AutorizacionException("El usuario no tiene permisos para realizar esta acción.");
         }
         
-        repositorio.EliminarTramite(idTramite);
+        repositorio.BajaTramite(idTramite);
     }
 }

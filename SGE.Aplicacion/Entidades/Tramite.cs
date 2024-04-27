@@ -17,7 +17,7 @@ public class Tramite
     }
     public int             ExpedienteId                { get; init; }
     public EtiquetaTramite Etiqueta                    { get; init; }
-    public string          Contenido                   { get; init; } = "";
+    public string          Contenido                   { get; set; } = "";
 
     public DateTime FechaCreacion {
         get => _fechaCreacion;
@@ -32,4 +32,6 @@ public class Tramite
     public int             IdUsuarioUltimaModificacion { get; set; }
 
     public override string ToString() => $"{Id}\x1F{ExpedienteId}\x1F{Etiqueta}\x1F{Contenido}\x1F{FechaCreacion}\x1F{UltimaModificacion}\x1F{IdUsuarioUltimaModificacion}";
+    
+    public string FormatoLegible() => $"Id: {Id}\nExpedienteId: {ExpedienteId}\nEtiqueta: {Etiqueta}\nContenido: {Contenido}\nFechaCreacion: {FechaCreacion}\nUltimaModificacion: {UltimaModificacion}\nIdUsuarioUltimaModificacion: {IdUsuarioUltimaModificacion}";
 }

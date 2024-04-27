@@ -21,6 +21,6 @@ public class TramiteAltaCasoDeUso(ITramiteRepositorio repositorio, IServicioAuto
             throw new AutorizacionException("El usuario no tiene permisos para realizar esta acción.");
         }
         
-        repositorio.AgregarTramite(tramite);
+        repositorio.AltaTramite(tramite);
     }
 }

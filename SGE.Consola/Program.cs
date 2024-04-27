@@ -100,5 +100,19 @@ public class Program
         TramiteConsultaPorEtiquetaCasoDeUso tramiteConsultaPorEtiquetaCasoDeUso = new(repositorio);
         
         List<Tramite> tramitesNotificacion = tramiteConsultaPorEtiquetaCasoDeUso.Ejecutar(EtiquetaTramite.Notificacion).ToList();
+
+        Console.WriteLine("Trámites de notificación:");
+        foreach (Tramite t in tramitesNotificacion) {
+            Console.WriteLine("-----------------------------------");
+            Console.WriteLine(t.FormatoLegible());
+        }
+        
+        TramiteModificacionCasoDeUso tramiteModificacionCasoDeUso = new(repositorio, servicioAutorizacion);
+        Tramite                      tramiteParaEditar            = tramitesNotificacion[1];
+        
+        tramiteParaEditar.Contenido = "Trámite 4 modificado";
+        tramiteModificacionCasoDeUso.Ejecutar(tramiteParaEditar, usuario.Id);
+
+        Console.ReadKey();
     }
 }
