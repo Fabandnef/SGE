@@ -20,10 +20,9 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
     public void BajaTramite(int id)
     {
         List<string> lineas = LeerTramites().ToList();
+        
+        int lineaParaEliminar = tramites.FindIndex(linea => linea.StartsWith(id.ToString() + '\x1F'));
 
-        int lineaParaEliminar = lineas.FindIndex(linea => linea.StartsWith(id.ToString()));
-
-        // Si encontramos la línea, la eliminamos
         if (lineaParaEliminar == -1) {
             return;
         }
@@ -50,7 +49,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
                     Contenido = partes[3],
                     FechaCreacion = DateTime.Parse(partes[4]),
                     UltimaModificacion = DateTime.Parse(partes[5]),
-                    IdUsuarioUltimaModificacion = int.Parse(partes[6])
+                    IdUsuarioUltimaModificacion = int.Parse(partes[6]),
                 };
             }
         }
@@ -105,7 +104,6 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         
         int lineaParaEditar = lineas.FindIndex(linea => linea.StartsWith(tramite.Id.ToString()));
 
-        // Si encontramos la línea, la reemplazamos con la nueva información del trámite
         if (lineaParaEditar == -1) {
             return;
         }

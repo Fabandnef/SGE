@@ -4,5 +4,9 @@ namespace SGE.Aplicacion.Interfaces;
 
 public interface IExpedienteRepositorio
 {
-    void AgregarExpediente(Expediente expediente);
+    void                    ExpedienteAlta(Expediente      expediente);
+    void                    ExpedienteBaja(int             idExpediente);
+    Expediente?             ExpedienteBuscarPorId(int      idExpediente);
+    void                    ExpedienteModificar(Expediente expedienteNuevo);
+    IEnumerable<Expediente> ExpedienteListar();
 }
