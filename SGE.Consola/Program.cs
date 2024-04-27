@@ -12,107 +12,113 @@ using SGE.Repositorios;
 
 public class Program
 {
-    public static void Main(string[] args)
+    static public void Main(string[] args)
     {
         Usuario usuario = new();
 
-        TramiteValidador               validador            = new();
-        RepositorioTramiteTxt          repositorio          = new();
-        ServicioAutorizacionProvisorio servicioAutorizacion = new();
+        ExpedienteValidador            expedienteValidador   = new();
+        TramiteValidador               tramiteValidador      = new();
+        RepositorioExpedienteTxt       repositorioExpediente = new();
+        RepositorioTramiteTxt          repositorioTramite    = new();
+        ServicioAutorizacionProvisorio servicioAutorizacion  = new();
+        EspecificacionCambioEstado     especificacionCambioEstado = new(repositorioTramite);
+        ServicioActualizacionEstado    servicioActualizacionEstado = new(repositorioExpediente, especificacionCambioEstado);
 
-        TramiteAltaCasoDeUso tramiteAltaCasoDeUso = new(repositorio, servicioAutorizacion, validador);
+        ExpedienteAltaCasoDeUso expedienteAltaCasoDeUso =
+            new(repositorioExpediente, expedienteValidador, servicioAutorizacion);
 
-        Tramite t1 = new Tramite() {
-                                       Contenido                   = "Trámite 1",
-                                       ExpedienteId                = 32,
-                                       Etiqueta                    = EtiquetaTramite.Notificacion,
-                                       IdUsuarioUltimaModificacion = usuario.Id,
-                                   };
+        TramiteAltaCasoDeUso tramiteAltaCasoDeUso = new(repositorioTramite, servicioAutorizacion, servicioActualizacionEstado, tramiteValidador);
 
-        Tramite t2 = new Tramite() {
-                                       Contenido                   = "Trámite 2",
-                                       ExpedienteId                = 54,
-                                       Etiqueta                    = EtiquetaTramite.Notificacion,
-                                       IdUsuarioUltimaModificacion = usuario.Id,
-                                   };
+        List<Expediente> expedientes = [];
 
-        Tramite t3 = new Tramite() {
-                                       Contenido                   = "Trámite 3",
-                                       ExpedienteId                = 12,
-                                       Etiqueta                    = EtiquetaTramite.PaseAEstudio,
-                                       IdUsuarioUltimaModificacion = usuario.Id,
-                                   };
-
-        Tramite t4 = new Tramite() {
-                                       Contenido                   = "Trámite 4",
-                                       ExpedienteId                = 76,
-                                       Etiqueta                    = EtiquetaTramite.Notificacion,
-                                       IdUsuarioUltimaModificacion = usuario.Id,
-                                   };
-
-        Tramite t5 = new Tramite() {
-                                       Contenido                   = "Trámite 5",
-                                       ExpedienteId                = 89,
-                                       Etiqueta                    = EtiquetaTramite.PaseAEstudio,
-                                       IdUsuarioUltimaModificacion = usuario.Id,
-                                   };
-
-        Tramite t6 = new Tramite() {
-                                       Contenido                   = "Trámite 6",
-                                       ExpedienteId                = 45,
-                                       Etiqueta                    = EtiquetaTramite.Notificacion,
-                                       IdUsuarioUltimaModificacion = usuario.Id,
-                                   };
-
-        Tramite t7 = new Tramite() {
-                                       Contenido                   = "Trámite 7",
-                                       ExpedienteId                = 67,
-                                       Etiqueta                    = EtiquetaTramite.PaseAEstudio,
-                                       IdUsuarioUltimaModificacion = usuario.Id,
-                                   };
-
-        Tramite t8 = new Tramite() {
-                                       Contenido                   = "Trámite 8",
-                                       ExpedienteId                = 23,
-                                       Etiqueta                    = EtiquetaTramite.Notificacion,
-                                       IdUsuarioUltimaModificacion = usuario.Id,
-                                   };
-
-        try {
-            tramiteAltaCasoDeUso.Ejecutar(t1, usuario.Id);
-            tramiteAltaCasoDeUso.Ejecutar(t2, usuario.Id);
-            tramiteAltaCasoDeUso.Ejecutar(t3, usuario.Id);
-            tramiteAltaCasoDeUso.Ejecutar(t4, usuario.Id);
-            tramiteAltaCasoDeUso.Ejecutar(t5, usuario.Id);
-            tramiteAltaCasoDeUso.Ejecutar(t6, usuario.Id);
-            tramiteAltaCasoDeUso.Ejecutar(t7, usuario.Id);
-            tramiteAltaCasoDeUso.Ejecutar(t8, usuario.Id);
+        for (int i = 0; i < 15; i++) {
+            expedientes.Add(new Expediente {
+                                               IdUsuarioUltimaModificacion = usuario.Id,
+                                               Caratula                    = GenerarFrase(new Random().Next(3, 8)),
+                                           }
+                           );
         }
-        catch (ValidacionException e) {
-            Console.WriteLine(e.Message);
+
+        foreach (Expediente expediente in expedientes) {
+            try {
+                expedienteAltaCasoDeUso.Ejecutar(expediente, usuario.Id);
+            }
+            catch (ValidacionException e) {
+                Console.WriteLine(e.Message);
+            }
         }
         
-        TramiteBajaCasoDeUso tramiteBajaCasoDeUso = new(repositorio, servicioAutorizacion);
-
-        tramiteBajaCasoDeUso.Ejecutar(2, usuario.Id);
-        tramiteBajaCasoDeUso.Ejecutar(7, usuario.Id);
+        List<Tramite> tramites = [];
         
-        TramiteConsultaPorEtiquetaCasoDeUso tramiteConsultaPorEtiquetaCasoDeUso = new(repositorio);
-        
-        List<Tramite> tramitesNotificacion = tramiteConsultaPorEtiquetaCasoDeUso.Ejecutar(EtiquetaTramite.Notificacion).ToList();
-
-        Console.WriteLine("Trámites de notificación:");
-        foreach (Tramite t in tramitesNotificacion) {
-            Console.WriteLine("-----------------------------------");
-            Console.WriteLine(t.FormatoLegible());
+        for (int i = 0; i < 80; i++) {
+            tramites.Add(new Tramite {
+                                         ExpedienteId = new Random().Next(1, 15),
+                                         Etiqueta = (EtiquetaTramite)(Enum.GetValues(typeof(EtiquetaTramite)).GetValue(new Random().Next(0,5)) ?? 0),
+                                         Contenido = GenerarFrase(new Random().Next(5,24)),
+                                   }
+                        );
         }
         
-        TramiteModificacionCasoDeUso tramiteModificacionCasoDeUso = new(repositorio, servicioAutorizacion);
-        Tramite                      tramiteParaEditar            = tramitesNotificacion[1];
-        
-        tramiteParaEditar.Contenido = "Trámite 4 modificado";
-        tramiteModificacionCasoDeUso.Ejecutar(tramiteParaEditar, usuario.Id);
+        foreach (Tramite tramite in tramites) {
+            try {
+                tramiteAltaCasoDeUso.Ejecutar(tramite, usuario.Id);
+            }
+            catch (ValidacionException e) {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        // TramiteBajaCasoDeUso tramiteBajaCasoDeUso = new(repositorioTramite, servicioAutorizacion);
+        //
+        // tramiteBajaCasoDeUso.Ejecutar(2, usuario.Id);
+        // tramiteBajaCasoDeUso.Ejecutar(7, usuario.Id);
+        //
+        // TramiteConsultaPorEtiquetaCasoDeUso tramiteConsultaPorEtiquetaCasoDeUso = new(repositorioTramite);
+        //
+        // List<Tramite> tramitesNotificacion =
+        //     tramiteConsultaPorEtiquetaCasoDeUso.Ejecutar(EtiquetaTramite.Notificacion).ToList();
+        //
+        // Console.WriteLine("Trámites de notificación:");
+        //
+        // foreach (Tramite t in tramitesNotificacion) {
+        //     Console.WriteLine("-----------------------------------");
+        //     Console.WriteLine(t.FormatoLegible());
+        // }
+        //
+        // TramiteModificacionCasoDeUso tramiteModificacionCasoDeUso = new(repositorioTramite, servicioAutorizacion);
+        // Tramite                      tramiteParaEditar            = tramitesNotificacion[1];
+        //
+        // tramiteParaEditar.Contenido = "Trámite 4 modificado";
+        // tramiteModificacionCasoDeUso.Ejecutar(tramiteParaEditar, usuario.Id);
 
         Console.ReadKey();
+    }
+
+    static private string GenerarFrase(int palabras = 5)
+    {
+        Random obj = new();
+        string st  = string.Empty;
+        int    letras;
+
+        for (int i = 0; i < palabras; i++) {
+            letras =  obj.Next(5, 10);
+            st     += GenerarPalabra(letras) + " ";
+        }
+
+        return st.TrimEnd();
+    }
+
+    static private string GenerarPalabra(int longitud = 5)
+    {
+        Random       obj            = new();
+        const string letras         = "abcdefghijklmnopqrstuvwxyz";
+        int          cantidadLetras = letras.Length;
+        string       st             = letras[obj.Next(longitud)].ToString().ToUpper();
+
+        for (int i = 0; i < longitud; i++) {
+            st += letras[obj.Next(cantidadLetras)].ToString();
+        }
+
+        return st;
     }
 }
