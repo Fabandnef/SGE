@@ -105,6 +105,34 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         return tramites;
     }
 
+    public IEnumerable<Tramite> ObtenerTramitesPorExpediente(int idExpediente)
+    {
+        Collection<Tramite> tramites = new();
+
+        using StreamReader sr = new(RutaArchivo);
+        string?            linea;
+
+        while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
+            string[] partes = linea.Split('\x1F');
+
+            if (int.TryParse(partes[1], out int idExpedienteTramite) && (idExpedienteTramite == idExpediente)) {
+                tramites.Add(new Tramite {
+                                             Id                          = int.Parse(partes[0]),
+                                             ExpedienteId                = int.Parse(partes[1]),
+                                             Etiqueta                    = Enum.Parse<EtiquetaTramite>(partes[2]),
+                                             Contenido                   = partes[3],
+                                             FechaCreacion               = DateTime.Parse(partes[4]),
+                                             UltimaModificacion          = DateTime.Parse(partes[5]),
+                                             IdUsuarioUltimaModificacion = int.Parse(partes[6])
+                                         });
+            }
+        }
+
+        return tramites;
+    }
+
+    public IEnumerable<Tramite> ObtenerTramitesPorExpediente(Expediente expediente) => ObtenerTramitesPorExpediente(expediente.Id);
+
     public void Modificar(Tramite tramite)
     {
         List<string> lineas = LeerTramites().ToList();
@@ -119,12 +147,24 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         lineas[lineaParaEditar] = tramite.ToString();
         GuardarTramites(lineas);
     }
-    
+
+    public void TramiteBajaPorExpediente(int idExpediente)
+    {
+        List<string> lineas = LeerTramites().ToList();
+
+        lineas.RemoveAll(linea => {
+            string[] partes = linea.Split('\x1F');
+            return int.TryParse(partes[1], out int idExpedienteTramite) && (idExpedienteTramite == idExpediente);
+        });
+        
+        GuardarTramites(lineas);
+    }
+
     public Tramite? ObtenerUltimoTramitePorExpediente(int idExpediente)
     {
         using StreamReader sr = new(RutaArchivo);
 
-        string? linea;
+        string?  linea;
         Tramite? ultimoTramite = null;
 
         while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
@@ -132,14 +172,15 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
 
             if (int.TryParse(partes[1], out int idExpedienteTramite) && (idExpedienteTramite == idExpediente)) {
                 ultimoTramite = new Tramite {
-                                               Id                          = int.Parse(partes[0]),
-                                               ExpedienteId                = idExpedienteTramite,
-                                               Etiqueta                    = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), partes[2]),
-                                               Contenido                   = partes[3],
-                                               FechaCreacion               = DateTime.Parse(partes[4]),
-                                               UltimaModificacion          = DateTime.Parse(partes[5]),
-                                               IdUsuarioUltimaModificacion = int.Parse(partes[6])
-                                           };
+                                                Id           = int.Parse(partes[0]),
+                                                ExpedienteId = idExpedienteTramite,
+                                                Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite),
+                                                    partes[2]),
+                                                Contenido                   = partes[3],
+                                                FechaCreacion               = DateTime.Parse(partes[4]),
+                                                UltimaModificacion          = DateTime.Parse(partes[5]),
+                                                IdUsuarioUltimaModificacion = int.Parse(partes[6])
+                                            };
             }
         }
 
