@@ -116,7 +116,7 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
     {
         Expediente? expediente = ExpedienteBuscarPorId(idExpediente);
         
-        if (expediente is null) {
+        if (expediente == null) {
             return;
         }
         
