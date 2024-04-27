@@ -119,6 +119,32 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         lineas[lineaParaEditar] = tramite.ToString();
         GuardarTramites(lineas);
     }
+    
+    public Tramite? ObtenerUltimoTramitePorExpediente(int idExpediente)
+    {
+        using StreamReader sr = new(RutaArchivo);
+
+        string? linea;
+        Tramite? ultimoTramite = null;
+
+        while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
+            string[] partes = linea.Split('\x1F');
+
+            if (int.TryParse(partes[1], out int idExpedienteTramite) && (idExpedienteTramite == idExpediente)) {
+                ultimoTramite = new Tramite {
+                                               Id                          = int.Parse(partes[0]),
+                                               ExpedienteId                = idExpedienteTramite,
+                                               Etiqueta                    = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), partes[2]),
+                                               Contenido                   = partes[3],
+                                               FechaCreacion               = DateTime.Parse(partes[4]),
+                                               UltimaModificacion          = DateTime.Parse(partes[5]),
+                                               IdUsuarioUltimaModificacion = int.Parse(partes[6])
+                                           };
+            }
+        }
+
+        return ultimoTramite;
+    }
 
     private IEnumerable<string> LeerTramites()
     {
