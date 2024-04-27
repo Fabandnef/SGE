@@ -12,7 +12,7 @@ using SGE.Repositorios;
 
 public class Program
 {
-    public static void Main(string[] args)
+    static public void Main(string[] args)
     {
         Usuario usuario = new();
 
