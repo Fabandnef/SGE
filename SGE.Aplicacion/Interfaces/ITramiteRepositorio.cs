@@ -14,4 +14,6 @@ public interface ITramiteRepositorio
     void BajaTramite(int idTramite);
     
     void Modificar(Tramite tramite);
+    
+    void TramiteBajaPorExpediente(int idExpediente);
 }

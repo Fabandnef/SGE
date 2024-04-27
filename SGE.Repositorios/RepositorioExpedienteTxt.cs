@@ -41,20 +41,20 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         File.WriteAllLines(RutaArchivo, lineas);
     }
 
-    public void ExpedienteBaja(int idExpediente)
+    public bool ExpedienteBaja(int idExpediente)
     {
-        // TODO: Preguntar si podemos usar la clase "File"
-
         List<string> lineas = File.ReadAllLines(RutaArchivo).ToList();
 
         int lineaAEliminar = lineas.FindIndex(linea => linea.StartsWith(idExpediente.ToString() + '\x1F'));
 
         if (lineaAEliminar == -1) {
-            return;
+            return false;
         }
 
         lineas.RemoveAt(lineaAEliminar);
         File.WriteAllLines(RutaArchivo, lineas);
+
+        return true;
     }
 
     public Expediente? ExpedienteBuscarPorId(int idExpediente)
