@@ -19,7 +19,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
 
     public void AltaTramite(Tramite tramite)
     {
-        tramite.Id = _ultimoId++;
+        tramite.Id = ++_ultimoId;
         using StreamWriter sw = new(RutaArchivo, append: true);
         sw.WriteLine(tramite.ToString());
     }
