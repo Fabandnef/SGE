@@ -21,7 +21,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
     {
         List<string> lineas = LeerTramites().ToList();
         
-        int lineaParaEliminar = tramites.FindIndex(linea => linea.StartsWith(id.ToString() + '\x1F'));
+        int lineaParaEliminar = lineas.FindIndex(linea => linea.StartsWith(id.ToString() + '\x1F'));
 
         if (lineaParaEliminar == -1) {
             return;
