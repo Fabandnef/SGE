@@ -7,77 +7,35 @@ namespace SGE.Repositorios;
 
 public class RepositorioTramiteTxt : ITramiteRepositorio
 {
-    const string RUTA_ARCHIVO = "Tramites.txt";
+    const string RutaArchivo = "Tramites.txt";
     static private int _ultimoId = 1;
 
     public void AltaTramite(Tramite tramite)
     {
         tramite.Id = _ultimoId++;
-        using StreamWriter sw = new(RUTA_ARCHIVO, append: true);
+        using StreamWriter sw = new(RutaArchivo, append: true);
         sw.WriteLine(tramite.ToString());
     }
-
-    public void EditarTramite(Tramite tramite)
-    {
-        // Leer todas las líneas del archivo
-        List<string> lineas = new();
-
-        using (StreamReader sr = new(RUTA_ARCHIVO)) {
-            string? linea;
-
-            while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
-                lineas.Add(linea);
-            }
-        }
-
-        // Buscar la línea que contiene la información del trámite que queremos editar
-        int lineaParaEditar = lineas.FindIndex(linea => linea.StartsWith(tramite.Id.ToString()));
-
-        // Si encontramos la línea, la reemplazamos con la nueva información del trámite
-        if (lineaParaEditar > -1) {
-            lineas[lineaParaEditar] = tramite.ToString();
-        }
-
-        // Escribir todas las líneas de nuevo en el archivo
-        using (StreamWriter sw = new(RUTA_ARCHIVO)) {
-            foreach (string linea in lineas) {
-                sw.WriteLine(linea);
-            }
-        }
-    }
-
+    
     public void BajaTramite(int id)
     {
-        // Leer todas las líneas del archivo
-        List<string> tramites = new();
+        List<string> lineas = LeerTramites().ToList();
 
-        using (StreamReader sr = new(RUTA_ARCHIVO)) {
-            string? tramiteImportado;
-
-            while (!string.IsNullOrEmpty(tramiteImportado = sr.ReadLine())) {
-                tramites.Add(tramiteImportado);
-            }
-        }
-
-        // Buscar la línea que contiene la información del trámite que queremos eliminar
-        int lineaParaEliminar = tramites.FindIndex(linea => linea.StartsWith(id.ToString()));
+        int lineaParaEliminar = lineas.FindIndex(linea => linea.StartsWith(id.ToString()));
 
         // Si encontramos la línea, la eliminamos
-        if (lineaParaEliminar > -1) {
-            tramites.RemoveAt(lineaParaEliminar);
+        if (lineaParaEliminar == -1) {
+            return;
         }
-
-        // Escribir todas las líneas de nuevo en el archivo
-        using (StreamWriter sw = new(RUTA_ARCHIVO)) {
-            foreach (string tramite in tramites) {
-                sw.WriteLine(tramite);
-            }
-        }
+        
+        // Eliminar y guardar
+        lineas.RemoveAt(lineaParaEliminar);
+        GuardarTramites(lineas);
     }
 
     public Tramite? ObtenerTramitePorId(int id)
     {
-        using StreamReader sr = new(RUTA_ARCHIVO);
+        using StreamReader sr = new(RutaArchivo);
         
         string? linea;
         
@@ -104,7 +62,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
     {
         List<Tramite> tramites = new();
 
-        using StreamReader sr = new(RUTA_ARCHIVO);
+        using StreamReader sr = new(RutaArchivo);
 
         string? linea;
 
@@ -119,7 +77,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
     {
         Collection<Tramite> tramites = new();
         
-        using StreamReader sr = new(RUTA_ARCHIVO);
+        using StreamReader sr = new(RutaArchivo);
         string? linea;
         
         while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
@@ -143,39 +101,46 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
     
     public void Modificar(Tramite tramite)
     {
-        // Leer todas las líneas del archivo
-        List<string> lineas = new();
-
-        using (StreamReader sr = new(RUTA_ARCHIVO)) {
-            string? tramiteImportado;
-
-            while (!string.IsNullOrEmpty(tramiteImportado = sr.ReadLine())) {
-                lineas.Add(tramiteImportado);
-            }
-        }
-
-        // Buscar la línea que contiene la información del trámite que queremos editar
+        List<string> lineas = LeerTramites().ToList();
+        
         int lineaParaEditar = lineas.FindIndex(linea => linea.StartsWith(tramite.Id.ToString()));
 
         // Si encontramos la línea, la reemplazamos con la nueva información del trámite
-        if (lineaParaEditar > -1) {
-            lineas[lineaParaEditar] = tramite.ToString();
+        if (lineaParaEditar == -1) {
+            return;
         }
 
-        // Escribir todas las líneas de nuevo en el archivo
-        using (StreamWriter sw = new(RUTA_ARCHIVO)) {
-            foreach (string linea in lineas) {
-                sw.WriteLine(linea);
-            }
+        // Editar y guardar
+        lineas[lineaParaEditar] = tramite.ToString();
+        GuardarTramites(lineas);
+    }
+
+    private IEnumerable<string> LeerTramites()
+    {
+        using StreamReader sr = new(RutaArchivo);
+
+        string? linea;
+
+        while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
+            yield return linea;
         }
     }
 
     private void GuardarTramites(IEnumerable<Tramite> tramites)
     {
-        using StreamWriter sw = new StreamWriter(RUTA_ARCHIVO);
+        using StreamWriter sw = new StreamWriter(RutaArchivo);
 
         foreach (Tramite tramite in tramites) {
             sw.WriteLine(tramite.ToString());
+        }
+    }
+    
+    private void GuardarTramites(IEnumerable<string> tramites)
+    {
+        using StreamWriter sw = new(RutaArchivo);
+
+        foreach (string tramite in tramites) {
+            sw.WriteLine(tramite);
         }
     }
 }
