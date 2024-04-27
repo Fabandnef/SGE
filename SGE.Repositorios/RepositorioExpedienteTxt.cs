@@ -112,6 +112,18 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         return expedientes;
     }
 
+    public void ExpedienteActualizarEstado(int idExpediente, EstadoExpediente estadoExpediente)
+    {
+        Expediente? expediente = ExpedienteBuscarPorId(idExpediente);
+        
+        if (expediente is null) {
+            return;
+        }
+        
+        expediente.Estado = estadoExpediente;
+        ExpedienteModificar(expediente);
+    }
+
     private int ObtenerUltimoId()
     {
         using StreamReader sr = new(RutaArchivo);
