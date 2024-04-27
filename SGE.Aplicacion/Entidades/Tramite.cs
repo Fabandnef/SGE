@@ -4,15 +4,32 @@ namespace SGE.Aplicacion.Entidades;
 
 public class Tramite
 {
-    static private int _ultimoId = 0;
-    private        int _idUsuarioActual;
+    private int      _id;
+    private DateTime _fechaCreacion;
 
-    public int             Id                          { get; private set; }
-    public int             ExpedienteId                { get; set; }
-    public EtiquetaTramite Etiqueta                    { get; set; }
-    public string          Contenido                   { get; set; }
-    public DateTime        FechaCreacion               { get; private set; }
-    public DateTime        UltimaModificacion          { get; private set; }
-    public int             IdUsuarioActual             { get; private set; }
-    public int             IdUsuarioUltimaModificacion { get; private set; }
+    public int Id {
+        get => _id;
+        set {
+            if (_id == 0) {
+                _id = value;
+            }
+        }
+    }
+    public int             ExpedienteId                { get; init; }
+    public EtiquetaTramite Etiqueta                    { get; init; }
+    public string          Contenido                   { get; init; } = "";
+
+    public DateTime FechaCreacion {
+        get => _fechaCreacion;
+        set {
+            if (_fechaCreacion == DateTime.MinValue) {
+                _fechaCreacion = value;
+            }
+        }
+    }
+
+    public DateTime        UltimaModificacion          { get; set; }
+    public int             IdUsuarioUltimaModificacion { get; set; }
+
+    public override string ToString() => $"{Id}\x1F{ExpedienteId}\x1F{Etiqueta}\x1F{Contenido}\x1F{FechaCreacion}\x1F{UltimaModificacion}\x1F{IdUsuarioUltimaModificacion}";
 }
