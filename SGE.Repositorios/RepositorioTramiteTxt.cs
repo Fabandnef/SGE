@@ -31,7 +31,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         }
 
         // Buscar la línea que contiene la información del trámite que queremos editar
-        int lineaParaEditar = lineas.FindIndex(linea => linea.StartsWith(tramite.Id.ToString()));
+        int lineaParaEditar = lineas.FindIndex(linea => linea.StartsWith(tramite.Id.ToString() + '\x1F'));
 
         // Si encontramos la línea, la reemplazamos con la nueva información del trámite
         if (lineaParaEditar > -1) {
@@ -60,7 +60,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         }
 
         // Buscar la línea que contiene la información del trámite que queremos eliminar
-        int lineaParaEliminar = tramites.FindIndex(linea => linea.StartsWith(id.ToString()));
+        int lineaParaEliminar = tramites.FindIndex(linea => linea.StartsWith(id.ToString() + '\x1F'));
 
         // Si encontramos la línea, la eliminamos
         if (lineaParaEliminar > -1) {
@@ -92,7 +92,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
                     Contenido = partes[3],
                     FechaCreacion = DateTime.Parse(partes[4]),
                     UltimaModificacion = DateTime.Parse(partes[5]),
-                    IdUsuarioUltimaModificacion = int.Parse(partes[6])
+                    IdUsuarioUltimaModificacion = int.Parse(partes[6]),
                 };
             }
         }
@@ -155,7 +155,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         }
 
         // Buscar la línea que contiene la información del trámite que queremos editar
-        int lineaParaEditar = lineas.FindIndex(linea => linea.StartsWith(tramite.Id.ToString()));
+        int lineaParaEditar = lineas.FindIndex(linea => linea.StartsWith(tramite.Id.ToString() + '\x1F'));
 
         // Si encontramos la línea, la reemplazamos con la nueva información del trámite
         if (lineaParaEditar > -1) {
