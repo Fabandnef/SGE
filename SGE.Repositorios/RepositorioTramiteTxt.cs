@@ -148,7 +148,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         GuardarTramites(lineas);
     }
 
-    public void TramiteBajaPorExpediente(int idExpediente)
+    public void BajaTramitePorExpediente(int idExpediente)
     {
         List<string> lineas = LeerTramites().ToList();
 
