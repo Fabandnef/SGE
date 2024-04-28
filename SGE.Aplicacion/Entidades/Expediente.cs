@@ -4,8 +4,8 @@ namespace SGE.Aplicacion.Entidades;
 
 public class Expediente
 {
-    private int      _id;
     private DateTime _fechaCreacion;
+    private int      _id;
 
     public int Id {
         get => _id;
@@ -30,7 +30,6 @@ public class Expediente
 
     public DateTime UltimaModificacion          { get; set; }
     public int      IdUsuarioUltimaModificacion { get; set; }
-    public int      IdUsuarioActual             { get; set; }
 
     // TODO: Consultar si esto está bien.
     public IEnumerable<Tramite>?
@@ -42,15 +41,13 @@ public class Expediente
            $"{Caratula}\x1F"                    +
            $"{FechaCreacion}\x1F"               +
            $"{UltimaModificacion}\x1F"          +
-           $"{IdUsuarioUltimaModificacion}\x1F" +
-           $"{IdUsuarioActual}";
+           $"{IdUsuarioUltimaModificacion}";
 
-    public string FormatoLegible() 
+    public string FormatoLegible()
         => $"Id: {Id}\n"                                                   +
            $"Estado: {Estado}\n"                                           +
            $"Caratula: {Caratula}\n"                                       +
            $"FechaCreacion: {FechaCreacion}\n"                             +
            $"UltimaModificacion: {UltimaModificacion}\n"                   +
-           $"IdUsuarioUltimaModificacion: {IdUsuarioUltimaModificacion}\n" +
-           $"IdUsuarioActual: {IdUsuarioActual}";
+           $"IdUsuarioUltimaModificacion: {IdUsuarioUltimaModificacion}\n";
 }

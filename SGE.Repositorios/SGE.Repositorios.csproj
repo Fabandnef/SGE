@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <ProjectReference Include="..\SGE.Aplicacion\SGE.Aplicacion.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\SGE.Aplicacion\SGE.Aplicacion.csproj"/>
+    </ItemGroup>
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <RootNamespace>SGE.Repositorios</RootNamespace>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>SGE.Repositorios</RootNamespace>
+    </PropertyGroup>
 
 </Project>

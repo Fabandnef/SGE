@@ -1,5 +1,4 @@
 ﻿using SGE.Aplicacion.Entidades;
-using SGE.Aplicacion.Interfaces;
 using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Aplicacion.CasosDeUso;

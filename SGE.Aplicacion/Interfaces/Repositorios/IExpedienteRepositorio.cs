@@ -10,6 +10,6 @@ public interface IExpedienteRepositorio
     Expediente?             BuscarPorId(int      idExpediente);
     void                    Modificar(Expediente expediente);
     IEnumerable<Expediente> Listar();
-    
-    void                    ActualizarEstado(int idExpediente, EstadoExpediente estadoExpediente);
+
+    void ActualizarEstado(int idExpediente, EstadoExpediente estadoExpediente);
 }

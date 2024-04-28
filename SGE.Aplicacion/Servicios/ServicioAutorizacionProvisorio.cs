@@ -1,5 +1,4 @@
 ﻿using SGE.Aplicacion.Enumerativos;
-using SGE.Aplicacion.Interfaces;
 using SGE.Aplicacion.Interfaces.Servicios;
 
 namespace SGE.Aplicacion.Servicios;

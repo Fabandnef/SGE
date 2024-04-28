@@ -2,9 +2,9 @@
 
 public class AutorizacionException : Exception
 {
-    public AutorizacionException(){}
-    
-    public AutorizacionException(string mensaje) : base(mensaje){}
-    
-    public AutorizacionException(string mensaje, Exception causa) : base(mensaje, causa){}
+    public AutorizacionException() { }
+
+    public AutorizacionException(string mensaje) : base(mensaje) { }
+
+    public AutorizacionException(string mensaje, Exception causa) : base(mensaje, causa) { }
 }

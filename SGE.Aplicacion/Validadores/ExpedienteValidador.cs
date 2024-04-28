@@ -8,7 +8,7 @@ public class ExpedienteValidador : IExpedienteValidador
     public bool Validar(Expediente expediente, out string error)
     {
         error = "";
-        
+
         if (string.IsNullOrEmpty(expediente.Caratula)) {
             error += "La carátula no puede estar vacía.\n";
         }

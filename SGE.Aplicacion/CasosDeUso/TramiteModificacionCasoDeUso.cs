@@ -1,7 +1,6 @@
 ﻿using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Enumerativos;
 using SGE.Aplicacion.Excepciones;
-using SGE.Aplicacion.Interfaces;
 using SGE.Aplicacion.Interfaces.Repositorios;
 using SGE.Aplicacion.Interfaces.Servicios;
 using SGE.Aplicacion.Servicios;

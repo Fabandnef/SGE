@@ -4,9 +4,9 @@ namespace SGE.Aplicacion.Entidades;
 
 public class Tramite
 {
-    private int      _id;
     private int      _expedienteId;
     private DateTime _fechaCreacion;
+    private int      _id;
 
     public int Id {
         get => _id;
@@ -18,7 +18,7 @@ public class Tramite
     }
 
     public int ExpedienteId {
-        get { return _expedienteId; }
+        get => _expedienteId;
         set {
             if (_expedienteId == 0) {
                 _expedienteId = value;

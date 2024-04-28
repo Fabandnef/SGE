@@ -29,7 +29,7 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         List<string> lineas = File.ReadAllLines(RutaArchivo).ToList();
 
         int expedienteIndice = lineas.FindIndex(linea => linea.StartsWith(expediente.Id.ToString() + '\x1F'));
-        
+
         lineas[expedienteIndice] = expediente.ToString();
         File.WriteAllLines(RutaArchivo, lineas);
     }
@@ -108,15 +108,15 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
     public void ActualizarEstado(int idExpediente, EstadoExpediente estadoExpediente)
     {
         Expediente? expediente = BuscarPorId(idExpediente);
-        
+
         if (expediente is null) {
             return;
         }
-        
+
         if (expediente.Estado == estadoExpediente) {
             return;
         }
-        
+
         expediente.Estado = estadoExpediente;
         Modificar(expediente);
     }

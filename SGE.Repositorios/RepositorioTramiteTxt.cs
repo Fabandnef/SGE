@@ -20,7 +20,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
     public void Alta(Tramite tramite)
     {
         tramite.Id = ++_ultimoId;
-        using StreamWriter sw = new(RutaArchivo, append: true);
+        using StreamWriter sw = new(RutaArchivo, true);
         sw.WriteLine(tramite.ToString());
     }
 
@@ -66,31 +66,6 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         return null;
     }
 
-    public IEnumerable<Tramite> ObtenerTramites()
-    {
-        List<Tramite> tramites = [];
-
-        using StreamReader sr = new(RutaArchivo);
-
-        string? linea;
-
-        while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
-            string[] partes = linea.Split(", ");
-
-            tramites.Add(new Tramite {
-                                         Id = int.Parse(partes[0]),
-                                         ExpedienteId = int.Parse(string.IsNullOrEmpty(partes[1]) ? "0" : partes[1]),
-                                         Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), partes[2]),
-                                         Contenido = partes[3],
-                                         FechaCreacion = DateTime.Parse(partes[4]),
-                                         UltimaModificacion = DateTime.Parse(partes[5]),
-                                         IdUsuarioUltimaModificacion = int.Parse(partes[6]),
-                                     });
-        }
-
-        return tramites;
-    }
-
     public IEnumerable<Tramite> ObtenerPorEtiqueta(EtiquetaTramite etiquetaTramite)
     {
         Collection<Tramite> tramites = new();
@@ -109,42 +84,13 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
                                              Contenido                   = partes[3],
                                              FechaCreacion               = DateTime.Parse(partes[4]),
                                              UltimaModificacion          = DateTime.Parse(partes[5]),
-                                             IdUsuarioUltimaModificacion = int.Parse(partes[6])
+                                             IdUsuarioUltimaModificacion = int.Parse(partes[6]),
                                          });
             }
         }
 
         return tramites;
     }
-
-    public IEnumerable<Tramite> ObtenerTramitesPorExpediente(int idExpediente)
-    {
-        Collection<Tramite> tramites = new();
-
-        using StreamReader sr = new(RutaArchivo);
-        string?            linea;
-
-        while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
-            string[] partes = linea.Split('\x1F');
-
-            if (int.TryParse(partes[1], out int idExpedienteTramite) && (idExpedienteTramite == idExpediente)) {
-                tramites.Add(new Tramite {
-                                             Id                          = int.Parse(partes[0]),
-                                             ExpedienteId                = int.Parse(partes[1]),
-                                             Etiqueta                    = Enum.Parse<EtiquetaTramite>(partes[2]),
-                                             Contenido                   = partes[3],
-                                             FechaCreacion               = DateTime.Parse(partes[4]),
-                                             UltimaModificacion          = DateTime.Parse(partes[5]),
-                                             IdUsuarioUltimaModificacion = int.Parse(partes[6])
-                                         });
-            }
-        }
-
-        return tramites;
-    }
-
-    public IEnumerable<Tramite> ObtenerTramitesPorExpediente(Expediente expediente)
-        => ObtenerTramitesPorExpediente(expediente.Id);
 
     public void Modificar(Tramite tramite)
     {
@@ -194,13 +140,67 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
                                                 Contenido                   = partes[3],
                                                 FechaCreacion               = DateTime.Parse(partes[4]),
                                                 UltimaModificacion          = DateTime.Parse(partes[5]),
-                                                IdUsuarioUltimaModificacion = int.Parse(partes[6])
+                                                IdUsuarioUltimaModificacion = int.Parse(partes[6]),
                                             };
             }
         }
 
         return ultimoTramite;
     }
+
+    public IEnumerable<Tramite> ObtenerTramites()
+    {
+        List<Tramite> tramites = [];
+
+        using StreamReader sr = new(RutaArchivo);
+
+        string? linea;
+
+        while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
+            string[] partes = linea.Split(", ");
+
+            tramites.Add(new Tramite {
+                                         Id = int.Parse(partes[0]),
+                                         ExpedienteId = int.Parse(string.IsNullOrEmpty(partes[1]) ? "0" : partes[1]),
+                                         Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), partes[2]),
+                                         Contenido = partes[3],
+                                         FechaCreacion = DateTime.Parse(partes[4]),
+                                         UltimaModificacion = DateTime.Parse(partes[5]),
+                                         IdUsuarioUltimaModificacion = int.Parse(partes[6]),
+                                     });
+        }
+
+        return tramites;
+    }
+
+    public IEnumerable<Tramite> ObtenerTramitesPorExpediente(int idExpediente)
+    {
+        Collection<Tramite> tramites = new();
+
+        using StreamReader sr = new(RutaArchivo);
+        string?            linea;
+
+        while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
+            string[] partes = linea.Split('\x1F');
+
+            if (int.TryParse(partes[1], out int idExpedienteTramite) && (idExpedienteTramite == idExpediente)) {
+                tramites.Add(new Tramite {
+                                             Id                          = int.Parse(partes[0]),
+                                             ExpedienteId                = int.Parse(partes[1]),
+                                             Etiqueta                    = Enum.Parse<EtiquetaTramite>(partes[2]),
+                                             Contenido                   = partes[3],
+                                             FechaCreacion               = DateTime.Parse(partes[4]),
+                                             UltimaModificacion          = DateTime.Parse(partes[5]),
+                                             IdUsuarioUltimaModificacion = int.Parse(partes[6]),
+                                         });
+            }
+        }
+
+        return tramites;
+    }
+
+    public IEnumerable<Tramite> ObtenerTramitesPorExpediente(Expediente expediente)
+        => ObtenerTramitesPorExpediente(expediente.Id);
 
     private IEnumerable<string> LeerTramites()
     {
@@ -215,7 +215,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
 
     private void GuardarTramites(IEnumerable<Tramite> tramites)
     {
-        using StreamWriter sw = new StreamWriter(RutaArchivo);
+        using StreamWriter sw = new(RutaArchivo);
 
         foreach (Tramite tramite in tramites) {
             sw.WriteLine(tramite.ToString());
