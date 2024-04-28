@@ -25,7 +25,7 @@ public class ServicioActualizacionEstado(
     {
         EstadoExpediente? estado = especificacionCambioEstado.DefinirEstado(tramite);
 
-        if (estado == null) {
+        if (estado is null) {
             return;
         }
 

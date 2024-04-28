@@ -109,7 +109,7 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
     {
         Expediente? expediente = BuscarPorId(idExpediente);
         
-        if (expediente == null) {
+        if (expediente is null) {
             return;
         }
         
