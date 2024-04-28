@@ -12,6 +12,9 @@ public class TramiteModificacionCasoDeUso(ITramiteRepositorio repositorio, IServ
         if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.ExpedienteModificacion)) {
             throw new AutorizacionException("El usuario no tiene permisos para realizar esta acción.");
         }
+        
+        tramite.IdUsuarioUltimaModificacion = idUsuario;
+        tramite.UltimaModificacion          = DateTime.Now;
 
         repositorio.Modificar(tramite);
     }

@@ -4,11 +4,9 @@ using SGE.Aplicacion.Enumerativos;
 using SGE.Aplicacion.Excepciones;
 using SGE.Aplicacion.Servicios;
 using SGE.Aplicacion.Validadores;
+using SGE.Repositorios;
 
 namespace SGE.Consola;
-
-using SGE.Aplicacion;
-using SGE.Repositorios;
 
 public class Program
 {
@@ -16,18 +14,21 @@ public class Program
     {
         Usuario usuario = new();
 
-        ExpedienteValidador            expedienteValidador   = new();
-        TramiteValidador               tramiteValidador      = new();
-        RepositorioExpedienteTxt       repositorioExpediente = new();
-        RepositorioTramiteTxt          repositorioTramite    = new();
-        ServicioAutorizacionProvisorio servicioAutorizacion  = new();
+        ExpedienteValidador            expedienteValidador        = new();
+        TramiteValidador               tramiteValidador           = new();
+        RepositorioExpedienteTxt       repositorioExpediente      = new();
+        RepositorioTramiteTxt          repositorioTramite         = new();
+        ServicioAutorizacionProvisorio servicioAutorizacion       = new();
         EspecificacionCambioEstado     especificacionCambioEstado = new(repositorioTramite);
-        ServicioActualizacionEstado    servicioActualizacionEstado = new(repositorioExpediente, especificacionCambioEstado);
+
+        ServicioActualizacionEstado servicioActualizacionEstado =
+            new(repositorioExpediente, especificacionCambioEstado);
 
         ExpedienteAltaCasoDeUso expedienteAltaCasoDeUso =
             new(repositorioExpediente, expedienteValidador, servicioAutorizacion);
 
-        TramiteAltaCasoDeUso tramiteAltaCasoDeUso = new(repositorioTramite, servicioAutorizacion, servicioActualizacionEstado, tramiteValidador);
+        TramiteAltaCasoDeUso tramiteAltaCasoDeUso =
+            new(repositorioTramite, servicioAutorizacion, servicioActualizacionEstado, tramiteValidador);
 
         List<Expediente> expedientes = [];
 
@@ -47,18 +48,19 @@ public class Program
                 Console.WriteLine(e.Message);
             }
         }
-        
+
         List<Tramite> tramites = [];
-        
+
         for (int i = 0; i < 80; i++) {
             tramites.Add(new Tramite {
                                          ExpedienteId = new Random().Next(1, 15),
-                                         Etiqueta = (EtiquetaTramite)(Enum.GetValues(typeof(EtiquetaTramite)).GetValue(new Random().Next(0,5)) ?? 0),
-                                         Contenido = GenerarFrase(new Random().Next(5,24)),
-                                   }
+                                         Etiqueta = (EtiquetaTramite)(Enum.GetValues(typeof(EtiquetaTramite))
+                                                                          .GetValue(new Random().Next(0, 5)) ?? 0),
+                                         Contenido = GenerarFrase(new Random().Next(5, 24)),
+                                     }
                         );
         }
-        
+
         foreach (Tramite tramite in tramites) {
             try {
                 tramiteAltaCasoDeUso.Ejecutar(tramite, usuario.Id);
@@ -67,6 +69,11 @@ public class Program
                 Console.WriteLine(e.Message);
             }
         }
+
+        ExpedienteBajaCasoDeUso expedienteBajaCasoDeUso =
+            new(repositorioExpediente, repositorioTramite, servicioAutorizacion);
+
+        expedienteBajaCasoDeUso.Ejecutar(2, usuario.Id);
 
         // TramiteBajaCasoDeUso tramiteBajaCasoDeUso = new(repositorioTramite, servicioAutorizacion);
         //
