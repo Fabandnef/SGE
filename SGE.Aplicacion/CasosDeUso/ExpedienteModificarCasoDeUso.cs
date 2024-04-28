@@ -2,28 +2,30 @@
 using SGE.Aplicacion.Enumerativos;
 using SGE.Aplicacion.Excepciones;
 using SGE.Aplicacion.Interfaces;
-using SGE.Aplicacion.Validadores;
+using SGE.Aplicacion.Interfaces.Repositorios;
+using SGE.Aplicacion.Interfaces.Servicios;
+using SGE.Aplicacion.Interfaces.Validadores;
 
 namespace SGE.Aplicacion.CasosDeUso;
 
 public class ExpedienteModificarCasoDeUso(
-    IExpedienteRepositorio repositorio,
-    ExpedienteValidador    validador,
+    IExpedienteRepositorio expedienteRepositorio,
+    IExpedienteValidador   expedienteValidador,
     IServicioAutorizacion  servicioAutorizacion
 )
 {
-    public void Ejecutar(Expediente expedienteNuevo, int idUsuario)
+    public void Ejecutar(Expediente expediente, int idUsuario)
     {
-        if (!validador.ValidarExpediente(expedienteNuevo, out string message1)) {
-            throw new ValidacionException(message1);
+        if (!expedienteValidador.Validar(expediente, out string error)) {
+            throw new ValidacionException(error);
         }
 
         if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.ExpedienteModificacion)) {
-            throw new AutorizacionException("El usuario no tiene permisos para editar un expediente");
+            throw new AutorizacionException("El usuario no tiene permisos para editar un expediente.");
         }
 
-        expedienteNuevo.IdUsuarioUltimaModificacion = idUsuario;
-        expedienteNuevo.UltimaModificacion          = DateTime.Now;
-        repositorio.ExpedienteModificar(expedienteNuevo);
+        expediente.IdUsuarioUltimaModificacion = idUsuario;
+        expediente.UltimaModificacion          = DateTime.Now;
+        expedienteRepositorio.Modificar(expediente);
     }
 }

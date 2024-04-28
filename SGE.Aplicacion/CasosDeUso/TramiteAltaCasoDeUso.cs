@@ -2,25 +2,27 @@
 using SGE.Aplicacion.Enumerativos;
 using SGE.Aplicacion.Excepciones;
 using SGE.Aplicacion.Interfaces;
+using SGE.Aplicacion.Interfaces.Repositorios;
+using SGE.Aplicacion.Interfaces.Servicios;
+using SGE.Aplicacion.Interfaces.Validadores;
 using SGE.Aplicacion.Servicios;
-using SGE.Aplicacion.Validadores;
 
 namespace SGE.Aplicacion.CasosDeUso;
 
 public class TramiteAltaCasoDeUso(
-    ITramiteRepositorio         repositorio,
+    ITramiteRepositorio         tramiteRepositorio,
+    ITramiteValidador           tramiteValidador,
     IServicioAutorizacion       servicioAutorizacion,
-    ServicioActualizacionEstado servicioActualizacionEstado,
-    TramiteValidador            validador
+    ServicioActualizacionEstado servicioActualizacionEstado
 )
 {
     public void Ejecutar(Tramite tramite, int idUsuario)
     {
-        if (!validador.ValidarTramite(tramite, out string mensajeError)) {
-            throw new ValidacionException(mensajeError);
+        if (!tramiteValidador.Validar(tramite, out string error)) {
+            throw new ValidacionException(error);
         }
 
-        if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.ExpedienteAlta)) {
+        if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.TramiteAlta)) {
             throw new AutorizacionException("El usuario no tiene permisos para realizar esta acción.");
         }
 
@@ -28,7 +30,7 @@ public class TramiteAltaCasoDeUso(
         tramite.UltimaModificacion          = DateTime.Now;
         tramite.IdUsuarioUltimaModificacion = idUsuario;
 
-        repositorio.AltaTramite(tramite);
+        tramiteRepositorio.Alta(tramite);
         servicioActualizacionEstado.ActualizarEstado(tramite);
     }
 }

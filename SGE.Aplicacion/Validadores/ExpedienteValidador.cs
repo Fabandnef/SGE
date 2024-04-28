@@ -1,23 +1,18 @@
 ﻿using SGE.Aplicacion.Entidades;
+using SGE.Aplicacion.Interfaces.Validadores;
 
 namespace SGE.Aplicacion.Validadores;
 
-public class ExpedienteValidador
+public class ExpedienteValidador : IExpedienteValidador
 {
-    public bool ValidarExpediente(Expediente expediente, out string mensajeError)
+    public bool Validar(Expediente expediente, out string error)
     {
-        mensajeError = "";
+        error = "";
+        
         if (string.IsNullOrEmpty(expediente.Caratula)) {
-            mensajeError = "La carátula no puede estar vacía.";
-            return false;
+            error += "La carátula no puede estar vacía.\n";
         }
 
-        // TODO: Ver cómo retornar que el ID no es válido.
-        // if (expediente.IdUsuarioActual <= 0) {
-        //     mensajeError = "El ID debe ser válido (Entero mayor que 0).";
-        //     return false;
-        // }
-
-        return true;
+        return !string.IsNullOrEmpty(error);
     }
 }

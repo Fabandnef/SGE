@@ -6,5 +6,5 @@ public enum EstadoExpediente
     ParaResolver,
     ConResolucion,
     EnNotificacion,
-    Finalizado
+    Finalizado,
 }

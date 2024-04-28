@@ -14,21 +14,17 @@ public class Program
     {
         Usuario usuario = new();
 
-        ExpedienteValidador            expedienteValidador        = new();
-        TramiteValidador               tramiteValidador           = new();
-        RepositorioExpedienteTxt       repositorioExpediente      = new();
-        RepositorioTramiteTxt          repositorioTramite         = new();
-        ServicioAutorizacionProvisorio servicioAutorizacion       = new();
-        EspecificacionCambioEstado     especificacionCambioEstado = new(repositorioTramite);
-
-        ServicioActualizacionEstado servicioActualizacionEstado =
-            new(repositorioExpediente, especificacionCambioEstado);
-
-        ExpedienteAltaCasoDeUso expedienteAltaCasoDeUso =
-            new(repositorioExpediente, expedienteValidador, servicioAutorizacion);
+        ExpedienteValidador            expedienteValidador         = new();
+        TramiteValidador               tramiteValidador            = new();
+        RepositorioExpedienteTxt       repositorioExpediente       = new();
+        RepositorioTramiteTxt          repositorioTramite          = new();
+        ServicioAutorizacionProvisorio servicioAutorizacion        = new();
+        EspecificacionCambioEstado     especificacionCambioEstado  = new(repositorioTramite);
+        ServicioActualizacionEstado    servicioActualizacionEstado = new(repositorioExpediente, especificacionCambioEstado);
+        ExpedienteAltaCasoDeUso        expedienteAltaCasoDeUso     = new(repositorioExpediente, expedienteValidador, servicioAutorizacion);
 
         TramiteAltaCasoDeUso tramiteAltaCasoDeUso =
-            new(repositorioTramite, servicioAutorizacion, servicioActualizacionEstado, tramiteValidador);
+            new(repositorioTramite, tramiteValidador, servicioAutorizacion, servicioActualizacionEstado);
 
         List<Expediente> expedientes = [];
 

@@ -1,17 +1,18 @@
 ﻿using SGE.Aplicacion.Entidades;
+using SGE.Aplicacion.Interfaces.Validadores;
 
 namespace SGE.Aplicacion.Validadores;
 
-public class TramiteValidador
+public class TramiteValidador : ITramiteValidador
 {
-    public bool ValidarTramite(Tramite tramite, out string mensajeError)
+    public bool Validar(Tramite tramite, out string error)
     {
-        mensajeError = "";
+        error = "";
 
         if (string.IsNullOrEmpty(tramite.Contenido)) {
-            mensajeError += "El contenido de un trámite no puede estar vacío.\n";
+            error += "El contenido de un trámite no puede estar vacío.\n";
         }
 
-        return mensajeError == "";
+        return !string.IsNullOrEmpty(error);
     }
 }

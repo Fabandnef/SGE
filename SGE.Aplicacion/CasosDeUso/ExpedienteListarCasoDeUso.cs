@@ -1,9 +1,10 @@
 ﻿using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Interfaces;
+using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Aplicacion.CasosDeUso;
 
-public class ExpedienteListarCasoDeUso(IExpedienteRepositorio repositorio)
+public class ExpedienteListarCasoDeUso(IExpedienteRepositorio expedienteRepositorio)
 {
-    public IEnumerable<Expediente> Ejecutar() => repositorio.ExpedienteListar();
+    public IEnumerable<Expediente> Ejecutar() => expedienteRepositorio.Listar();
 }

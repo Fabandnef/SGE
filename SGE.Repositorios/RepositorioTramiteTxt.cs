@@ -2,6 +2,7 @@
 using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Enumerativos;
 using SGE.Aplicacion.Interfaces;
+using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Repositorios;
 
@@ -17,29 +18,31 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         }
     }
 
-    public void AltaTramite(Tramite tramite)
+    public void Alta(Tramite tramite)
     {
         tramite.Id = ++_ultimoId;
         using StreamWriter sw = new(RutaArchivo, append: true);
         sw.WriteLine(tramite.ToString());
     }
 
-    public void BajaTramite(int id)
+    public bool Baja(int id)
     {
         List<string> lineas = LeerTramites().ToList();
 
         int lineaParaEliminar = lineas.FindIndex(linea => linea.StartsWith(id.ToString() + '\x1F'));
 
         if (lineaParaEliminar == -1) {
-            return;
+            return false;
         }
 
         // Eliminar y guardar
         lineas.RemoveAt(lineaParaEliminar);
         GuardarTramites(lineas);
+
+        return true;
     }
 
-    public Tramite? ObtenerTramitePorId(int id)
+    public Tramite? ObtenerPorId(int id)
     {
         using StreamReader sr = new(RutaArchivo);
 
@@ -79,7 +82,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         return tramites;
     }
 
-    public IEnumerable<Tramite> ObtenerTramitesPorEtiqueta(EtiquetaTramite etiquetaTramite)
+    public IEnumerable<Tramite> ObtenerPorEtiqueta(EtiquetaTramite etiquetaTramite)
     {
         Collection<Tramite> tramites = new();
 
@@ -148,7 +151,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         GuardarTramites(lineas);
     }
 
-    public void BajaTramitePorExpediente(int idExpediente)
+    public void BajaPorExpediente(int idExpediente)
     {
         List<string> lineas = LeerTramites().ToList();
 
@@ -160,7 +163,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         GuardarTramites(lineas);
     }
 
-    public Tramite? ObtenerUltimoTramitePorExpediente(int idExpediente)
+    public Tramite? ObtenerUltimoPorExpediente(int idExpediente)
     {
         using StreamReader sr = new(RutaArchivo);
 

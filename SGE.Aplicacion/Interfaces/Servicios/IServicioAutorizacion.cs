@@ -1,6 +1,6 @@
 ﻿using SGE.Aplicacion.Enumerativos;
 
-namespace SGE.Aplicacion.Interfaces;
+namespace SGE.Aplicacion.Interfaces.Servicios;
 
 public interface IServicioAutorizacion
 {

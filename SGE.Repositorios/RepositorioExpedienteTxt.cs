@@ -1,6 +1,6 @@
 ﻿using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Enumerativos;
-using SGE.Aplicacion.Interfaces;
+using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Repositorios;
 
@@ -16,7 +16,7 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         }
     }
 
-    public void ExpedienteAlta(Expediente expediente)
+    public void Alta(Expediente expediente)
     {
         expediente.Id = ++_ultimoId;
 
@@ -24,24 +24,17 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         sw.WriteLine(expediente.ToString());
     }
 
-    public void ExpedienteModificar(Expediente expedienteNuevo)
+    public void Modificar(Expediente expediente)
     {
-        // TODO: Preguntar si podemos usar la clase "File"
-
         List<string> lineas = File.ReadAllLines(RutaArchivo).ToList();
 
-        int expedienteIndice = lineas.FindIndex(linea => linea.StartsWith(expedienteNuevo.Id.ToString() + '\x1F'));
-
-        // TODO: Tener en cuenta que chequear la existencia de la linea se hace en el caso de uso. Así que esto debería ser redundante.
-        if (expedienteIndice == -1) {
-            return;
-        }
-
-        lineas[expedienteIndice] = expedienteNuevo.ToString();
+        int expedienteIndice = lineas.FindIndex(linea => linea.StartsWith(expediente.Id.ToString() + '\x1F'));
+        
+        lineas[expedienteIndice] = expediente.ToString();
         File.WriteAllLines(RutaArchivo, lineas);
     }
 
-    public bool ExpedienteBaja(int idExpediente)
+    public bool Baja(int idExpediente)
     {
         List<string> lineas = File.ReadAllLines(RutaArchivo).ToList();
 
@@ -57,7 +50,7 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         return true;
     }
 
-    public Expediente? ExpedienteBuscarPorId(int idExpediente)
+    public Expediente? BuscarPorId(int idExpediente)
     {
         using StreamReader sr = new(RutaArchivo);
 
@@ -85,7 +78,7 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         return expediente;
     }
 
-    public IEnumerable<Expediente> ExpedienteListar()
+    public IEnumerable<Expediente> Listar()
     {
         List<Expediente> expedientes = new();
 
@@ -112,16 +105,20 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         return expedientes;
     }
 
-    public void ExpedienteActualizarEstado(int idExpediente, EstadoExpediente estadoExpediente)
+    public void ActualizarEstado(int idExpediente, EstadoExpediente estadoExpediente)
     {
-        Expediente? expediente = ExpedienteBuscarPorId(idExpediente);
+        Expediente? expediente = BuscarPorId(idExpediente);
         
         if (expediente == null) {
             return;
         }
         
+        if (expediente.Estado == estadoExpediente) {
+            return;
+        }
+        
         expediente.Estado = estadoExpediente;
-        ExpedienteModificar(expediente);
+        Modificar(expediente);
     }
 
     private int ObtenerUltimoId()

@@ -2,22 +2,29 @@
 using SGE.Aplicacion.Enumerativos;
 using SGE.Aplicacion.Excepciones;
 using SGE.Aplicacion.Interfaces;
+using SGE.Aplicacion.Interfaces.Repositorios;
+using SGE.Aplicacion.Interfaces.Servicios;
+using SGE.Aplicacion.Servicios;
 using SGE.Aplicacion.Validadores;
 
 namespace SGE.Aplicacion.CasosDeUso;
 
-public class TramiteBajaCasoDeUso(ITramiteRepositorio repositorio, IServicioAutorizacion servicioAutorizacion)
+public class TramiteBajaCasoDeUso(
+    ITramiteRepositorio         repositorio,
+    ServicioActualizacionEstado servicioActualizacionEstado,
+    IServicioAutorizacion       servicioAutorizacion
+)
 {
     public void Ejecutar(int idTramite, int idUsuarioActual)
     {
-        if (idTramite <= 0) {
-            throw new RepositorioException("El Id del trámite debe ser mayor a 0.");
-        }
-        
-        if (!servicioAutorizacion.PoseeElPermiso(idUsuarioActual, Permiso.ExpedienteBaja)) {
+        if (!servicioAutorizacion.PoseeElPermiso(idUsuarioActual, Permiso.TramiteBaja)) {
             throw new AutorizacionException("El usuario no tiene permisos para realizar esta acción.");
         }
+
+        if (!repositorio.Baja(idTramite)) {
+            throw new RepositorioException("El trámite a eliminar no existe.");
+        }
         
-        repositorio.BajaTramite(idTramite);
+        servicioActualizacionEstado.ActualizarEstado(idTramite);
     }
 }

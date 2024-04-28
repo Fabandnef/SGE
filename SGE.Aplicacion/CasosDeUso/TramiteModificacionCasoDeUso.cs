@@ -2,20 +2,28 @@
 using SGE.Aplicacion.Enumerativos;
 using SGE.Aplicacion.Excepciones;
 using SGE.Aplicacion.Interfaces;
+using SGE.Aplicacion.Interfaces.Repositorios;
+using SGE.Aplicacion.Interfaces.Servicios;
+using SGE.Aplicacion.Servicios;
 
 namespace SGE.Aplicacion.CasosDeUso;
 
-public class TramiteModificacionCasoDeUso(ITramiteRepositorio repositorio, IServicioAutorizacion servicioAutorizacion)
+public class TramiteModificacionCasoDeUso(
+    ITramiteRepositorio         repositorioTramite,
+    ServicioActualizacionEstado servicioActualizacionEstado,
+    IServicioAutorizacion       servicioAutorizacion
+)
 {
     public void Ejecutar(Tramite tramite, int idUsuario)
     {
-        if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.ExpedienteModificacion)) {
+        if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.TramiteModificacion)) {
             throw new AutorizacionException("El usuario no tiene permisos para realizar esta acción.");
         }
-        
+
         tramite.IdUsuarioUltimaModificacion = idUsuario;
         tramite.UltimaModificacion          = DateTime.Now;
 
-        repositorio.Modificar(tramite);
+        repositorioTramite.Modificar(tramite);
+        servicioActualizacionEstado.ActualizarEstado(tramite);
     }
 }

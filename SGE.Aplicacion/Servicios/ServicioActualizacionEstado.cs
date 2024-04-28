@@ -1,10 +1,14 @@
 ﻿using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Enumerativos;
 using SGE.Aplicacion.Interfaces;
+using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Aplicacion.Servicios;
 
-public class ServicioActualizacionEstado(IExpedienteRepositorio repositorio, EspecificacionCambioEstado especificacionCambioEstado)
+public class ServicioActualizacionEstado(
+    IExpedienteRepositorio     expedienteRepositorio,
+    EspecificacionCambioEstado especificacionCambioEstado
+)
 {
     public void ActualizarEstado(int idExpediente)
     {
@@ -14,9 +18,9 @@ public class ServicioActualizacionEstado(IExpedienteRepositorio repositorio, Esp
             return;
         }
 
-        repositorio.ExpedienteActualizarEstado(idExpediente, estado.Value);
+        expedienteRepositorio.ActualizarEstado(idExpediente, estado.Value);
     }
-    
+
     public void ActualizarEstado(Tramite tramite)
     {
         EstadoExpediente? estado = especificacionCambioEstado.DefinirEstado(tramite);
@@ -25,6 +29,6 @@ public class ServicioActualizacionEstado(IExpedienteRepositorio repositorio, Esp
             return;
         }
 
-        repositorio.ExpedienteActualizarEstado(tramite.ExpedienteId, estado.Value);
+        expedienteRepositorio.ActualizarEstado(tramite.ExpedienteId, estado.Value);
     }
 }

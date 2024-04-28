@@ -5,6 +5,7 @@ namespace SGE.Aplicacion.Entidades;
 public class Tramite
 {
     private int      _id;
+    private int      _expedienteId;
     private DateTime _fechaCreacion;
 
     public int Id {
@@ -15,9 +16,18 @@ public class Tramite
             }
         }
     }
-    public int             ExpedienteId                { get; init; }
-    public EtiquetaTramite Etiqueta                    { get; init; }
-    public string          Contenido                   { get; set; } = "";
+
+    public int ExpedienteId {
+        get { return _expedienteId; }
+        set {
+            if (_expedienteId == 0) {
+                _expedienteId = value;
+            }
+        }
+    }
+
+    public EtiquetaTramite Etiqueta  { get; set; }
+    public string          Contenido { get; set; } = "";
 
     public DateTime FechaCreacion {
         get => _fechaCreacion;
@@ -28,10 +38,24 @@ public class Tramite
         }
     }
 
-    public DateTime        UltimaModificacion          { get; set; }
-    public int             IdUsuarioUltimaModificacion { get; set; }
+    public DateTime UltimaModificacion          { get; set; }
+    public int      IdUsuarioUltimaModificacion { get; set; }
 
-    public override string ToString() => $"{Id}\x1F{ExpedienteId}\x1F{Etiqueta}\x1F{Contenido}\x1F{FechaCreacion}\x1F{UltimaModificacion}\x1F{IdUsuarioUltimaModificacion}";
-    
-    public string FormatoLegible() => $"Id: {Id}\nExpedienteId: {ExpedienteId}\nEtiqueta: {Etiqueta}\nContenido: {Contenido}\nFechaCreacion: {FechaCreacion}\nUltimaModificacion: {UltimaModificacion}\nIdUsuarioUltimaModificacion: {IdUsuarioUltimaModificacion}";
+    public override string ToString()
+        => $"{Id}\x1F"                 +
+           $"{ExpedienteId}\x1F"       +
+           $"{Etiqueta}\x1F"           +
+           $"{Contenido}\x1F"          +
+           $"{FechaCreacion}\x1F"      +
+           $"{UltimaModificacion}\x1F" +
+           $"{IdUsuarioUltimaModificacion}";
+
+    public string FormatoLegible()
+        => $"Id: {Id}\n"                                 +
+           $"ExpedienteId: {ExpedienteId}\n"             +
+           $"Etiqueta: {Etiqueta}\n"                     +
+           $"Contenido: {Contenido}\n"                   +
+           $"FechaCreacion: {FechaCreacion}\n"           +
+           $"UltimaModificacion: {UltimaModificacion}\n" +
+           $"IdUsuarioUltimaModificacion: {IdUsuarioUltimaModificacion}";
 }
