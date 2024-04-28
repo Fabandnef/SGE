@@ -1,14 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Enumerativos;
-using SGE.Aplicacion.Interfaces;
 using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Repositorios;
 
 public class RepositorioTramiteTxt : ITramiteRepositorio
 {
-    const          string RutaArchivo = "Tramites.txt";
+    private const  string RutaArchivo = "Tramites.txt";
     static private int    _ultimoId;
 
     public RepositorioTramiteTxt()
@@ -69,7 +68,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
 
     public IEnumerable<Tramite> ObtenerTramites()
     {
-        List<Tramite> tramites = new();
+        List<Tramite> tramites = [];
 
         using StreamReader sr = new(RutaArchivo);
 
@@ -77,6 +76,16 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
 
         while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
             string[] partes = linea.Split(", ");
+
+            tramites.Add(new Tramite {
+                                         Id = int.Parse(partes[0]),
+                                         ExpedienteId = int.Parse(string.IsNullOrEmpty(partes[1]) ? "0" : partes[1]),
+                                         Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), partes[2]),
+                                         Contenido = partes[3],
+                                         FechaCreacion = DateTime.Parse(partes[4]),
+                                         UltimaModificacion = DateTime.Parse(partes[5]),
+                                         IdUsuarioUltimaModificacion = int.Parse(partes[6]),
+                                     });
         }
 
         return tramites;
@@ -134,7 +143,8 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         return tramites;
     }
 
-    public IEnumerable<Tramite> ObtenerTramitesPorExpediente(Expediente expediente) => ObtenerTramitesPorExpediente(expediente.Id);
+    public IEnumerable<Tramite> ObtenerTramitesPorExpediente(Expediente expediente)
+        => ObtenerTramitesPorExpediente(expediente.Id);
 
     public void Modificar(Tramite tramite)
     {
@@ -156,10 +166,12 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         List<string> lineas = LeerTramites().ToList();
 
         lineas.RemoveAll(linea => {
-            string[] partes = linea.Split('\x1F');
-            return int.TryParse(partes[1], out int idExpedienteTramite) && (idExpedienteTramite == idExpediente);
-        });
-        
+                             string[] partes = linea.Split('\x1F');
+
+                             return int.TryParse(partes[1], out int idExpedienteTramite) &&
+                                    (idExpedienteTramite == idExpediente);
+                         });
+
         GuardarTramites(lineas);
     }
 
@@ -178,7 +190,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
                                                 Id           = int.Parse(partes[0]),
                                                 ExpedienteId = idExpedienteTramite,
                                                 Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite),
-                                                    partes[2]),
+                                                                                       partes[2]),
                                                 Contenido                   = partes[3],
                                                 FechaCreacion               = DateTime.Parse(partes[4]),
                                                 UltimaModificacion          = DateTime.Parse(partes[5]),
