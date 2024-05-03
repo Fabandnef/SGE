@@ -17,6 +17,11 @@ public class Tramite
         }
     }
 
+    public int    IdUsuarioUltimaModificacion { get; set; }
+    public string Contenido                   { get; set; } = "";
+
+    public EtiquetaTramite Etiqueta { get; set; }
+
     public int ExpedienteId {
         get => _expedienteId;
         set {
@@ -25,9 +30,6 @@ public class Tramite
             }
         }
     }
-
-    public EtiquetaTramite Etiqueta  { get; set; }
-    public string          Contenido { get; set; } = "";
 
     public DateTime FechaCreacion {
         get => _fechaCreacion;
@@ -38,17 +40,7 @@ public class Tramite
         }
     }
 
-    public DateTime UltimaModificacion          { get; set; }
-    public int      IdUsuarioUltimaModificacion { get; set; }
-
-    public override string ToString()
-        => $"{Id}\x1F"                 +
-           $"{ExpedienteId}\x1F"       +
-           $"{Etiqueta}\x1F"           +
-           $"{Contenido}\x1F"          +
-           $"{FechaCreacion}\x1F"      +
-           $"{UltimaModificacion}\x1F" +
-           $"{IdUsuarioUltimaModificacion}";
+    public DateTime UltimaModificacion { get; set; }
 
     public string FormatoLegible()
         => $"Id: {Id}\n"                                 +
@@ -58,4 +50,13 @@ public class Tramite
            $"FechaCreacion: {FechaCreacion}\n"           +
            $"UltimaModificacion: {UltimaModificacion}\n" +
            $"IdUsuarioUltimaModificacion: {IdUsuarioUltimaModificacion}";
+
+    public override string ToString()
+        => $"{Id}\x1F"                 +
+           $"{ExpedienteId}\x1F"       +
+           $"{Etiqueta}\x1F"           +
+           $"{Contenido}\x1F"          +
+           $"{FechaCreacion}\x1F"      +
+           $"{UltimaModificacion}\x1F" +
+           $"{IdUsuarioUltimaModificacion}";
 }

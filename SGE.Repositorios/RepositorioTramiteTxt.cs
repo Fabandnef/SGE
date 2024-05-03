@@ -202,17 +202,6 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
     public IEnumerable<Tramite> ObtenerTramitesPorExpediente(Expediente expediente)
         => ObtenerTramitesPorExpediente(expediente.Id);
 
-    private IEnumerable<string> LeerTramites()
-    {
-        using StreamReader sr = new(RutaArchivo);
-
-        string? linea;
-
-        while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
-            yield return linea;
-        }
-    }
-
     private void GuardarTramites(IEnumerable<Tramite> tramites)
     {
         using StreamWriter sw = new(RutaArchivo);
@@ -228,6 +217,17 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
 
         foreach (string tramite in tramites) {
             sw.WriteLine(tramite);
+        }
+    }
+
+    private IEnumerable<string> LeerTramites()
+    {
+        using StreamReader sr = new(RutaArchivo);
+
+        string? linea;
+
+        while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
+            yield return linea;
         }
     }
 

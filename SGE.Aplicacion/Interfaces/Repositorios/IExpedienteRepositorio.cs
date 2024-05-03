@@ -5,11 +5,10 @@ namespace SGE.Aplicacion.Interfaces.Repositorios;
 
 public interface IExpedienteRepositorio
 {
+    void                    ActualizarEstado(int idExpediente, EstadoExpediente estadoExpediente);
     void                    Alta(Expediente      expediente);
     bool                    Baja(int             idExpediente);
     Expediente?             BuscarPorId(int      idExpediente);
-    void                    Modificar(Expediente expediente);
     IEnumerable<Expediente> Listar();
-
-    void ActualizarEstado(int idExpediente, EstadoExpediente estadoExpediente);
+    void                    Modificar(Expediente expediente);
 }

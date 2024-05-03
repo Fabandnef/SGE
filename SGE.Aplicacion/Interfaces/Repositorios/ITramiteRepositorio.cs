@@ -7,15 +7,15 @@ public interface ITramiteRepositorio
 {
     void Alta(Tramite tramite);
 
-    Tramite? ObtenerPorId(int idTramite);
-
-    IEnumerable<Tramite> ObtenerPorEtiqueta(EtiquetaTramite etiquetaTramite);
-
     bool Baja(int idTramite);
+
+    void BajaPorExpediente(int idExpediente);
 
     void Modificar(Tramite tramite);
 
-    void BajaPorExpediente(int idExpediente);
+    IEnumerable<Tramite> ObtenerPorEtiqueta(EtiquetaTramite etiquetaTramite);
+
+    Tramite? ObtenerPorId(int idTramite);
 
     Tramite? ObtenerUltimoPorExpediente(int idExpediente);
 }

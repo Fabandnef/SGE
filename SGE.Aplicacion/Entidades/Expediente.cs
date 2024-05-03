@@ -16,8 +16,10 @@ public class Expediente
         }
     }
 
-    public EstadoExpediente Estado   { get; set; }
+    public int IdUsuarioUltimaModificacion { get; set; }
+
     public string           Caratula { get; set; } = "";
+    public EstadoExpediente Estado   { get; set; }
 
     public DateTime FechaCreacion {
         get => _fechaCreacion;
@@ -28,26 +30,25 @@ public class Expediente
         }
     }
 
-    public DateTime UltimaModificacion          { get; set; }
-    public int      IdUsuarioUltimaModificacion { get; set; }
-
     // TODO: Consultar si esto está bien.
     public IEnumerable<Tramite>?
         Tramites { get; set; } // * IMPORTANT: Esto no sale en el PDF, pero lo pongo porque si no no tiene sentido.
 
-    public override string ToString()
-        => $"{Id}\x1F"                          +
-           $"{Estado}\x1F"                      +
-           $"{Caratula}\x1F"                    +
-           $"{FechaCreacion}\x1F"               +
-           $"{UltimaModificacion}\x1F"          +
-           $"{IdUsuarioUltimaModificacion}";
+    public DateTime UltimaModificacion { get; set; }
 
     public string FormatoLegible()
-        => $"Id: {Id}\n"                                                   +
-           $"Estado: {Estado}\n"                                           +
-           $"Caratula: {Caratula}\n"                                       +
-           $"FechaCreacion: {FechaCreacion}\n"                             +
-           $"UltimaModificacion: {UltimaModificacion}\n"                   +
+        => $"Id: {Id}\n"                                 +
+           $"Estado: {Estado}\n"                         +
+           $"Caratula: {Caratula}\n"                     +
+           $"FechaCreacion: {FechaCreacion}\n"           +
+           $"UltimaModificacion: {UltimaModificacion}\n" +
            $"IdUsuarioUltimaModificacion: {IdUsuarioUltimaModificacion}\n";
+
+    public override string ToString()
+        => $"{Id}\x1F"                 +
+           $"{Estado}\x1F"             +
+           $"{Caratula}\x1F"           +
+           $"{FechaCreacion}\x1F"      +
+           $"{UltimaModificacion}\x1F" +
+           $"{IdUsuarioUltimaModificacion}";
 }
