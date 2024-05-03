@@ -29,7 +29,8 @@ public class TramiteAltaCasoDeUso(
         tramite.UltimaModificacion          = DateTime.Now;
         tramite.IdUsuarioUltimaModificacion = idUsuario;
 
-        tramiteRepositorio.Alta(tramite);
+        Tramite t = tramiteRepositorio.Alta(tramite);
         servicioActualizacionEstado.ActualizarEstado(tramite);
+        Console.WriteLine($"Trámite {t.Id} creado correctamente. Expediente actualizado.");
     }
 }

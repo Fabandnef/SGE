@@ -16,22 +16,29 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         }
     }
 
-    public void Alta(Expediente expediente)
+    public void ActualizarEstado(int idExpediente, EstadoExpediente estadoExpediente)
+    {
+        Expediente? expediente = BuscarPorId(idExpediente);
+
+        if (expediente is null) {
+            return;
+        }
+
+        if (expediente.Estado == estadoExpediente) {
+            return;
+        }
+
+        expediente.Estado = estadoExpediente;
+        Modificar(expediente);
+    }
+
+    public Expediente Alta(Expediente expediente)
     {
         expediente.Id = ++_ultimoId;
 
         using StreamWriter sw = new(RutaArchivo, true);
         sw.WriteLine(expediente.ToString());
-    }
-
-    public void Modificar(Expediente expediente)
-    {
-        List<string> lineas = File.ReadAllLines(RutaArchivo).ToList();
-
-        int expedienteIndice = lineas.FindIndex(linea => linea.StartsWith(expediente.Id.ToString() + '\x1F'));
-
-        lineas[expedienteIndice] = expediente.ToString();
-        File.WriteAllLines(RutaArchivo, lineas);
+        return expediente;
     }
 
     public bool Baja(int idExpediente)
@@ -105,20 +112,14 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         return expedientes;
     }
 
-    public void ActualizarEstado(int idExpediente, EstadoExpediente estadoExpediente)
+    public void Modificar(Expediente expediente)
     {
-        Expediente? expediente = BuscarPorId(idExpediente);
+        List<string> lineas = File.ReadAllLines(RutaArchivo).ToList();
 
-        if (expediente is null) {
-            return;
-        }
+        int expedienteIndice = lineas.FindIndex(linea => linea.StartsWith(expediente.Id.ToString() + '\x1F'));
 
-        if (expediente.Estado == estadoExpediente) {
-            return;
-        }
-
-        expediente.Estado = estadoExpediente;
-        Modificar(expediente);
+        lineas[expedienteIndice] = expediente.ToString();
+        File.WriteAllLines(RutaArchivo, lineas);
     }
 
     private int ObtenerUltimoId()

@@ -26,5 +26,6 @@ public class ExpedienteModificarCasoDeUso(
         expediente.IdUsuarioUltimaModificacion = idUsuario;
         expediente.UltimaModificacion          = DateTime.Now;
         expedienteRepositorio.Modificar(expediente);
+        Console.WriteLine($"Expediente {expediente.Id} modificado correctamente.");
     }
 }

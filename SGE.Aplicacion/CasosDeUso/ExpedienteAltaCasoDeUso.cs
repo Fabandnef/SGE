@@ -20,13 +20,15 @@ public class ExpedienteAltaCasoDeUso(
         }
 
         if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.ExpedienteAlta)) {
-            throw new AutorizacionException("El usuario no tiene permisos para dar de alta un expediente.");
+            throw
+                new AutorizacionException($"El usuario {idUsuario} no tiene permisos para dar de alta un expediente.");
         }
 
         expediente.FechaCreacion               = DateTime.Now;
         expediente.UltimaModificacion          = DateTime.Now;
         expediente.IdUsuarioUltimaModificacion = idUsuario;
 
-        expedienteRepositorio.Alta(expediente);
+        Expediente e = expedienteRepositorio.Alta(expediente);
+        Console.WriteLine($"Expediente {e.Id} creado correctamente.");
     }
 }

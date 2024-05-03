@@ -24,5 +24,6 @@ public class TramiteModificacionCasoDeUso(
 
         repositorioTramite.Modificar(tramite);
         servicioActualizacionEstado.ActualizarEstado(tramite);
+        Console.WriteLine($"Trámite {tramite.Id} modificado correctamente. Expediente actualizado.");
     }
 }

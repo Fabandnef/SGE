@@ -17,11 +17,12 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         }
     }
 
-    public void Alta(Tramite tramite)
+    public Tramite Alta(Tramite tramite)
     {
         tramite.Id = ++_ultimoId;
         using StreamWriter sw = new(RutaArchivo, true);
         sw.WriteLine(tramite.ToString());
+        return tramite;
     }
 
     public bool Baja(int id)
@@ -41,29 +42,19 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         return true;
     }
 
-    public Tramite? ObtenerPorId(int id)
+    public void Modificar(Tramite tramite)
     {
-        using StreamReader sr = new(RutaArchivo);
+        List<string> lineas = LeerTramites().ToList();
 
-        string? linea;
+        int lineaParaEditar = lineas.FindIndex(linea => linea.StartsWith(tramite.Id.ToString()));
 
-        while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
-            string[] partes = linea.Split('\x1F');
-
-            if (int.TryParse(partes[0], out int idTramite) && (idTramite == id)) {
-                return new Tramite {
-                                       Id = idTramite,
-                                       ExpedienteId = int.Parse(partes[1]),
-                                       Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), partes[2]),
-                                       Contenido = partes[3],
-                                       FechaCreacion = DateTime.Parse(partes[4]),
-                                       UltimaModificacion = DateTime.Parse(partes[5]),
-                                       IdUsuarioUltimaModificacion = int.Parse(partes[6]),
-                                   };
-            }
+        if (lineaParaEditar == -1) {
+            return;
         }
 
-        return null;
+        // Editar y guardar
+        lineas[lineaParaEditar] = tramite.ToString();
+        GuardarTramites(lineas);
     }
 
     public IEnumerable<Tramite> ObtenerPorEtiqueta(EtiquetaTramite etiquetaTramite)
@@ -92,19 +83,29 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         return tramites;
     }
 
-    public void Modificar(Tramite tramite)
+    public Tramite? ObtenerPorId(int id)
     {
-        List<string> lineas = LeerTramites().ToList();
+        using StreamReader sr = new(RutaArchivo);
 
-        int lineaParaEditar = lineas.FindIndex(linea => linea.StartsWith(tramite.Id.ToString()));
+        string? linea;
 
-        if (lineaParaEditar == -1) {
-            return;
+        while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
+            string[] partes = linea.Split('\x1F');
+
+            if (int.TryParse(partes[0], out int idTramite) && (idTramite == id)) {
+                return new Tramite {
+                                       Id = idTramite,
+                                       ExpedienteId = int.Parse(partes[1]),
+                                       Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), partes[2]),
+                                       Contenido = partes[3],
+                                       FechaCreacion = DateTime.Parse(partes[4]),
+                                       UltimaModificacion = DateTime.Parse(partes[5]),
+                                       IdUsuarioUltimaModificacion = int.Parse(partes[6]),
+                                   };
+            }
         }
 
-        // Editar y guardar
-        lineas[lineaParaEditar] = tramite.ToString();
-        GuardarTramites(lineas);
+        return null;
     }
 
     public void BajaPorExpediente(int idExpediente)
@@ -173,6 +174,9 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         return tramites;
     }
 
+    public IEnumerable<Tramite> ObtenerTramitesPorExpediente(Expediente expediente)
+        => ObtenerTramitesPorExpediente(expediente.Id);
+
     public IEnumerable<Tramite> ObtenerTramitesPorExpediente(int idExpediente)
     {
         Collection<Tramite> tramites = new();
@@ -199,8 +203,14 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         return tramites;
     }
 
-    public IEnumerable<Tramite> ObtenerTramitesPorExpediente(Expediente expediente)
-        => ObtenerTramitesPorExpediente(expediente.Id);
+    private void GuardarTramites(IEnumerable<string> tramites)
+    {
+        using StreamWriter sw = new(RutaArchivo);
+
+        foreach (string tramite in tramites) {
+            sw.WriteLine(tramite);
+        }
+    }
 
     private void GuardarTramites(IEnumerable<Tramite> tramites)
     {
@@ -208,15 +218,6 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
 
         foreach (Tramite tramite in tramites) {
             sw.WriteLine(tramite.ToString());
-        }
-    }
-
-    private void GuardarTramites(IEnumerable<string> tramites)
-    {
-        using StreamWriter sw = new(RutaArchivo);
-
-        foreach (string tramite in tramites) {
-            sw.WriteLine(tramite);
         }
     }
 

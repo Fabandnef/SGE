@@ -22,6 +22,6 @@ public class ExpedienteBajaCasoDeUso(
         }
 
         tramiteRepositorio.BajaPorExpediente(idExpediente);
-        Console.WriteLine($"Expediente con id {idExpediente} eliminado correctamente junto con sus trámites.");
+        Console.WriteLine($"Expediente {idExpediente} eliminado correctamente junto con sus trámites.");
     }
 }
