@@ -5,5 +5,5 @@ namespace SGE.Aplicacion.CasosDeUso;
 
 public class ExpedienteBuscarPorIdCasoDeUso(IExpedienteRepositorio expedienteRepositorio)
 {
-    public Expediente? Ejecutar(int idExpediente) => expedienteRepositorio.BuscarPorId(idExpediente);
+    public Expediente? Ejecutar(int expedienteId) => expedienteRepositorio.BuscarPorId(expedienteId);
 }

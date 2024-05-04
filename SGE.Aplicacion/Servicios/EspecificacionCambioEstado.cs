@@ -6,9 +6,9 @@ namespace SGE.Aplicacion.Servicios;
 
 public class EspecificacionCambioEstado(ITramiteRepositorio tramiteRepositorio)
 {
-    public EstadoExpediente? DefinirEstado(int idExpediente)
+    public EstadoExpediente? DefinirEstado(int expedienteId)
     {
-        Tramite? tramite = tramiteRepositorio.ObtenerUltimoPorExpediente(idExpediente);
+        Tramite? tramite = tramiteRepositorio.ObtenerUltimoPorExpediente(expedienteId);
 
         if (tramite is null) {
             return null;

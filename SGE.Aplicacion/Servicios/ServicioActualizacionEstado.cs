@@ -9,15 +9,15 @@ public class ServicioActualizacionEstado(
     EspecificacionCambioEstado especificacionCambioEstado
 )
 {
-    public void ActualizarEstado(int idExpediente)
+    public void ActualizarEstado(int expedienteId)
     {
-        EstadoExpediente? estado = especificacionCambioEstado.DefinirEstado(idExpediente);
+        EstadoExpediente? estado = especificacionCambioEstado.DefinirEstado(expedienteId);
 
         if (estado is null) {
             return;
         }
 
-        expedienteRepositorio.ActualizarEstado(idExpediente, estado.Value);
+        expedienteRepositorio.ActualizarEstado(expedienteId, estado.Value);
     }
 
     public void ActualizarEstado(Tramite tramite)
