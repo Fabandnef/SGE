@@ -11,17 +11,17 @@ public class ExpedienteBajaCasoDeUso(
     IServicioAutorizacion  servicioAutorizacion
 )
 {
-    public void Ejecutar(int idExpediente, int idUsuario)
+    public void Ejecutar(int expedienteId, int idUsuario)
     {
         if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.ExpedienteBaja)) {
             throw new AutorizacionException("El usuario no tiene permisos para dar de baja un expediente.");
         }
 
-        if (!expedienteRepositorio.Baja(idExpediente)) {
+        if (!expedienteRepositorio.Baja(expedienteId)) {
             throw new RepositorioException("El expediente a eliminar no existe.");
         }
 
-        tramiteRepositorio.BajaPorExpediente(idExpediente);
-        Console.WriteLine($"Expediente {idExpediente} eliminado correctamente junto con sus trámites.");
+        tramiteRepositorio.BajaPorExpediente(expedienteId);
+        Console.WriteLine($"Expediente {expedienteId} eliminado correctamente junto con sus trámites.");
     }
 }

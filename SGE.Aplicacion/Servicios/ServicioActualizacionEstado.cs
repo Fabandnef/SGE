@@ -17,6 +17,7 @@ public class ServicioActualizacionEstado(
     EspecificacionCambioEstado especificacionCambioEstado
 )
 {
+
     /// <summary>
     /// Actualiza el estado de un expediente en base a la especificación de cambio de estado.
     /// </summary>
