@@ -37,7 +37,7 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
     /// <param name="estadoExpediente">Nuevo <see cref="EstadoExpediente">Estado</see> del expediente.</param>
     public void ActualizarEstado(int idExpediente, EstadoExpediente estadoExpediente)
     {
-        Expediente? expediente = BuscarPorId(idExpediente);
+        Expediente? expediente = BuscarPorId(expedienteId);
 
         if (expediente is null) {
             return;
@@ -61,7 +61,7 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         expediente.Id = ++_ultimoId;
 
         using StreamWriter sw = new(RutaArchivo, true);
-        sw.WriteLine(expediente.ToString());
+        sw.WriteLine(Encode(expediente));
         return expediente;
     }
 
@@ -72,16 +72,25 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
     /// <returns><c>True</c> si se dió de baja el expediente, <c>false</c> si no se encontró.</returns>
     public bool Baja(int idExpediente)
     {
-        List<string> lineas = File.ReadAllLines(RutaArchivo).ToList();
+        List<Expediente> expedientes = LeerExpedientes().ToList();
 
-        int lineaAEliminar = lineas.FindIndex(linea => linea.StartsWith(idExpediente.ToString() + '\x1F'));
+        int i                      = 0;
+        int expedienteParaEliminar = -1;
+        
+        while (i < expedientes.Count && expedienteParaEliminar == -1) {
+            if (expedientes[i].Id == expedienteId) {
+                expedienteParaEliminar = i;
+            }
 
-        if (lineaAEliminar == -1) {
+            i++;
+        }
+        
+        if (expedienteParaEliminar == -1) {
             return false;
         }
 
-        lineas.RemoveAt(lineaAEliminar);
-        File.WriteAllLines(RutaArchivo, lineas);
+        expedientes.RemoveAt(expedienteParaEliminar);
+        GuardarExpedientes(expedientes);
 
         return true;
     }
@@ -96,27 +105,20 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         using StreamReader sr = new(RutaArchivo);
 
         string? linea = sr.ReadLine();
+        bool    found = false;
+        Expediente? expediente = null;
 
-        while (!string.IsNullOrEmpty(linea) && !linea.StartsWith(idExpediente.ToString() + '\x1F')) {
-            linea = sr.ReadLine();
+        while (!string.IsNullOrEmpty(linea) && !found) {
+            expediente = Decode(linea);
+            
+            if (expediente.Id == expedienteId) {
+                found = true;
+            } else {
+                linea = sr.ReadLine();
+            }
         }
 
-        if (string.IsNullOrEmpty(linea)) {
-            return null;
-        }
-
-        string[] partes = linea.Split('\x1F');
-
-        Expediente expediente = new() {
-                                          Id = int.Parse(partes[0]),
-                                          Caratula = partes[1],
-                                          FechaCreacion = DateTime.Parse(partes[2]),
-                                          UltimaModificacion = DateTime.Parse(partes[3]),
-                                          IdUsuarioUltimaModificacion = int.Parse(partes[4]),
-                                          Estado = (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), partes[5]),
-                                      };
-
-        return expediente;
+        return found ? expediente : null;
     }
 
     /// <summary>
@@ -128,23 +130,11 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         List<Expediente> expedientes = new();
 
         using StreamReader sr    = new(RutaArchivo);
-        string?            linea = sr.ReadLine();
+        string?            linea = null;
 
-        while (linea != null) {
-            string[] partes = linea.Split('\x1F');
-
-            Expediente expediente = new() {
-                                              Id                          = int.Parse(partes[0]),
-                                              Caratula                    = partes[1],
-                                              FechaCreacion               = DateTime.Parse(partes[2]),
-                                              UltimaModificacion          = DateTime.Parse(partes[3]),
-                                              IdUsuarioUltimaModificacion = int.Parse(partes[4]),
-                                              Estado =
-                                                  (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), partes[5]),
-                                          };
-
+        while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
+            Expediente expediente = Decode(linea);
             expedientes.Add(expediente);
-            linea = sr.ReadLine();
         }
 
         return expedientes;
@@ -156,12 +146,27 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
     /// <param name="expediente"><see cref="Expediente"/> a modificar.</param>
     public void Modificar(Expediente expediente)
     {
-        List<string> lineas = File.ReadAllLines(RutaArchivo).ToList();
+        List<Expediente> expedientes = LeerExpedientes().ToList();
 
-        int expedienteIndice = lineas.FindIndex(linea => linea.StartsWith(expediente.Id.ToString() + '\x1F'));
+        int i = 0;
+        int expedienteIndice = -1;
+        bool found = false;
+        
+        while (i < expedientes.Count && !found) {
+            if (expedientes[i].Id == expediente.Id) {
+                expedienteIndice = i;
+                found = true;
+            }
 
-        lineas[expedienteIndice] = expediente.ToString();
-        File.WriteAllLines(RutaArchivo, lineas);
+            i++;
+        }
+
+        if (!found) {
+            return;
+        }
+
+        expedientes[expedienteIndice] = expediente;
+        GuardarExpedientes(expedientes);
     }
 
     /// <summary>
@@ -186,5 +191,47 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
 
         string[] partes = prevLine.Split('\x1F');
         return int.Parse(partes[0]);
+    }
+
+    private void GuardarExpedientes(IEnumerable<Expediente> expedientes)
+    {
+        using StreamWriter sw = new(RutaArchivo);
+
+        foreach (Expediente expediente in expedientes) {
+            sw.WriteLine(Encode(expediente));
+        }
+    }
+
+    private IEnumerable<Expediente> LeerExpedientes()
+    {
+        using StreamReader sr = new(RutaArchivo);
+
+        string? linea;
+
+        while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
+            yield return Decode(linea);
+        }
+    }
+    
+    private string Encode(Expediente expediente)
+        => $"{expediente.Id}\x1F"                          +
+           $"{expediente.Caratula}\x1F"                    +
+           $"{expediente.FechaCreacion}\x1F"               +
+           $"{expediente.UltimaModificacion}\x1F"          +
+           $"{expediente.IdUsuarioUltimaModificacion}\x1F" +
+           $"{expediente.Estado}";
+    
+    private Expediente Decode(string linea)
+    {
+        string[] partes = linea.Split('\x1F');
+
+        return new Expediente {
+                                 Id                          = int.Parse(partes[0]),
+                                 Caratula                    = partes[1],
+                                 FechaCreacion               = DateTime.Parse(partes[2]),
+                                 UltimaModificacion          = DateTime.Parse(partes[3]),
+                                 IdUsuarioUltimaModificacion = int.Parse(partes[4]),
+                                 Estado                      = (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), partes[5]),
+                             };
     }
 }
