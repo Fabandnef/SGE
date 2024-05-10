@@ -13,6 +13,6 @@ public class TramiteValidador : ITramiteValidador
             error += "El contenido de un trámite no puede estar vacío.\n";
         }
 
-        return !string.IsNullOrEmpty(error);
+        return string.IsNullOrEmpty(error);
     }
 }

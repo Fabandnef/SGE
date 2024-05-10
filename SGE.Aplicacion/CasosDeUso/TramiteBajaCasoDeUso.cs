@@ -7,7 +7,7 @@ using SGE.Aplicacion.Servicios;
 namespace SGE.Aplicacion.CasosDeUso;
 
 public class TramiteBajaCasoDeUso(
-    ITramiteRepositorio         repositorio,
+    ITramiteRepositorio         tramiteRepositorio,
     ServicioActualizacionEstado servicioActualizacionEstado,
     IServicioAutorizacion       servicioAutorizacion
 )
@@ -18,7 +18,7 @@ public class TramiteBajaCasoDeUso(
             throw new AutorizacionException("El usuario no tiene permisos para realizar esta acción.");
         }
 
-        if (!repositorio.Baja(idTramite)) {
+        if (!tramiteRepositorio.Baja(idTramite)) {
             throw new RepositorioException("El trámite a eliminar no existe.");
         }
 

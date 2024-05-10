@@ -13,6 +13,6 @@ public class ExpedienteValidador : IExpedienteValidador
             error += "La carátula no puede estar vacía.\n";
         }
 
-        return !string.IsNullOrEmpty(error);
+        return string.IsNullOrEmpty(error);
     }
 }

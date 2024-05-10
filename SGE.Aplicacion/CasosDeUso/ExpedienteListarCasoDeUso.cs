@@ -5,5 +5,5 @@ namespace SGE.Aplicacion.CasosDeUso;
 
 public class ExpedienteListarCasoDeUso(IExpedienteRepositorio expedienteRepositorio)
 {
-    public IEnumerable<Expediente> Ejecutar() => expedienteRepositorio.Listar();
+    public List<Expediente> Ejecutar() => expedienteRepositorio.Listar();
 }
