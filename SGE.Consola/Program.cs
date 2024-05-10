@@ -2,6 +2,9 @@
 using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Enumerativos;
 using SGE.Aplicacion.Excepciones;
+using SGE.Aplicacion.Interfaces.Repositorios;
+using SGE.Aplicacion.Interfaces.Servicios;
+using SGE.Aplicacion.Interfaces.Validadores;
 using SGE.Aplicacion.Servicios;
 using SGE.Aplicacion.Validadores;
 using SGE.Repositorios;
@@ -14,21 +17,21 @@ public class Program
     {
         Usuario usuario = new();
 
-        ExpedienteValidador            expedienteValidador        = new();
-        TramiteValidador               tramiteValidador           = new();
-        RepositorioExpedienteTxt       repositorioExpediente      = new();
-        RepositorioTramiteTxt          repositorioTramite         = new();
-        ServicioAutorizacionProvisorio servicioAutorizacion       = new();
-        EspecificacionCambioEstado     especificacionCambioEstado = new(repositorioTramite);
+        IExpedienteValidador       expedienteValidador        = new ExpedienteValidador();
+        ITramiteValidador          tramiteValidador           = new TramiteValidador();
+        IExpedienteRepositorio     expedienteRepositorio      = new RepositorioExpedienteTxt();
+        ITramiteRepositorio        tramiteRepositorio         = new RepositorioTramiteTxt();
+        IServicioAutorizacion      servicioAutorizacion       = new ServicioAutorizacionProvisorio();
+        EspecificacionCambioEstado especificacionCambioEstado = new(tramiteRepositorio);
 
         ServicioActualizacionEstado servicioActualizacionEstado =
-            new(repositorioExpediente, especificacionCambioEstado);
+            new(expedienteRepositorio, especificacionCambioEstado);
 
         ExpedienteAltaCasoDeUso expedienteAltaCasoDeUso =
-            new(repositorioExpediente, expedienteValidador, servicioAutorizacion);
+            new(expedienteRepositorio, expedienteValidador, servicioAutorizacion);
 
         TramiteAltaCasoDeUso tramiteAltaCasoDeUso =
-            new(repositorioTramite, tramiteValidador, servicioAutorizacion, servicioActualizacionEstado);
+            new(tramiteRepositorio, tramiteValidador, servicioAutorizacion, servicioActualizacionEstado);
 
         List<Expediente> expedientes = [];
 
@@ -42,9 +45,9 @@ public class Program
 
         foreach (Expediente expediente in expedientes) {
             try {
-                expedienteAltaCasoDeUso.Ejecutar(expediente, usuario.Id);
-            }
-            catch (ValidacionException e) {
+                Expediente e = expedienteAltaCasoDeUso.Ejecutar(expediente, usuario.Id);
+                Console.WriteLine($"Expediente {e.Id} creado correctamente.");
+            } catch (ValidacionException e) {
                 Console.WriteLine(e.Message);
             }
         }
@@ -64,16 +67,29 @@ public class Program
         foreach (Tramite tramite in tramites) {
             try {
                 tramiteAltaCasoDeUso.Ejecutar(tramite, usuario.Id);
-            }
-            catch (ValidacionException e) {
+            } catch (ValidacionException e) {
                 Console.WriteLine(e.Message);
             }
         }
 
-        ExpedienteBajaCasoDeUso expedienteBajaCasoDeUso =
-            new(repositorioExpediente, repositorioTramite, servicioAutorizacion);
+//        ExpedienteBajaCasoDeUso expedienteBajaCasoDeUso =
+//            new(repositorioExpediente, repositorioTramite, servicioAutorizacion);
+//
+//        try {
+//            expedienteBajaCasoDeUso.Ejecutar(2, usuario.Id);
+//        } catch (Exception e) {
+//            Console.WriteLine(e.Message);
+//        }
 
-        expedienteBajaCasoDeUso.Ejecutar(2, usuario.Id);
+        ExpedienteListarConTramitesCasoDeUso expedienteListarConTramitesCasoDeUso =
+            new(expedienteRepositorio, tramiteRepositorio);
+
+        List<Expediente> expedientesConTramites = expedienteListarConTramitesCasoDeUso.Ejecutar();
+
+        ExpedienteBuscarPorIdConTramitesCasoDeUso expedienteBuscarPorIdConTramitesCasoDeUso =
+            new(expedienteRepositorio, tramiteRepositorio);
+
+        Expediente? expedienteBuscado = expedienteBuscarPorIdConTramitesCasoDeUso.Ejecutar(1);
 
         // TramiteBajaCasoDeUso tramiteBajaCasoDeUso = new(repositorioTramite, servicioAutorizacion);
         //

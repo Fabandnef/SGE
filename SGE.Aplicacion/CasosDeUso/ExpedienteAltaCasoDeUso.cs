@@ -13,7 +13,7 @@ public class ExpedienteAltaCasoDeUso(
     IServicioAutorizacion  servicioAutorizacion
 )
 {
-    public void Ejecutar(Expediente expediente, int idUsuario)
+    public Expediente Ejecutar(Expediente expediente, int idUsuario)
     {
         if (!expedienteValidador.Validar(expediente, out string error)) {
             throw new ValidacionException(error);
@@ -29,6 +29,7 @@ public class ExpedienteAltaCasoDeUso(
         expediente.IdUsuarioUltimaModificacion = idUsuario;
 
         Expediente e = expedienteRepositorio.Alta(expediente);
-        Console.WriteLine($"Expediente {e.Id} creado correctamente.");
+
+        return e;
     }
 }
