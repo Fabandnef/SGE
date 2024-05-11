@@ -75,6 +75,16 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
     }
 
     /// <inheritdoc />
+    public void BajaPorExpediente(int idExpediente)
+    {
+        List<Tramite> tramites = LeerTramites();
+
+        tramites.RemoveAll(tramite => tramite.idExpediente == idExpediente);
+
+        GuardarTramites(tramites);
+    }
+
+    /// <inheritdoc />
     public void Modificar(Tramite tramite)
     {
         List<Tramite> tramites = LeerTramites().ToList();
@@ -138,39 +148,6 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         return found ? t : null;
     }
 
-    /// <inheritdoc />
-    public void BajaPorExpediente(int idExpediente)
-    {
-        List<Tramite> tramites = LeerTramites();
-
-        tramites.RemoveAll(tramite => tramite.idExpediente == idExpediente);
-
-        GuardarTramites(tramites);
-    }
-
-    /// <inheritdoc />
-    public Tramite? ObtenerUltimoPorExpediente(int idExpediente)
-    {
-        using StreamReader sr = new(RutaArchivo);
-
-        string?  linea;
-        Tramite? ultimoTramite = null;
-
-        while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
-            Tramite t = Decode(linea);
-
-            if (t.idExpediente != idExpediente) {
-                continue;
-            }
-
-            if ((ultimoTramite == null) || (t.FechaCreacion > ultimoTramite.FechaCreacion)) {
-                ultimoTramite = t;
-            }
-        }
-
-        return ultimoTramite;
-    }
-
     /// <summary>
     ///     Obtiene todos los trámites.
     /// </summary>
@@ -214,6 +191,29 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         // Asigno los trámites al expediente y lo devuelvo
         expediente.Tramites = tramites;
         return expediente;
+    }
+
+    /// <inheritdoc />
+    public Tramite? ObtenerUltimoPorExpediente(int idExpediente)
+    {
+        using StreamReader sr = new(RutaArchivo);
+
+        string?  linea;
+        Tramite? ultimoTramite = null;
+
+        while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
+            Tramite t = Decode(linea);
+
+            if (t.idExpediente != idExpediente) {
+                continue;
+            }
+
+            if ((ultimoTramite == null) || (t.FechaCreacion > ultimoTramite.FechaCreacion)) {
+                ultimoTramite = t;
+            }
+        }
+
+        return ultimoTramite;
     }
     #endregion
     #endregion

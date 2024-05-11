@@ -24,11 +24,6 @@ public class Tramite
 
     #region PROPIEDADES PUBLICAS -----------------------------------------------------------------------
     /// <summary>
-    ///     El usuario que realizó la última modificación en el trámite.
-    /// </summary>
-    public int IdUsuarioUltimaModificacion { get; set; }
-
-    /// <summary>
     ///     El contenido del trámite, en formato de texto.
     /// </summary>
     public string? Contenido { get; set; }
@@ -40,30 +35,21 @@ public class Tramite
     public EtiquetaTramite Etiqueta { get; set; }
 
     /// <summary>
-    ///     La fecha en la que se realizó la última modificación en el trámite. La fecha se actualiza
-    ///     automáticamente cada vez que se modifica el trámite.
-    /// </summary>
-    public DateTime UltimaModificacion { get; set; }
-
-    /// <summary>
     ///     El identificador del expediente al que pertenece el trámite. Se asocia a un expediente
     ///     a través de este identificador. Solo se permite la asignación del valor al crear el trámite.
     /// </summary>
     public int idExpediente { get; init; }
 
     /// <summary>
-    ///     Identificador único del trámite. Ya que el ID se calcula antes de ser insertado, se
-    ///     permite la asignación del ID solo si el valor actual es 0, o sea, si no fue asignado.
-    ///     La funcionalidad final termina siendo la misma que si el ID fuera de solo lectura.
+    ///     El usuario que realizó la última modificación en el trámite.
     /// </summary>
-    public int Id {
-        get => _id;
-        set {
-            if (_id == 0) {
-                _id = value;
-            }
-        }
-    }
+    public int IdUsuarioUltimaModificacion { get; set; }
+
+    /// <summary>
+    ///     La fecha en la que se realizó la última modificación en el trámite. La fecha se actualiza
+    ///     automáticamente cada vez que se modifica el trámite.
+    /// </summary>
+    public DateTime UltimaModificacion { get; set; }
 
     /// <summary>
     ///     La fecha en la que se creó el trámite. Se permite la asignación de la fecha solo si el
@@ -75,6 +61,20 @@ public class Tramite
         set {
             if (_fechaCreacion == DateTime.MinValue) {
                 _fechaCreacion = value;
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Identificador único del trámite. Ya que el ID se calcula antes de ser insertado, se
+    ///     permite la asignación del ID solo si el valor actual es 0, o sea, si no fue asignado.
+    ///     La funcionalidad final termina siendo la misma que si el ID fuera de solo lectura.
+    /// </summary>
+    public int Id {
+        get => _id;
+        set {
+            if (_id == 0) {
+                _id = value;
             }
         }
     }
