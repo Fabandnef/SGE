@@ -13,15 +13,16 @@ public class ExpedienteAltaCasoDeUso(
     IServicioAutorizacion  servicioAutorizacion
 )
 {
+    #region METODOS PUBLICOS ---------------------------------------------------------------------------
     public Expediente Ejecutar(Expediente expediente, int idUsuario)
     {
-        if (!expedienteValidador.Validar(expediente, out string error)) {
-            throw new ValidacionException(error);
-        }
-
         if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.ExpedienteAlta)) {
             throw
                 new AutorizacionException($"El usuario {idUsuario} no tiene permisos para dar de alta un expediente.");
+        }
+
+        if (!expedienteValidador.Validar(expediente, out string error)) {
+            throw new ValidacionException(error);
         }
 
         expediente.FechaCreacion               = DateTime.Now;
@@ -32,4 +33,5 @@ public class ExpedienteAltaCasoDeUso(
 
         return e;
     }
+    #endregion
 }

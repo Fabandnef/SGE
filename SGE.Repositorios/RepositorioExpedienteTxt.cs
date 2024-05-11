@@ -38,9 +38,10 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
 
     #region IMPLEMENTACIONES DE INTERFACES -------------------------------------------------------------
     #region IExpedienteRepositorio
-    public void ActualizarEstado(int expedienteId, EstadoExpediente estadoExpediente)
+    /// <inheritdoc />
+    public void ActualizarEstado(int idExpediente, EstadoExpediente estadoExpediente)
     {
-        Expediente? expediente = BuscarPorId(expedienteId);
+        Expediente? expediente = BuscarPorId(idExpediente);
 
         if (expediente is null) {
             return;
@@ -54,6 +55,7 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         Modificar(expediente);
     }
 
+    /// <inheritdoc />
     public Expediente Alta(Expediente expediente)
     {
         expediente.Id = ++_ultimoId;
@@ -63,41 +65,41 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         return expediente;
     }
 
-    public bool Baja(int expedienteId)
+    /// <inheritdoc />
+    public bool Baja(int idExpediente)
     {
         List<Expediente> expedientes = LeerExpedientes();
 
         int i                      = 0;
         int expedienteParaEliminar = -1;
 
+        // Buscar el índice del expediente a eliminar.
         while (
             (i            < expedientes.Count)
          && (-1           == expedienteParaEliminar)
-         && (expedienteId <= expedientes[i].Id)
+         && (idExpediente <= expedientes[i].Id)
         ) {
-            if (expedientes[i].Id == expedienteId) {
+            if (expedientes[i].Id == idExpediente) {
                 expedienteParaEliminar = i;
             }
 
             i++;
         }
 
+        // Si no se encontró el expediente, devolver false.
         if (expedienteParaEliminar == -1) {
             return false;
         }
 
+        // Eliminar el expediente y guardar los cambios.
         expedientes.RemoveAt(expedienteParaEliminar);
         GuardarExpedientes(expedientes);
 
         return true;
     }
 
-    /// <summary>
-    ///     Buscar un expediente por su ID.
-    /// </summary>
-    /// <param name="expedienteId">ID del expediente a buscar.</param>
-    /// <returns><see cref="Expediente" /> encontrado, o <c>null</c> si no se encontró.</returns>
-    public Expediente? BuscarPorId(int expedienteId)
+    /// <inheritdoc />
+    public Expediente? BuscarPorId(int idExpediente)
     {
         using StreamReader sr = new(RutaArchivo);
 
@@ -105,10 +107,11 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         bool        found      = false;
         Expediente? expediente = null;
 
+        // Recorrer el archivo hasta encontrar el expediente o llegar al final.
         while (!string.IsNullOrEmpty(linea) && !found) {
             expediente = Decode(linea);
 
-            if (expediente.Id == expedienteId) {
+            if (expediente.Id == idExpediente) {
                 found = true;
             } else {
                 linea = sr.ReadLine();
@@ -118,6 +121,7 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         return found ? expediente : null;
     }
 
+    /// <inheritdoc />
     public List<Expediente> Listar()
     {
         List<Expediente> expedientes = [];
@@ -133,6 +137,7 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         return expedientes;
     }
 
+    /// <inheritdoc />
     public void Modificar(Expediente expediente)
     {
         List<Expediente> expedientes = LeerExpedientes().ToList();
@@ -141,13 +146,14 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         int  expedienteIndice = -1;
         bool found            = false;
 
+        // Buscar el índice del expediente a modificar.
         while ((i < expedientes.Count) && !found) {
             if (expedientes[i].Id == expediente.Id) {
                 expedienteIndice = i;
                 found            = true;
+            } else {
+                i++;
             }
-
-            i++;
         }
 
         if (!found) {
@@ -162,7 +168,70 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
 
     #region METODOS ------------------------------------------------------------------------------------
     /// <summary>
-    ///     Obtener el último ID de los expedientes.
+    ///     Decodificar una línea de texto en un expediente.
+    /// </summary>
+    /// <param name="linea">Línea de texto a decodificar.</param>
+    /// <returns><see cref="Expediente" /> decodificado.</returns>
+    private Expediente Decode(string linea)
+    {
+        string[] partes = linea.Split('\x1F');
+
+        return new Expediente {
+                                  Id                          = int.Parse(partes[0]),
+                                  Caratula                    = partes[1],
+                                  FechaCreacion               = DateTime.Parse(partes[2]),
+                                  UltimaModificacion          = DateTime.Parse(partes[3]),
+                                  IdUsuarioUltimaModificacion = int.Parse(partes[4]),
+                                  Estado                      = Enum.Parse<EstadoExpediente>(partes[5]),
+                              };
+    }
+
+    /// <summary>
+    ///     Codificar un expediente en una línea de texto.
+    /// </summary>
+    /// <param name="expediente">Expediente a codificar.</param>
+    /// <returns>Línea de texto codificada.</returns>
+    private string Encode(Expediente expediente)
+        => $"{expediente.Id}\x1F"                          +
+           $"{expediente.Caratula}\x1F"                    +
+           $"{expediente.FechaCreacion}\x1F"               +
+           $"{expediente.UltimaModificacion}\x1F"          +
+           $"{expediente.IdUsuarioUltimaModificacion}\x1F" +
+           $"{expediente.Estado}";
+
+    /// <summary>
+    ///     Guardar los expedientes en el archivo.
+    /// </summary>
+    /// <param name="expedientes"><see cref="IEnumerable{T}" /> de <see cref="Expediente" /></param>
+    private void GuardarExpedientes(IEnumerable<Expediente> expedientes)
+    {
+        using StreamWriter sw = new(RutaArchivo);
+
+        foreach (Expediente expediente in expedientes) {
+            sw.WriteLine(Encode(expediente));
+        }
+    }
+
+    /// <summary>
+    ///     Lee los expedientes del archivo.
+    /// </summary>
+    /// <returns><see cref="List{T}" /> de <see cref="Expediente" />.</returns>
+    private List<Expediente> LeerExpedientes()
+    {
+        using StreamReader sr = new(RutaArchivo);
+
+        string?          linea;
+        List<Expediente> expedientes = [];
+
+        while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
+            expedientes.Add(Decode(linea));
+        }
+
+        return expedientes;
+    }
+
+    /// <summary>
+    ///     Obtiene el último ID de los expedientes.
     /// </summary>
     /// <returns>Último ID de los expedientes.</returns>
     private int ObtenerUltimoId()
@@ -181,53 +250,8 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
             return 0;
         }
 
-        string[] partes = prevLine.Split('\x1F');
-        return int.Parse(partes[0]);
-    }
-
-    private void GuardarExpedientes(IEnumerable<Expediente> expedientes)
-    {
-        using StreamWriter sw = new(RutaArchivo);
-
-        foreach (Expediente expediente in expedientes) {
-            sw.WriteLine(Encode(expediente));
-        }
-    }
-
-    private List<Expediente> LeerExpedientes()
-    {
-        using StreamReader sr = new(RutaArchivo);
-
-        string?          linea;
-        List<Expediente> expedientes = [];
-
-        while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
-            expedientes.Add(Decode(linea));
-        }
-
-        return expedientes;
-    }
-
-    private string Encode(Expediente expediente)
-        => $"{expediente.Id}\x1F"                          +
-           $"{expediente.Caratula}\x1F"                    +
-           $"{expediente.FechaCreacion}\x1F"               +
-           $"{expediente.UltimaModificacion}\x1F"          +
-           $"{expediente.IdUsuarioUltimaModificacion}\x1F" +
-           $"{expediente.Estado}";
-
-    private Expediente Decode(string linea)
-    {
-        string[] partes = linea.Split('\x1F');
-
-        return new Expediente {
-                                  Id                          = int.Parse(partes[0]),
-                                  Caratula                    = partes[1],
-                                  FechaCreacion               = DateTime.Parse(partes[2]),
-                                  UltimaModificacion          = DateTime.Parse(partes[3]),
-                                  IdUsuarioUltimaModificacion = int.Parse(partes[4]),
-                                  Estado                      = Enum.Parse<EstadoExpediente>(partes[5]),
-                              };
+        Expediente e = Decode(prevLine);
+        return e.Id;
     }
     #endregion
 }

@@ -12,6 +12,7 @@ public class TramiteBajaCasoDeUso(
     IServicioAutorizacion       servicioAutorizacion
 )
 {
+    #region METODOS PUBLICOS ---------------------------------------------------------------------------
     public void Ejecutar(int idTramite, int idUsuarioActual)
     {
         if (!servicioAutorizacion.PoseeElPermiso(idUsuarioActual, Permiso.TramiteBaja)) {
@@ -23,6 +24,6 @@ public class TramiteBajaCasoDeUso(
         }
 
         servicioActualizacionEstado.ActualizarEstado(idTramite);
-        Console.WriteLine($"Trámite {idTramite} eliminado correctamente. Expediente actualizado.");
     }
+    #endregion
 }

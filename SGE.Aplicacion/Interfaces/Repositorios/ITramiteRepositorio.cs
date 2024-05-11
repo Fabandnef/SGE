@@ -5,6 +5,7 @@ namespace SGE.Aplicacion.Interfaces.Repositorios;
 
 public interface ITramiteRepositorio
 {
+    #region METODOS PUBLICOS ---------------------------------------------------------------------------
     /// <summary>
     ///     Da de alta un trámite.
     /// </summary>
@@ -22,8 +23,8 @@ public interface ITramiteRepositorio
     /// <summary>
     ///     Da de baja todos los trámites de un expediente.
     /// </summary>
-    /// <param name="expedienteId">ID del expediente.</param>
-    void BajaPorExpediente(int expedienteId);
+    /// <param name="idExpediente">ID del expediente.</param>
+    void BajaPorExpediente(int idExpediente);
 
     /// <summary>
     ///     Modifica un trámite.
@@ -49,7 +50,7 @@ public interface ITramiteRepositorio
     ///     Obtiene todos los trámites.
     /// </summary>
     /// <returns><see cref="List{T}" /> de <see cref="Tramite" />.</returns>
-    List<Tramite>        ObtenerTramites();
+    List<Tramite> ObtenerTramites();
 
     /// <summary>
     ///     Obtiene todos los trámites de un expediente.
@@ -61,7 +62,8 @@ public interface ITramiteRepositorio
     /// <summary>
     ///     Obtiene el último trámite de un expediente.
     /// </summary>
-    /// <param name="expedienteId">ID del expediente.</param>
+    /// <param name="idExpediente">ID del expediente.</param>
     /// <returns>Último <see cref="Tramite" /> del expediente, <c>null</c> si no se encontró.</returns>
-    Tramite? ObtenerUltimoPorExpediente(int expedienteId);
+    Tramite? ObtenerUltimoPorExpediente(int idExpediente);
+    #endregion
 }

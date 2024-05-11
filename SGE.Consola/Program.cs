@@ -13,6 +13,7 @@ namespace SGE.Consola;
 
 public class Program
 {
+    #region METODOS PUBLICOS ---------------------------------------------------------------------------
     static public void Main(string[] args)
     {
         Usuario usuario = new();
@@ -56,7 +57,7 @@ public class Program
 
         for (int i = 0; i < 80; i++) {
             tramites.Add(new Tramite {
-                                         ExpedienteId = new Random().Next(1, 15),
+                                         idExpediente = new Random().Next(1, 15),
                                          Etiqueta = (EtiquetaTramite)(Enum.GetValues(typeof(EtiquetaTramite))
                                                                           .GetValue(new Random().Next(0, 5)) ?? 0),
                                          Contenido = GenerarFrase(new Random().Next(5, 24)),
@@ -116,7 +117,9 @@ public class Program
 
         Console.ReadKey();
     }
+    #endregion
 
+    #region METODOS ------------------------------------------------------------------------------------
     static private string GenerarFrase(int palabras = 5)
     {
         Random obj = new();
@@ -144,4 +147,5 @@ public class Program
 
         return st;
     }
+    #endregion
 }

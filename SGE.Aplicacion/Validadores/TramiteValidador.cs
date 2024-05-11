@@ -3,8 +3,15 @@ using SGE.Aplicacion.Interfaces.Validadores;
 
 namespace SGE.Aplicacion.Validadores;
 
+/// <summary>
+///     Clase que implementa la interfaz ITramiteValidador. Permite validar un trámite, o
+///     arrojar un mensaje de error si no cumple con las reglas preestablecidas.
+/// </summary>
 public class TramiteValidador : ITramiteValidador
 {
+    #region IMPLEMENTACIONES DE INTERFACES -------------------------------------------------------------
+    #region ITramiteValidador
+    /// <inheritdoc />
     public bool Validar(Tramite tramite, out string error)
     {
         error = "";
@@ -15,4 +22,6 @@ public class TramiteValidador : ITramiteValidador
 
         return string.IsNullOrEmpty(error);
     }
+    #endregion
+    #endregion
 }

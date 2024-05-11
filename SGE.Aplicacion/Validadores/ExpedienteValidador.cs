@@ -3,8 +3,15 @@ using SGE.Aplicacion.Interfaces.Validadores;
 
 namespace SGE.Aplicacion.Validadores;
 
+/// <summary>
+///     Clase que implementa la interfaz IExpedienteValidador. Permite validar un expediente, o
+///     arrojar un mensaje de error si no cumple con las reglas preestablecidas.
+/// </summary>
 public class ExpedienteValidador : IExpedienteValidador
 {
+    #region IMPLEMENTACIONES DE INTERFACES -------------------------------------------------------------
+    #region IExpedienteValidador
+    /// <inheritdoc />
     public bool Validar(Expediente expediente, out string error)
     {
         error = "";
@@ -15,4 +22,6 @@ public class ExpedienteValidador : IExpedienteValidador
 
         return string.IsNullOrEmpty(error);
     }
+    #endregion
+    #endregion
 }

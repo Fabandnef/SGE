@@ -5,36 +5,38 @@ using SGE.Aplicacion.Interfaces.Repositorios;
 namespace SGE.Aplicacion.Servicios;
 
 /// <summary>
-/// Servicio que permite actualizar el estado del expediente. Para ello,
-/// utilizar una clase que implemente la interfaz <see cref="EspecificacionCambioEstado"/>
-/// para determinar el nuevo estado del expediente, y en base a eso, actualizarlo.
+///     Servicio que permite actualizar el estado del expediente. Para ello,
+///     utilizar una clase que implemente la interfaz <see cref="EspecificacionCambioEstado" />
+///     para determinar el nuevo estado del expediente, y en base a eso, actualizarlo.
 /// </summary>
 /// <param name="expedienteRepositorio">Repositorio de expedientes.</param>
-/// <param name="especificacionCambioEstado">Servicio para determinar el nuevo
-/// estado del expediente.</param>
+/// <param name="especificacionCambioEstado">
+///     Servicio para determinar el nuevo
+///     estado del expediente.
+/// </param>
 public class ServicioActualizacionEstado(
     IExpedienteRepositorio     expedienteRepositorio,
     EspecificacionCambioEstado especificacionCambioEstado
 )
 {
-
+    #region METODOS PUBLICOS ---------------------------------------------------------------------------
     /// <summary>
-    /// Actualiza el estado de un expediente en base a la especificación de cambio de estado.
+    ///     Actualiza el estado de un expediente en base a la especificación de cambio de estado.
     /// </summary>
-    /// <param name="expedienteId">ID del expediente.</param>
-    public void ActualizarEstado(int expedienteId)
+    /// <param name="idExpediente">ID del expediente.</param>
+    public void ActualizarEstado(int idExpediente)
     {
-        EstadoExpediente? estado = especificacionCambioEstado.DefinirEstado(expedienteId);
+        EstadoExpediente? estado = especificacionCambioEstado.DefinirEstado(idExpediente);
 
         if (estado is null) {
             return;
         }
 
-        expedienteRepositorio.ActualizarEstado(expedienteId, estado.Value);
+        expedienteRepositorio.ActualizarEstado(idExpediente, estado.Value);
     }
 
     /// <summary>
-    /// Actualiza el estado de un expediente en base a la especificación de cambio de estado.
+    ///     Actualiza el estado de un expediente en base a la especificación de cambio de estado.
     /// </summary>
     /// <param name="tramite">Trámite a utilizar para verificar estados.</param>
     public void ActualizarEstado(Tramite tramite)
@@ -45,6 +47,7 @@ public class ServicioActualizacionEstado(
             return;
         }
 
-        expedienteRepositorio.ActualizarEstado(tramite.ExpedienteId, estado.Value);
+        expedienteRepositorio.ActualizarEstado(tramite.idExpediente, estado.Value);
     }
+    #endregion
 }
