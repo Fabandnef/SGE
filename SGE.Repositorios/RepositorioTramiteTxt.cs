@@ -79,7 +79,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
     {
         List<Tramite> tramites = LeerTramites();
 
-        tramites.RemoveAll(tramite => tramite.idExpediente == idExpediente);
+        tramites.RemoveAll(tramite => tramite.IdExpediente == idExpediente);
 
         GuardarTramites(tramites);
     }
@@ -183,7 +183,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
             Tramite t = Decode(linea);
 
-            if (t.idExpediente == expediente.Id) {
+            if (t.IdExpediente == expediente.Id) {
                 tramites.Add(t);
             }
         }
@@ -204,7 +204,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
             Tramite t = Decode(linea);
 
-            if (t.idExpediente != idExpediente) {
+            if (t.IdExpediente != idExpediente) {
                 continue;
             }
 
@@ -230,7 +230,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
 
         return new Tramite {
                                Id                          = int.Parse(partes[0]),
-                               idExpediente                = int.Parse(partes[1]),
+                               IdExpediente                = int.Parse(partes[1]),
                                Etiqueta                    = Enum.Parse<EtiquetaTramite>(partes[2]),
                                Contenido                   = partes[3],
                                FechaCreacion               = DateTime.Parse(partes[4]),
@@ -246,7 +246,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
     /// <returns>Línea de texto codificada.</returns>
     private string Encode(Tramite tramite)
         => $"{tramite.Id}\x1F"                 +
-           $"{tramite.idExpediente}\x1F"       +
+           $"{tramite.IdExpediente}\x1F"       +
            $"{tramite.Etiqueta}\x1F"           +
            $"{tramite.Contenido}\x1F"          +
            $"{tramite.FechaCreacion}\x1F"      +
