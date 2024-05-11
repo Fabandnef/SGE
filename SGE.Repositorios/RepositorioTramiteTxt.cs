@@ -48,7 +48,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
     }
 
     /// <inheritdoc />
-    public bool Baja(int idTramite)
+    public int Baja(int idTramite)
     {
         List<Tramite> tramites = LeerTramites().ToList();
 
@@ -64,14 +64,17 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         }
 
         if (lineaParaEliminar == -1) {
-            return false;
+            return 0; // El trámite no fue encontrado
         }
 
+        // Guardar id del expediente asignado al trámite
+        int idExpediente = tramites[lineaParaEliminar].IdExpediente;
+        
         // Eliminar y guardar
         tramites.RemoveAt(lineaParaEliminar);
         GuardarTramites(tramites);
 
-        return true;
+        return idExpediente;
     }
 
     /// <inheritdoc />

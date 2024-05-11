@@ -18,12 +18,14 @@ public class TramiteBajaCasoDeUso(
         if (!servicioAutorizacion.PoseeElPermiso(idUsuarioActual, Permiso.TramiteBaja)) {
             throw new AutorizacionException("El usuario no tiene permisos para realizar esta acción.");
         }
-
-        if (!tramiteRepositorio.Baja(idTramite)) {
+        
+        int idExpediente = tramiteRepositorio.Baja(idTramite);
+        
+        if (idExpediente == 0) {
             throw new RepositorioException("El trámite a eliminar no existe.");
         }
 
-        servicioActualizacionEstado.ActualizarEstado(idTramite);
+        servicioActualizacionEstado.ActualizarEstado(idExpediente);
     }
     #endregion
 }

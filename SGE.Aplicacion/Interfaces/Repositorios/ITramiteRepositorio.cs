@@ -17,8 +17,8 @@ public interface ITramiteRepositorio
     ///     Da de baja un trámite.
     /// </summary>
     /// <param name="idTramite">ID del trámite a dar de baja.</param>
-    /// <returns><c>True</c> si se dio de baja el trámite, <c>False</c> si no se encontró.</returns>
-    bool Baja(int idTramite);
+    /// <returns><c>IdExpediente</c> si se dio de baja el trámite, <c>0</c> si no se encontró el trámite a dar de baja.</returns>
+    int Baja(int idTramite);
 
     /// <summary>
     ///     Da de baja todos los trámites de un expediente.
