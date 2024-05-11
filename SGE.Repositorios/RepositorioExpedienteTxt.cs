@@ -7,7 +7,7 @@ namespace SGE.Repositorios;
 /// <summary>
 ///     Repositorio de expedientes en un archivo de texto.
 /// </summary>
-public class RepositorioExpedienteTxt : IExpedienteRepositorio
+public sealed class RepositorioExpedienteTxt : RepositorioTxt, IExpedienteRepositorio
 {
     #region CONSTANTES ---------------------------------------------------------------------------------
     /// <summary>
@@ -28,9 +28,9 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
     ///     Constructor de la clase. Si el archivo existe y no está vacío, y el último ID es 0,
     ///     se obtiene el último ID de los expedientes.
     /// </summary>
-    public RepositorioExpedienteTxt()
+    public RepositorioExpedienteTxt() : base(RutaArchivo)
     {
-        if (File.Exists(RutaArchivo) && (new FileInfo(RutaArchivo).Length > 0) && (_ultimoId == 0)) {
+        if ((new FileInfo(RutaArchivo).Length > 0) && (_ultimoId == 0)) {
             _ultimoId = ObtenerUltimoId();
         }
     }
