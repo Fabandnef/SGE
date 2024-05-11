@@ -85,7 +85,7 @@ public class Expediente
     ///     Devuelve una representación en formato de cadena de texto del expediente, con el valor de
     ///     todas sus propiedades de una forma legible.
     /// </summary>
-    /// <returns>String representando todos los elementos del trámite</returns>
+    /// <returns>String representando todos los elementos del expediente</returns>
     public override string ToString()
     {
         string st = $"Id: {Id}\n"                                 +

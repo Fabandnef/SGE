@@ -19,6 +19,10 @@ public class TramiteValidador : ITramiteValidador
         if (string.IsNullOrEmpty(tramite.Contenido)) {
             error += "El contenido de un trámite no puede estar vacío.\n";
         }
+        
+        if (tramite.IdExpediente <= 0) {
+            error += "El trámite debe estar asociado a un expediente.\n";
+        }
 
         return string.IsNullOrEmpty(error);
     }
