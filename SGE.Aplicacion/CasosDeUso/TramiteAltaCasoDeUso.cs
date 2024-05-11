@@ -18,12 +18,12 @@ public class TramiteAltaCasoDeUso(
     #region METODOS PUBLICOS ---------------------------------------------------------------------------
     public Tramite Ejecutar(Tramite tramite, int idUsuario)
     {
-        if (!tramiteValidador.Validar(tramite, out string error)) {
-            throw new ValidacionException(error);
-        }
-
         if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.TramiteAlta)) {
             throw new AutorizacionException("El usuario no tiene permisos para realizar esta acción.");
+        }
+        
+        if (!tramiteValidador.Validar(tramite, out string error)) {
+            throw new ValidacionException(error);
         }
 
         tramite.FechaCreacion               = DateTime.Now;
