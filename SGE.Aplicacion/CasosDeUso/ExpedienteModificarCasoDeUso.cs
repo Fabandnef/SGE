@@ -13,12 +13,13 @@ public class ExpedienteModificarCasoDeUso(
     IServicioAutorizacion  servicioAutorizacion
 )
 {
+    #region METODOS PUBLICOS ---------------------------------------------------------------------------
     public void Ejecutar(Expediente expediente, int idUsuario)
     {
         if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.ExpedienteModificacion)) {
             throw new AutorizacionException("El usuario no tiene permisos para editar un expediente.");
         }
-        
+
         if (!expedienteValidador.Validar(expediente, out string error)) {
             throw new ValidacionException(error);
         }
@@ -27,4 +28,5 @@ public class ExpedienteModificarCasoDeUso(
         expediente.UltimaModificacion          = DateTime.Now;
         expedienteRepositorio.Modificar(expediente);
     }
+    #endregion
 }

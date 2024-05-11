@@ -13,6 +13,7 @@ namespace SGE.Consola;
 
 public class Program
 {
+    #region METODOS PUBLICOS ---------------------------------------------------------------------------
     static public void Main(string[] args)
     {
         Usuario usuario = new();
@@ -116,7 +117,9 @@ public class Program
 
         Console.ReadKey();
     }
+    #endregion
 
+    #region METODOS ------------------------------------------------------------------------------------
     static private string GenerarFrase(int palabras = 5)
     {
         Random obj = new();
@@ -144,4 +147,5 @@ public class Program
 
         return st;
     }
+    #endregion
 }

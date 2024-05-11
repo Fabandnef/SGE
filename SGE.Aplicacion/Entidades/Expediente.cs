@@ -14,11 +14,11 @@ public class Expediente
     ///     La fecha en la que se creó el expediente.
     /// </summary>
     private DateTime _fechaCreacion;
-    
+
     /// <summary>
     ///     Identificador único del expediente.
     /// </summary>
-    private int      _id;
+    private int _id;
     #endregion
 
     #region PROPIEDADES PUBLICAS -----------------------------------------------------------------------

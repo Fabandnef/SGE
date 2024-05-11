@@ -15,6 +15,7 @@ public class TramiteAltaCasoDeUso(
     ServicioActualizacionEstado servicioActualizacionEstado
 )
 {
+    #region METODOS PUBLICOS ---------------------------------------------------------------------------
     public Tramite Ejecutar(Tramite tramite, int idUsuario)
     {
         if (!tramiteValidador.Validar(tramite, out string error)) {
@@ -31,7 +32,8 @@ public class TramiteAltaCasoDeUso(
 
         Tramite t = tramiteRepositorio.Alta(tramite);
         servicioActualizacionEstado.ActualizarEstado(tramite);
-        
+
         return t;
     }
+    #endregion
 }

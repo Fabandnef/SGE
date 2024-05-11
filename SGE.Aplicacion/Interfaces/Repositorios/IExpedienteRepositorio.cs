@@ -8,6 +8,7 @@ namespace SGE.Aplicacion.Interfaces.Repositorios;
 /// </summary>
 public interface IExpedienteRepositorio
 {
+    #region METODOS PUBLICOS ---------------------------------------------------------------------------
     /// <summary>
     ///     Actualiza el estado de un expediente.
     /// </summary>
@@ -47,4 +48,5 @@ public interface IExpedienteRepositorio
     /// </summary>
     /// <param name="expediente"><see cref="Expediente" /> a modificar.</param>
     void Modificar(Expediente expediente);
+    #endregion
 }

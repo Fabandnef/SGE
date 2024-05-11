@@ -13,6 +13,7 @@ public class TramiteModificacionCasoDeUso(
     IServicioAutorizacion       servicioAutorizacion
 )
 {
+    #region METODOS PUBLICOS ---------------------------------------------------------------------------
     public void Ejecutar(Tramite tramite, int idUsuario)
     {
         if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.TramiteModificacion)) {
@@ -25,4 +26,5 @@ public class TramiteModificacionCasoDeUso(
         repositorioTramite.Modificar(tramite);
         servicioActualizacionEstado.ActualizarEstado(tramite);
     }
+    #endregion
 }

@@ -9,6 +9,8 @@ namespace SGE.Aplicacion.Validadores;
 /// </summary>
 public class ExpedienteValidador : IExpedienteValidador
 {
+    #region IMPLEMENTACIONES DE INTERFACES -------------------------------------------------------------
+    #region IExpedienteValidador
     /// <inheritdoc />
     public bool Validar(Expediente expediente, out string error)
     {
@@ -20,4 +22,6 @@ public class ExpedienteValidador : IExpedienteValidador
 
         return string.IsNullOrEmpty(error);
     }
+    #endregion
+    #endregion
 }

@@ -7,6 +7,7 @@ namespace SGE.Aplicacion.Interfaces.Validadores;
 /// </summary>
 public interface ITramiteValidador
 {
+    #region METODOS PUBLICOS ---------------------------------------------------------------------------
     /// <summary>
     ///     Valida un trámite.
     /// </summary>
@@ -14,4 +15,5 @@ public interface ITramiteValidador
     /// <param name="error">Mensaje de error si no cumple con las reglas.</param>
     /// <returns><c>True</c> si se considera que el trámite es válido, <c>False</c> caso contrario.</returns>
     bool Validar(Tramite tramite, out string error);
+    #endregion
 }

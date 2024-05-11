@@ -9,6 +9,10 @@ namespace SGE.Aplicacion.Servicios;
 /// </summary>
 public class ServicioAutorizacionProvisorio : IServicioAutorizacion
 {
+    #region IMPLEMENTACIONES DE INTERFACES -------------------------------------------------------------
+    #region IServicioAutorizacion
     /// <inheritdoc />
     public bool PoseeElPermiso(int idUsuario, Permiso permiso) => idUsuario == 1;
+    #endregion
+    #endregion
 }

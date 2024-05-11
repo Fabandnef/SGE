@@ -15,11 +15,11 @@ public class Tramite
     ///     externas a través de la propiedad pública.
     /// </summary>
     private DateTime _fechaCreacion;
-    
+
     /// <summary>
     ///     Identificador único del trámite.
     /// </summary>
-    private int      _id;
+    private int _id;
     #endregion
 
     #region PROPIEDADES PUBLICAS -----------------------------------------------------------------------
@@ -46,6 +46,12 @@ public class Tramite
     public DateTime UltimaModificacion { get; set; }
 
     /// <summary>
+    ///     El identificador del expediente al que pertenece el trámite. Se asocia a un expediente
+    ///     a través de este identificador. Solo se permite la asignación del valor al crear el trámite.
+    /// </summary>
+    public int idExpediente { get; init; }
+
+    /// <summary>
     ///     Identificador único del trámite. Ya que el ID se calcula antes de ser insertado, se
     ///     permite la asignación del ID solo si el valor actual es 0, o sea, si no fue asignado.
     ///     La funcionalidad final termina siendo la misma que si el ID fuera de solo lectura.
@@ -58,12 +64,6 @@ public class Tramite
             }
         }
     }
-
-    /// <summary>
-    ///     El identificador del expediente al que pertenece el trámite. Se asocia a un expediente
-    ///     a través de este identificador. Solo se permite la asignación del valor al crear el trámite.
-    /// </summary>
-    public int idExpediente { get; init; }
 
     /// <summary>
     ///     La fecha en la que se creó el trámite. Se permite la asignación de la fecha solo si el

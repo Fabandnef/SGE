@@ -7,6 +7,7 @@ namespace SGE.Aplicacion.Interfaces.Validadores;
 /// </summary>
 public interface IExpedienteValidador
 {
+    #region METODOS PUBLICOS ---------------------------------------------------------------------------
     /// <summary>
     ///     Valida un expediente.
     /// </summary>
@@ -14,4 +15,5 @@ public interface IExpedienteValidador
     /// <param name="error">Mensaje de error si no cumple con las reglas.</param>
     /// <returns><c>True</c> si se considera que el expediente es válido, <c>False</c> caso contrario.</returns>
     bool Validar(Expediente expediente, out string error);
+    #endregion
 }

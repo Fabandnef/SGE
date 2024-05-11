@@ -6,18 +6,20 @@ namespace SGE.Aplicacion.Servicios;
 
 /// <summary>
 ///     Servicio que permite actualizar el estado del expediente. Para ello,
-///     utilizar una clase que implemente la interfaz <see cref="EspecificacionCambioEstado"/>
+///     utilizar una clase que implemente la interfaz <see cref="EspecificacionCambioEstado" />
 ///     para determinar el nuevo estado del expediente, y en base a eso, actualizarlo.
 /// </summary>
 /// <param name="expedienteRepositorio">Repositorio de expedientes.</param>
-/// <param name="especificacionCambioEstado">Servicio para determinar el nuevo
-/// estado del expediente.</param>
+/// <param name="especificacionCambioEstado">
+///     Servicio para determinar el nuevo
+///     estado del expediente.
+/// </param>
 public class ServicioActualizacionEstado(
     IExpedienteRepositorio     expedienteRepositorio,
     EspecificacionCambioEstado especificacionCambioEstado
 )
 {
-
+    #region METODOS PUBLICOS ---------------------------------------------------------------------------
     /// <summary>
     ///     Actualiza el estado de un expediente en base a la especificación de cambio de estado.
     /// </summary>
@@ -47,4 +49,5 @@ public class ServicioActualizacionEstado(
 
         expedienteRepositorio.ActualizarEstado(tramite.idExpediente, estado.Value);
     }
+    #endregion
 }

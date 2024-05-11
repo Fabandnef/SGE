@@ -5,9 +5,11 @@
 /// </summary>
 public class AutorizacionException : Exception
 {
+    #region CONSTRUCTORES ------------------------------------------------------------------------------
     public AutorizacionException() { }
 
     public AutorizacionException(string mensaje) : base(mensaje) { }
 
     public AutorizacionException(string mensaje, Exception causa) : base(mensaje, causa) { }
+    #endregion
 }

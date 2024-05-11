@@ -9,6 +9,8 @@ namespace SGE.Aplicacion.Validadores;
 /// </summary>
 public class TramiteValidador : ITramiteValidador
 {
+    #region IMPLEMENTACIONES DE INTERFACES -------------------------------------------------------------
+    #region ITramiteValidador
     /// <inheritdoc />
     public bool Validar(Tramite tramite, out string error)
     {
@@ -20,4 +22,6 @@ public class TramiteValidador : ITramiteValidador
 
         return string.IsNullOrEmpty(error);
     }
+    #endregion
+    #endregion
 }

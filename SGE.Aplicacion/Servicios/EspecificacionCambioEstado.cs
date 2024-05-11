@@ -10,6 +10,7 @@ namespace SGE.Aplicacion.Servicios;
 /// <param name="tramiteRepositorio">Repositorio de trámites.</param>
 public class EspecificacionCambioEstado(ITramiteRepositorio tramiteRepositorio)
 {
+    #region METODOS PUBLICOS ---------------------------------------------------------------------------
     /// <summary>
     ///     Define el estado de un expediente.
     /// </summary>
@@ -36,4 +37,5 @@ public class EspecificacionCambioEstado(ITramiteRepositorio tramiteRepositorio)
                    _                             => null,
                };
     }
+    #endregion
 }

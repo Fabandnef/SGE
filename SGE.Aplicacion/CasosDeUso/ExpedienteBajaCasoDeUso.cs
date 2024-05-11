@@ -11,6 +11,7 @@ public class ExpedienteBajaCasoDeUso(
     IServicioAutorizacion  servicioAutorizacion
 )
 {
+    #region METODOS PUBLICOS ---------------------------------------------------------------------------
     public void Ejecutar(int idExpediente, int idUsuario)
     {
         if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.ExpedienteBaja)) {
@@ -23,4 +24,5 @@ public class ExpedienteBajaCasoDeUso(
 
         tramiteRepositorio.BajaPorExpediente(idExpediente);
     }
+    #endregion
 }
