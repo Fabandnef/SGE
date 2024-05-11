@@ -22,8 +22,8 @@ public interface ITramiteRepositorio
     /// <summary>
     ///     Da de baja todos los trámites de un expediente.
     /// </summary>
-    /// <param name="expedienteId">ID del expediente.</param>
-    void BajaPorExpediente(int expedienteId);
+    /// <param name="idExpediente">ID del expediente.</param>
+    void BajaPorExpediente(int idExpediente);
 
     /// <summary>
     ///     Modifica un trámite.
@@ -61,7 +61,7 @@ public interface ITramiteRepositorio
     /// <summary>
     ///     Obtiene el último trámite de un expediente.
     /// </summary>
-    /// <param name="expedienteId">ID del expediente.</param>
+    /// <param name="idExpediente">ID del expediente.</param>
     /// <returns>Último <see cref="Tramite" /> del expediente, <c>null</c> si no se encontró.</returns>
-    Tramite? ObtenerUltimoPorExpediente(int expedienteId);
+    Tramite? ObtenerUltimoPorExpediente(int idExpediente);
 }

@@ -21,16 +21,16 @@ public class ServicioActualizacionEstado(
     /// <summary>
     /// Actualiza el estado de un expediente en base a la especificación de cambio de estado.
     /// </summary>
-    /// <param name="expedienteId">ID del expediente.</param>
-    public void ActualizarEstado(int expedienteId)
+    /// <param name="idExpediente">ID del expediente.</param>
+    public void ActualizarEstado(int idExpediente)
     {
-        EstadoExpediente? estado = especificacionCambioEstado.DefinirEstado(expedienteId);
+        EstadoExpediente? estado = especificacionCambioEstado.DefinirEstado(idExpediente);
 
         if (estado is null) {
             return;
         }
 
-        expedienteRepositorio.ActualizarEstado(expedienteId, estado.Value);
+        expedienteRepositorio.ActualizarEstado(idExpediente, estado.Value);
     }
 
     /// <summary>
@@ -45,6 +45,6 @@ public class ServicioActualizacionEstado(
             return;
         }
 
-        expedienteRepositorio.ActualizarEstado(tramite.ExpedienteId, estado.Value);
+        expedienteRepositorio.ActualizarEstado(tramite.idExpediente, estado.Value);
     }
 }

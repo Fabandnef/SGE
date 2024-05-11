@@ -38,9 +38,9 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
 
     #region IMPLEMENTACIONES DE INTERFACES -------------------------------------------------------------
     #region IExpedienteRepositorio
-    public void ActualizarEstado(int expedienteId, EstadoExpediente estadoExpediente)
+    public void ActualizarEstado(int idExpediente, EstadoExpediente estadoExpediente)
     {
-        Expediente? expediente = BuscarPorId(expedienteId);
+        Expediente? expediente = BuscarPorId(idExpediente);
 
         if (expediente is null) {
             return;
@@ -63,7 +63,7 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         return expediente;
     }
 
-    public bool Baja(int expedienteId)
+    public bool Baja(int idExpediente)
     {
         List<Expediente> expedientes = LeerExpedientes();
 
@@ -73,9 +73,9 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         while (
             (i            < expedientes.Count)
          && (-1           == expedienteParaEliminar)
-         && (expedienteId <= expedientes[i].Id)
+         && (idExpediente <= expedientes[i].Id)
         ) {
-            if (expedientes[i].Id == expedienteId) {
+            if (expedientes[i].Id == idExpediente) {
                 expedienteParaEliminar = i;
             }
 
@@ -95,9 +95,9 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
     /// <summary>
     ///     Buscar un expediente por su ID.
     /// </summary>
-    /// <param name="expedienteId">ID del expediente a buscar.</param>
+    /// <param name="idExpediente">ID del expediente a buscar.</param>
     /// <returns><see cref="Expediente" /> encontrado, o <c>null</c> si no se encontró.</returns>
-    public Expediente? BuscarPorId(int expedienteId)
+    public Expediente? BuscarPorId(int idExpediente)
     {
         using StreamReader sr = new(RutaArchivo);
 
@@ -108,7 +108,7 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         while (!string.IsNullOrEmpty(linea) && !found) {
             expediente = Decode(linea);
 
-            if (expediente.Id == expedienteId) {
+            if (expediente.Id == idExpediente) {
                 found = true;
             } else {
                 linea = sr.ReadLine();

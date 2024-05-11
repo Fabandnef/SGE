@@ -15,13 +15,13 @@ public class ExpedienteAltaCasoDeUso(
 {
     public Expediente Ejecutar(Expediente expediente, int idUsuario)
     {
-        if (!expedienteValidador.Validar(expediente, out string error)) {
-            throw new ValidacionException(error);
-        }
-
         if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.ExpedienteAlta)) {
             throw
                 new AutorizacionException($"El usuario {idUsuario} no tiene permisos para dar de alta un expediente.");
+        }
+        
+        if (!expedienteValidador.Validar(expediente, out string error)) {
+            throw new ValidacionException(error);
         }
 
         expediente.FechaCreacion               = DateTime.Now;

@@ -133,16 +133,16 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         return found ? t : null;
     }
 
-    public void BajaPorExpediente(int expedienteId)
+    public void BajaPorExpediente(int idExpediente)
     {
         List<Tramite> tramites = LeerTramites();
 
-        tramites.RemoveAll(tramite => tramite.ExpedienteId == expedienteId);
+        tramites.RemoveAll(tramite => tramite.idExpediente == idExpediente);
 
         GuardarTramites(tramites);
     }
 
-    public Tramite? ObtenerUltimoPorExpediente(int expedienteId)
+    public Tramite? ObtenerUltimoPorExpediente(int idExpediente)
     {
         using StreamReader sr = new(RutaArchivo);
 
@@ -152,7 +152,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
             Tramite t = Decode(linea);
 
-            if (t.ExpedienteId != expedienteId) {
+            if (t.idExpediente != idExpediente) {
                 continue;
             }
 
@@ -192,7 +192,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
             Tramite t = Decode(linea);
 
-            if (t.ExpedienteId == expediente.Id) {
+            if (t.idExpediente == expediente.Id) {
                 tramites.Add(t);
             }
         }
@@ -266,7 +266,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
     /// <returns>Cadena de texto codificada.</returns>
     private string Encode(Tramite tramite)
         => $"{tramite.Id}\x1F"                 +
-           $"{tramite.ExpedienteId}\x1F"       +
+           $"{tramite.idExpediente}\x1F"       +
            $"{tramite.Etiqueta}\x1F"           +
            $"{tramite.Contenido}\x1F"          +
            $"{tramite.FechaCreacion}\x1F"      +
@@ -284,7 +284,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
 
         return new Tramite {
                                Id                          = int.Parse(partes[0]),
-                               ExpedienteId                = int.Parse(partes[1]),
+                               idExpediente                = int.Parse(partes[1]),
                                Etiqueta                    = Enum.Parse<EtiquetaTramite>(partes[2]),
                                Contenido                   = partes[3],
                                FechaCreacion               = DateTime.Parse(partes[4]),

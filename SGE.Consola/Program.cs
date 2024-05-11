@@ -56,7 +56,7 @@ public class Program
 
         for (int i = 0; i < 80; i++) {
             tramites.Add(new Tramite {
-                                         ExpedienteId = new Random().Next(1, 15),
+                                         idExpediente = new Random().Next(1, 15),
                                          Etiqueta = (EtiquetaTramite)(Enum.GetValues(typeof(EtiquetaTramite))
                                                                           .GetValue(new Random().Next(0, 5)) ?? 0),
                                          Contenido = GenerarFrase(new Random().Next(5, 24)),

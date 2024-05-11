@@ -23,6 +23,5 @@ public class TramiteBajaCasoDeUso(
         }
 
         servicioActualizacionEstado.ActualizarEstado(idTramite);
-        Console.WriteLine($"Trámite {idTramite} eliminado correctamente. Expediente actualizado.");
     }
 }
