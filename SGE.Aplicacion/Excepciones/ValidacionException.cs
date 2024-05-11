@@ -1,5 +1,8 @@
 ﻿namespace SGE.Aplicacion.Excepciones;
 
+/// <summary>
+///     Excepción que se lanza cuando ocurre un error de validación.
+/// </summary>
 public class ValidacionException : Exception
 {
     public ValidacionException() { }

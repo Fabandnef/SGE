@@ -38,6 +38,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
 
     #region IMPLEMENTACIONES DE INTERFACES -------------------------------------------------------------
     #region ITramiteRepositorio
+    /// <inheritdoc />
     public Tramite Alta(Tramite tramite)
     {
         tramite.Id = ++_ultimoId;
@@ -46,6 +47,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         return tramite;
     }
 
+    /// <inheritdoc />
     public bool Baja(int idTramite)
     {
         List<Tramite> tramites = LeerTramites().ToList();
@@ -72,6 +74,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         return true;
     }
 
+    /// <inheritdoc />
     public void Modificar(Tramite tramite)
     {
         List<Tramite> tramites = LeerTramites().ToList();
@@ -96,6 +99,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         GuardarTramites(tramites);
     }
 
+    /// <inheritdoc />
     public List<Tramite> ObtenerPorEtiqueta(EtiquetaTramite etiquetaTramite)
     {
         List<Tramite> tramites = [];
@@ -114,6 +118,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         return tramites;
     }
 
+    /// <inheritdoc />
     public Tramite? ObtenerPorId(int idTramite)
     {
         using StreamReader sr = new(RutaArchivo);
@@ -133,6 +138,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         return found ? t : null;
     }
 
+    /// <inheritdoc />
     public void BajaPorExpediente(int idExpediente)
     {
         List<Tramite> tramites = LeerTramites();
@@ -142,6 +148,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         GuardarTramites(tramites);
     }
 
+    /// <inheritdoc />
     public Tramite? ObtenerUltimoPorExpediente(int idExpediente)
     {
         using StreamReader sr = new(RutaArchivo);
@@ -163,10 +170,11 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
 
         return ultimoTramite;
     }
-    #endregion
-    #endregion
 
-    #region METODOS PUBLICOS ---------------------------------------------------------------------------
+    /// <summary>
+    ///     Obtiene todos los trámites.
+    /// </summary>
+    /// <returns><see cref="List{T}" /> de <see cref="Tramite" />s.</returns>
     public List<Tramite> ObtenerTramites()
     {
         List<Tramite> tramites = [];
@@ -182,6 +190,11 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         return tramites;
     }
 
+    /// <summary>
+    ///     Obtiene los trámites de un expediente dado.
+    /// </summary>
+    /// <param name="expediente">Expediente a buscar.</param>
+    /// <returns><see cref="Expediente" /> con sus trámites.</returns>
     public Expediente ObtenerTramitesPorExpediente(Expediente expediente)
     {
         List<Tramite> tramites = [];
@@ -189,6 +202,7 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
         using StreamReader sr = new(RutaArchivo);
         string?            linea;
 
+        // Busco los trámites del expediente y los agrego a la lista
         while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
             Tramite t = Decode(linea);
 
@@ -196,14 +210,49 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
                 tramites.Add(t);
             }
         }
-        
-        expediente.Tramites = tramites;
 
+        // Asigno los trámites al expediente y lo devuelvo
+        expediente.Tramites = tramites;
         return expediente;
     }
     #endregion
+    #endregion
 
     #region METODOS ------------------------------------------------------------------------------------
+    /// <summary>
+    ///     Decodifica una línea de texto en un trámite.
+    /// </summary>
+    /// <param name="linea">Línea de texto a decodificar.</param>
+    /// <returns><see cref="Tramite" /> decodificado.</returns>
+    private Tramite Decode(string linea)
+    {
+        string[] partes = linea.Split('\x1F');
+
+        return new Tramite {
+                               Id                          = int.Parse(partes[0]),
+                               idExpediente                = int.Parse(partes[1]),
+                               Etiqueta                    = Enum.Parse<EtiquetaTramite>(partes[2]),
+                               Contenido                   = partes[3],
+                               FechaCreacion               = DateTime.Parse(partes[4]),
+                               UltimaModificacion          = DateTime.Parse(partes[5]),
+                               IdUsuarioUltimaModificacion = int.Parse(partes[6]),
+                           };
+    }
+
+    /// <summary>
+    ///     Codifica un trámite en una línea de texto.
+    /// </summary>
+    /// <param name="tramite">Trámite a codificar.</param>
+    /// <returns>Línea de texto codificada.</returns>
+    private string Encode(Tramite tramite)
+        => $"{tramite.Id}\x1F"                 +
+           $"{tramite.idExpediente}\x1F"       +
+           $"{tramite.Etiqueta}\x1F"           +
+           $"{tramite.Contenido}\x1F"          +
+           $"{tramite.FechaCreacion}\x1F"      +
+           $"{tramite.UltimaModificacion}\x1F" +
+           $"{tramite.IdUsuarioUltimaModificacion}";
+
     /// <summary>
     ///     Guarda los trámites en el archivo.
     /// </summary>
@@ -255,42 +304,8 @@ public class RepositorioTramiteTxt : ITramiteRepositorio
             return 0;
         }
 
-        string[] partes = prevLine.Split('\x1F');
-        return int.Parse(partes[0]);
-    }
-
-    /// <summary>
-    ///     Codifica un trámite en una cadena de texto.
-    /// </summary>
-    /// <param name="tramite">Trámite a codificar.</param>
-    /// <returns>Cadena de texto codificada.</returns>
-    private string Encode(Tramite tramite)
-        => $"{tramite.Id}\x1F"                 +
-           $"{tramite.idExpediente}\x1F"       +
-           $"{tramite.Etiqueta}\x1F"           +
-           $"{tramite.Contenido}\x1F"          +
-           $"{tramite.FechaCreacion}\x1F"      +
-           $"{tramite.UltimaModificacion}\x1F" +
-           $"{tramite.IdUsuarioUltimaModificacion}";
-
-    /// <summary>
-    ///     Decodifica una cadena de texto en un trámite.
-    /// </summary>
-    /// <param name="linea">Línea a decodificar.</param>
-    /// <returns><see cref="Tramite" /> decodificado.</returns>
-    private Tramite Decode(string linea)
-    {
-        string[] partes = linea.Split('\x1F');
-
-        return new Tramite {
-                               Id                          = int.Parse(partes[0]),
-                               idExpediente                = int.Parse(partes[1]),
-                               Etiqueta                    = Enum.Parse<EtiquetaTramite>(partes[2]),
-                               Contenido                   = partes[3],
-                               FechaCreacion               = DateTime.Parse(partes[4]),
-                               UltimaModificacion          = DateTime.Parse(partes[5]),
-                               IdUsuarioUltimaModificacion = int.Parse(partes[6]),
-                           };
+        Tramite t = Decode(prevLine);
+        return t.Id;
     }
     #endregion
 }
