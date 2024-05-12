@@ -1,4 +1,8 @@
-﻿# Dar de alta un expediente
+﻿### Todos los ejemplos asumen que los archivos `Expedientes.txt` y `Tramites.txt` no existen, o están vacíos.
+### Las salidas de consola esperadas pueden variar si los archivos ya contienen datos. Se recomienda borrar los archivos antes de ejecutar cada uno de los ejemplos para obtener las salidas esperadas.
+
+---
+# Dar de alta un expediente
 
 Para testear el alta de un expediente, se debe generar una instancia de la clase
 `ExpedienteAltaCasoDeUso`, la cual recibe 3 parámetros en su constructor:
@@ -29,44 +33,99 @@ Y retorna una instancia de la clase `Expediente`.
 ## Ejemplo de test
 
 ```csharp
-Usuario                    usuario                    = new();
-IExpedienteValidador       expedienteValidador        = new ExpedienteValidador();
-IExpedienteRepositorio     expedienteRepositorio      = new RepositorioExpedienteTxt();
-IServicioAutorizacion      servicioAutorizacion       = new ServicioAutorizacionProvisorio();
+Usuario                usuario               = new();
+IExpedienteValidador   expedienteValidador   = new ExpedienteValidador();
+IExpedienteRepositorio expedienteRepositorio = new RepositorioExpedienteTxt();
+IServicioAutorizacion  servicioAutorizacion  = new ServicioAutorizacionProvisorio();
 
 ExpedienteAltaCasoDeUso altaCasoDeUso = new(expedienteRepositorio, expedienteValidador, servicioAutorizacion);
 
-Expediente expedienteNuevo = new()
-{
-    Caratula = "Caratula de prueba del expediente",
-};
+Expediente expediente1 = new()
+                             {
+                                 Caratula = "Carátula de prueba del expediente",
+                             };
 
-try
-{
-    Expediente expedienteGuardado = altaCasoDeUso.Ejecutar(expedienteNuevo, usuario.Id);
-    Console.WriteLine($"Expediente guardado con id: {expedienteGuardado.Id}");
+Expediente expediente2 = new()
+                             {
+                                 Caratula = "",
+                             };
+
+Expediente expediente3 = new()
+                             {
+                                 Id = 999,
+                                 Caratula = "Carátula de prueba del expediente",
+                             };
+
+Expediente expediente4 = new()
+                             {
+                                 Caratula = "Otra carátula de prueba",
+                             };
+
+try {
+    altaCasoDeUso.Ejecutar(expediente1, usuario.Id);
+    Console.WriteLine($"Expediente guardado con id: {expediente1.Id}");
+} catch (AutorizacionException ex) {
+    Console.WriteLine($"Error de autorización: {ex.Message}");
+} catch (ValidacionException ex) {
+    Console.WriteLine($"Error de validación: {ex.Message}");
+} catch (RepositorioException ex) {
+    Console.WriteLine($"Error de repositorio: {ex.Message}");
+} catch (Exception ex) {
+    Console.WriteLine($"Error inesperado: {ex.Message}");
 }
-catch (Exception e)
-{
-    Console.WriteLine(e.Message);
+
+try {
+    altaCasoDeUso.Ejecutar(expediente2, usuario.Id);
+    Console.WriteLine($"Expediente guardado con id: {expediente2.Id}");
+} catch (AutorizacionException ex) {
+    Console.WriteLine($"Error de autorización: {ex.Message}");
+} catch (ValidacionException ex) {
+    Console.WriteLine($"Error de validación: {ex.Message}");
+} catch (RepositorioException ex) {
+    Console.WriteLine($"Error de repositorio: {ex.Message}");
+} catch (Exception ex) {
+    Console.WriteLine($"Error inesperado: {ex.Message}");
+}
+
+try {
+    altaCasoDeUso.Ejecutar(expediente3, usuario.Id);
+    Console.WriteLine($"Expediente guardado con id: {expediente3.Id}");
+} catch (AutorizacionException ex) {
+    Console.WriteLine($"Error de autorización: {ex.Message}");
+} catch (ValidacionException ex) {
+    Console.WriteLine($"Error de validación: {ex.Message}");
+} catch (RepositorioException ex) {
+    Console.WriteLine($"Error de repositorio: {ex.Message}");
+} catch (Exception ex) {
+    Console.WriteLine($"Error inesperado: {ex.Message}");
+}
+
+try {
+    altaCasoDeUso.Ejecutar(expediente4, usuario.Id);
+    Console.WriteLine($"Expediente guardado con id: {expediente4.Id}");
+} catch (AutorizacionException ex) {
+    Console.WriteLine($"Error de autorización: {ex.Message}");
+} catch (ValidacionException ex) {
+    Console.WriteLine($"Error de validación: {ex.Message}");
+} catch (RepositorioException ex) {
+    Console.WriteLine($"Error de repositorio: {ex.Message}");
+} catch (Exception ex) {
+    Console.WriteLine($"Error inesperado: {ex.Message}");
 }
 ```
 
 En el ejemplo anterior, la salida por consola esperada es:
 
     Expediente guardado con id: 1
-
-Si se vuelven a ejecutar las mismas líneas de código, la salida esperada es:
-
+    Error de validación: La carátula no puede estar vacía.
+    Error de repositorio: No se puede dar de alta un expediente que ya tiene ID.
     Expediente guardado con id: 2
 
-En ambos casos anteriores, los datos se guardarán en el archivo `Expedientes.txt`
-
-Si se intenta guardar un expediente sin caratula, la salida esperada es:
-
-    La carátula no puede estar vacía
-
-En este caso, no se guardará ningún expediente en el archivo `Expedientes.txt` ya que no cumple con la validación requerida.
+Los datos se persistirán en el archivo `Expedientes.txt`.
+Si se intenta guardar un expediente asignando un ID manualmente, se arrojará una excepción del repositorio
+que es el encargado de asignar los ID automáticamente antes de persistir los datos.
+Un alta de expediente con ID ya establecido, puede significar que se está intentando dar de alta un 
+expediente que ya existe. Como no se puede garantizar que el ID sea único, se lanza una excepción.
 
 ---
 # Dar de baja un expediente
@@ -104,51 +163,51 @@ ExpedienteAltaCasoDeUso altaCasoDeUso = new(expedienteRepositorio, expedienteVal
 ExpedienteBajaCasoDeUso bajaCasoDeUso = new(expedienteRepositorio, tramiteRepositorio, servicioAutorizacion);
 
 Expediente expedienteNuevo = new()
-                                {
-                                    Caratula = "Caratula de prueba del expediente",
-                                };
+                             {
+                                 Caratula = "Caratula de prueba del expediente",
+                             };
 
 // Añado el expediente
-int expedienteId = 0; 
-try
-{
-    Expediente expedienteGuardado = altaCasoDeUso.Ejecutar(expedienteNuevo, usuario.Id);
-    Console.WriteLine($"Expediente guardado con id: {expedienteGuardado.Id}");
-    expedienteId = expedienteGuardado.Id;
-}
-catch (Exception e)
-{
-	Console.WriteLine(e.Message);
+int idExpediente = 0; 
+try {
+    altaCasoDeUso.Ejecutar(expedienteNuevo, usuario.Id);
+    idExpediente = expedienteNuevo.Id;
+    Console.WriteLine($"Expediente guardado con id {idExpediente}");
+} catch (AutorizacionException ex) {
+    Console.WriteLine($"Error de autorización: {ex.Message}");
+} catch (ValidacionException ex) {
+    Console.WriteLine($"Error de validación: {ex.Message}");
+} catch (RepositorioException ex) {
+    Console.WriteLine($"Error de repositorio: {ex.Message}");
+} catch (Exception ex) {
+    Console.WriteLine($"Error inesperado: {ex.Message}");
 }
 
 // Elimino el expediente
 try {
-    if (expedienteId > 0) {
-        bajaCasoDeUso.Ejecutar(expedienteId, usuario.Id);
-        Console.WriteLine($"Expediente con id: {expedienteId} eliminado");
-    }
-}
-catch (Exception e) 
-{
-    Console.WriteLine(e.Message);
+    bajaCasoDeUso.Ejecutar(idExpediente, usuario.Id);
+    Console.WriteLine($"Expediente con id {idExpediente} eliminado");
+    idExpediente = 99999;
+    bajaCasoDeUso.Ejecutar(idExpediente, usuario.Id);
+    Console.WriteLine($"Expediente con id {idExpediente} eliminado");
+} catch (AutorizacionException ex) {
+    Console.WriteLine($"Error de autorización: {ex.Message}");
+} catch (ValidacionException ex) {
+    Console.WriteLine($"Error de validación: {ex.Message}");
+} catch (RepositorioException ex) {
+    Console.WriteLine($"Error de repositorio: {ex.Message}");
+} catch (Exception ex) {
+    Console.WriteLine($"Error inesperado: {ex.Message}");
 }
 ```
 
 En el ejemplo anterior, la salida por consola esperada es:
 
-    Expediente guardado con id: 1
-    Expediente con id: 1 eliminado
+    Expediente guardado con id 1
+    Expediente con id 1 eliminado
+    Error de repositorio: No se pudo eliminar el expediente con ID 99999. Expediente no encontrado.
 
-Si se vuelven a ejecutar las mismas líneas de código, la salida esperada es:
-
-    Expediente guardado con id: 1
-    Expediente con id: 1 eliminado
-
-En ambos casos anteriores, los datos se guardarán en el archivo `Expedientes.txt`, el cuál al final estará vacío debido a la eliminación de los expedientes creados.
-
-Si se intenta eliminar un expediente que no existe, la salida esperada es:
-
-    El expediente a eliminar no existe.
+Los datos se persistirán en el archivo `Expedientes.txt`.
 
 ---
 # Buscar un expediente por ID sin sus trámites

@@ -46,10 +46,6 @@ public sealed class RepositorioTramiteTxt : RepositorioTxt, ITramiteRepositorio
             throw new RepositorioException("No se puede dar de alta un trámite con ID ya asignado.");
         }
 
-        if (tramite.IdExpediente == 0) {
-            throw new RepositorioException("No se puede dar de alta un trámite sin expediente.");
-        }
-
         tramite.Id = ++_ultimoId;
         using StreamWriter sw = new(RutaArchivo, true);
 

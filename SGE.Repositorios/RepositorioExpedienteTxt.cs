@@ -60,7 +60,7 @@ public sealed class RepositorioExpedienteTxt : RepositorioTxt, IExpedienteReposi
     public void Alta(Expediente expediente)
     {
         if (expediente.Id != 0) {
-            throw new RepositorioException("No se puede dar de alta un expediente que ya tiene ID.\n");
+            throw new RepositorioException("No se puede dar de alta un expediente que ya tiene ID.");
         }
 
         expediente.Id = ++_ultimoId;
@@ -96,7 +96,7 @@ public sealed class RepositorioExpedienteTxt : RepositorioTxt, IExpedienteReposi
 
         // Si no se encontró el expediente, tirar una excepción.
         if (expedienteParaEliminar == -1) {
-            throw new RepositorioException("No se encontró el expediente a eliminar.");
+            throw new RepositorioException($"No se pudo eliminar el expediente con ID {idExpediente}. Expediente no encontrado.");
         }
 
         // Eliminar el expediente y guardar los cambios.
