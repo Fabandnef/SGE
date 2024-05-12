@@ -16,11 +16,11 @@ public class ExpedienteValidador : IExpedienteValidador
     {
         error = "";
 
-        if (string.IsNullOrEmpty(expediente.Caratula)) {
-            error += "La carátula no puede estar vacía.\n";
+        if (string.IsNullOrWhiteSpace(expediente.Caratula)) {
+            error += "La carátula no puede estar vacía.";
         }
 
-        return string.IsNullOrEmpty(error);
+        return string.IsNullOrWhiteSpace(error);
     }
     #endregion
     #endregion

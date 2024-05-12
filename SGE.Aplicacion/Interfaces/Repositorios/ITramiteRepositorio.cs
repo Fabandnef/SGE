@@ -1,5 +1,6 @@
 ﻿using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Enumerativos;
+using SGE.Aplicacion.Excepciones;
 
 namespace SGE.Aplicacion.Interfaces.Repositorios;
 
@@ -11,14 +12,15 @@ public interface ITramiteRepositorio
     /// </summary>
     /// <param name="tramite">Trámite a dar de alta.</param>
     /// <returns><see cref="Tramite" /> dado de alta.</returns>
-    Tramite Alta(Tramite tramite);
+    void Alta(Tramite tramite);
 
     /// <summary>
     ///     Da de baja un trámite.
     /// </summary>
     /// <param name="idTramite">ID del trámite a dar de baja.</param>
     /// <returns><c>True</c> si se dio de baja el trámite, <c>False</c> si no se encontró.</returns>
-    bool Baja(int idTramite);
+    /// <exception cref="RepositorioException">Excepción si el trámite a dar de baja no existe en el archivo.</exception>
+    void Baja(int idTramite);
 
     /// <summary>
     ///     Da de baja todos los trámites de un expediente.

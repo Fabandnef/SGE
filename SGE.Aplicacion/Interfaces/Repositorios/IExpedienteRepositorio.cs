@@ -1,5 +1,6 @@
 ﻿using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Enumerativos;
+using SGE.Aplicacion.Excepciones;
 
 namespace SGE.Aplicacion.Interfaces.Repositorios;
 
@@ -21,14 +22,15 @@ public interface IExpedienteRepositorio
     /// </summary>
     /// <param name="expediente">Expediente a dar de alta.</param>
     /// <returns><see cref="Expediente" /> dado de alta.</returns>
-    Expediente Alta(Expediente expediente);
+    /// <exception cref="RepositorioException">Excepción si el expediente ya viene con ID seteado.</exception>
+    void Alta(Expediente expediente);
 
     /// <summary>
     ///     Dar de baja un expediente.
     /// </summary>
     /// <param name="idExpediente">ID del expediente a dar de baja.</param>
-    /// <returns><c>True</c> si se dió de baja el expediente, <c>false</c> si no se encontró.</returns>
-    bool Baja(int idExpediente);
+    /// <exception cref="RepositorioException">Excepción si el expediente a dar de baja no existe en el archivo.</exception>
+    void Baja(int idExpediente);
 
     /// <summary>
     ///     Buscar un expediente por su ID.
@@ -47,6 +49,7 @@ public interface IExpedienteRepositorio
     ///     Modificar un expediente.
     /// </summary>
     /// <param name="expediente"><see cref="Expediente" /> a modificar.</param>
+    /// <exception cref="RepositorioException">Excepción si el expediente no existe en el archivo.</exception>
     void Modificar(Expediente expediente);
     #endregion
 }

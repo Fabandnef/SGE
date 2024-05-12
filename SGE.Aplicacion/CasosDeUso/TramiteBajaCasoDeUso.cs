@@ -19,10 +19,7 @@ public class TramiteBajaCasoDeUso(
             throw new AutorizacionException("El usuario no tiene permisos para realizar esta acción.");
         }
 
-        if (!tramiteRepositorio.Baja(idTramite)) {
-            throw new RepositorioException("El trámite a eliminar no existe.");
-        }
-
+        tramiteRepositorio.Baja(idTramite);
         servicioActualizacionEstado.ActualizarEstado(idTramite);
     }
     #endregion

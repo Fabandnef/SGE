@@ -16,15 +16,20 @@ public class TramiteValidador : ITramiteValidador
     {
         error = "";
 
-        if (string.IsNullOrEmpty(tramite.Contenido)) {
-            error += "El contenido de un trámite no puede estar vacío.\n";
-        }
-        
-        if (tramite.IdExpediente <= 0) {
-            error += "El trámite debe estar asociado a un expediente.\n";
+        if (string.IsNullOrWhiteSpace(tramite.Contenido)) {
+            error += "El contenido de un trámite no puede estar vacío.";
         }
 
-        return string.IsNullOrEmpty(error);
+        if (tramite.IdExpediente > 0) {
+            return string.IsNullOrWhiteSpace(error);
+        }
+
+        if (!string.IsNullOrWhiteSpace(error)) {
+            error += "\n";
+        }
+        error += "El trámite debe estar asociado a un expediente.";
+
+        return string.IsNullOrWhiteSpace(error);
     }
     #endregion
     #endregion

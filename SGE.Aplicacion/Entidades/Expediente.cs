@@ -93,7 +93,7 @@ public class Expediente
                     $"Caratula: {Caratula}\n"                     +
                     $"FechaCreacion: {FechaCreacion}\n"           +
                     $"UltimaModificacion: {UltimaModificacion}\n" +
-                    $"IdUsuarioUltimaModificacion: {IdUsuarioUltimaModificacion}\n";
+                    $"IdUsuarioUltimaModificacion: {IdUsuarioUltimaModificacion}";
 
         // Si no hay trámites, devuelvo solo el expediente.
         if (Tramites.Count == 0) {
@@ -101,15 +101,15 @@ public class Expediente
         }
 
         // Si hay trámites, los agrego al string.
-        st += "--------------\n" +
-              "Tramites:\n";
+        st += "\n--------------\n" +
+              $"Tramites del expediente {Id}:";
 
         foreach (Tramite tramite in Tramites) {
-            st += "--------------\n";
+            st += "\n--------------\n";
             st += tramite.ToString();
         }
 
-        st += "--------------\n";
+        st += "\n--------------";
 
         return st;
     }

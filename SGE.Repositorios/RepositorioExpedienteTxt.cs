@@ -1,5 +1,6 @@
 ﻿using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Enumerativos;
+using SGE.Aplicacion.Excepciones;
 using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Repositorios;
@@ -7,7 +8,7 @@ namespace SGE.Repositorios;
 /// <summary>
 ///     Repositorio de expedientes en un archivo de texto.
 /// </summary>
-public class RepositorioExpedienteTxt : IExpedienteRepositorio
+public sealed class RepositorioExpedienteTxt : RepositorioTxt, IExpedienteRepositorio
 {
     #region CONSTANTES ---------------------------------------------------------------------------------
     /// <summary>
@@ -28,9 +29,9 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
     ///     Constructor de la clase. Si el archivo existe y no está vacío, y el último ID es 0,
     ///     se obtiene el último ID de los expedientes.
     /// </summary>
-    public RepositorioExpedienteTxt()
+    public RepositorioExpedienteTxt() : base(RutaArchivo)
     {
-        if (File.Exists(RutaArchivo) && (new FileInfo(RutaArchivo).Length > 0) && (_ultimoId == 0)) {
+        if ((new FileInfo(RutaArchivo).Length > 0) && (_ultimoId == 0)) {
             _ultimoId = ObtenerUltimoId();
         }
     }
@@ -44,7 +45,7 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         Expediente? expediente = BuscarPorId(idExpediente);
 
         if (expediente is null) {
-            return;
+            throw new RepositorioException("No se encontró el expediente a modificar.");
         }
 
         if (expediente.Estado == estadoExpediente) {
@@ -56,17 +57,24 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
     }
 
     /// <inheritdoc />
-    public Expediente Alta(Expediente expediente)
+    public void Alta(Expediente expediente)
     {
-        expediente.Id = ++_ultimoId;
+        if (expediente.Id != 0) {
+            throw new RepositorioException("No se puede dar de alta un expediente que ya tiene ID.");
+        }
 
+        expediente.Id = ++_ultimoId;
         using StreamWriter sw = new(RutaArchivo, true);
-        sw.WriteLine(Encode(expediente));
-        return expediente;
+
+        try {
+            sw.WriteLine(Encode(expediente));
+        } catch (Exception e) {
+            throw new RepositorioException("Error al guardar el expediente.", e);
+        }
     }
 
     /// <inheritdoc />
-    public bool Baja(int idExpediente)
+    public void Baja(int idExpediente)
     {
         List<Expediente> expedientes = LeerExpedientes();
 
@@ -77,25 +85,23 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         while (
             (i            < expedientes.Count)
          && (-1           == expedienteParaEliminar)
-         && (idExpediente <= expedientes[i].Id)
+         && (idExpediente >= expedientes[i].Id)
         ) {
-            if (expedientes[i].Id == idExpediente) {
+            if (expedientes[i].Id.Equals(idExpediente)) {
                 expedienteParaEliminar = i;
+            } else {
+                i++;
             }
-
-            i++;
         }
 
-        // Si no se encontró el expediente, devolver false.
+        // Si no se encontró el expediente, tirar una excepción.
         if (expedienteParaEliminar == -1) {
-            return false;
+            throw new RepositorioException($"No se pudo eliminar el expediente con ID {idExpediente}. Expediente no encontrado.");
         }
 
         // Eliminar el expediente y guardar los cambios.
         expedientes.RemoveAt(expedienteParaEliminar);
         GuardarExpedientes(expedientes);
-
-        return true;
     }
 
     /// <inheritdoc />
@@ -157,7 +163,7 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
         }
 
         if (!found) {
-            return;
+            throw new RepositorioException("No se encontró el expediente a modificar.");
         }
 
         expedientes[expedienteIndice] = expediente;
@@ -207,8 +213,12 @@ public class RepositorioExpedienteTxt : IExpedienteRepositorio
     {
         using StreamWriter sw = new(RutaArchivo);
 
-        foreach (Expediente expediente in expedientes) {
-            sw.WriteLine(Encode(expediente));
+        try {
+            foreach (Expediente expediente in expedientes) {
+                sw.WriteLine(Encode(expediente));
+            }
+        } catch (Exception e) {
+            throw new RepositorioException("Error al guardar los expedientes.", e);
         }
     }
 

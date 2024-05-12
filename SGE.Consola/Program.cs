@@ -16,7 +16,39 @@ public class Program
     #region METODOS PUBLICOS ---------------------------------------------------------------------------
     static public void Main(string[] args)
     {
-        // COMPLETAR CON EL CÓDIGO DESEADO DE LOS EJEMPLOS.
+        Usuario                usuario               = new();
+        IExpedienteValidador   expedienteValidador   = new ExpedienteValidador();
+        IExpedienteRepositorio expedienteRepositorio = new RepositorioExpedienteTxt();
+        IServicioAutorizacion  servicioAutorizacion  = new ServicioAutorizacionProvisorio();
+
+        ExpedienteAltaCasoDeUso expedienteAltaCasoDeUso = new(expedienteRepositorio, expedienteValidador, servicioAutorizacion);
+        ExpedienteListarCasoDeUso expedienteListarCasoDeUso = new(expedienteRepositorio);
+
+        Expediente expedienteNuevo1 = new() { Caratula = "Caratula de prueba del expediente1",};
+        Expediente expedienteNuevo2 = new() { Caratula  = "Caratula de prueba del expediente2",};
+
+        // Añado los expedientes
+        try {
+            expedienteAltaCasoDeUso.Ejecutar(expedienteNuevo1, usuario.Id);
+            Console.WriteLine($"Expediente guardado con id: {expedienteNuevo1.Id}");
+            expedienteAltaCasoDeUso.Ejecutar(expedienteNuevo1, usuario.Id);
+            Console.WriteLine($"Expediente guardado con id: {expedienteNuevo2.Id}");
+        } catch (RepositorioException e) {
+            Console.WriteLine("Problema reportado por el repositorio: " + e.Message);
+        } catch (ValidacionException e) {
+            Console.WriteLine("Problema reportado por el validador: " + e.Message);
+        } catch (AutorizacionException e) {
+            Console.WriteLine("Problema reportado por el servicio de autorización: " + e.Message);
+        } catch (Exception e) {
+            Console.WriteLine("Problema desconocido: " + e.Message);
+        }
+
+        // Listo los expedientes
+        List<Expediente> expedientes = expedienteListarCasoDeUso.Ejecutar().ToList();
+
+        foreach (Expediente expediente in expedientes) {
+            Console.WriteLine(expediente.ToString());
+        }
     }
     #endregion
 
