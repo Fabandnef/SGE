@@ -984,6 +984,7 @@ catch (Exception ex) {
 ```
 
 En el ejemplo anterior, la salida por consola esperada es:
+
     Expediente guardado con ID 1
     Trámite con ID 1 guardado al expediente con ID 1
     Error de repositorio: No se puede dar de alta un trámite con ID ya asignado.
