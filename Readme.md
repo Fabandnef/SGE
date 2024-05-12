@@ -18,7 +18,7 @@ de las clases de la capa de repositorio sin tener que modificar las clases de la
 La capa aplicación está separada en diferentes carpetas, cada una con un propósito específico:
 - **Casos de Uso**: Contiene los casos de uso de la aplicación con los que interactúa la capa de interfaz de usuario. Devuelven resultados y lanzan excepciones en caso de errores. Entre ellos se encuentran los casos de uso de dar de alta, dar de baja, modificar, buscar y listar expedientes con y sin trámites, y los casos de uso de dar de alta, baja, modificar y listar trámites.
 - **Entidades**: Contiene las clases que representan las entidades de la aplicación. En este caso, las entidades son `Expediente`, `Tramite` y `Usuario`.
-- **Enumerativos**: Contiene los enumerativos de la aplicación. En este caso, los enumerativos son `EtiquetaTramite`, que representa las distintas etiquetas que puede tener un trámite; `EstadoExpediente`, que representa los distintos estados que puede tener un expediente y `Permisos`, que representa los distintos permisos que puede tener un usuario.
+- **Enumerativos**: Contiene los enumerativos de la aplicación. En este caso, los enumerativos son `EtiquetaTramite`, que representa las distintas etiquetas que puede tener un trámite, `EstadoExpediente`, que representa los distintos estados que puede tener un expediente y `Permiso`, que representa los distintos permisos que puede tener un usuario.
 - **Excepciones**: Contiene las excepciones personalizadas de la aplicación. En este caso, las excepciones son `AutorizacionException`, `RepositorioException` y `ValidacionException`.
 - **Interfaces**: Contiene las interfaces de la aplicación. Las interfaces están divididas en distitos tipos. Las interfaces de repositorio son `IExpedienteRepositorio` e `ITramiteRepositorio`, la interfaz de servicio es `IServicioAutorizacion`, y las interfaces de validadores son `IExpedienteValidador` e `ITramiteValidador`.
 - **Servicios**: Contiene las clases que implementan la lógica de negocio de la aplicación y/o automatización de tareas. En este caso, el servicio `EspeficicacionCambioEstado` se encarga de definir el estado de un expediente en función de los trámites que tenga asociados luego de que alguno sea agregado, eliminado o editado. El servicio `ServicioActualizacionEstado` se encarga de verificar si un expediente debe cambiar de estado y de actualizarlo en caso de ser necesario. Por último, el servicio `ServicioAutorizacionProvisorio` se encarga de autorizar o no la ejecución de un caso de uso, dependiendo del id del usuario que lo solicita y los permisos que tenga.
@@ -33,20 +33,27 @@ y de la capa de interfaz de usuario implementen las interfaces que las clases de
 
 ## Capa de Repositorio
 La capa de repositorio contiene las clases que interactúan con la base de datos.
-En esta versión, la base de datos es un archivo de texto, pero se puede cambiar fácilmente a una base de datos relacional o no relacional con 
+En esta versión, la base de datos es un archivo de texto, pero se puede cambiar fácilmente a una base de datos relacional o no relacional con
 sólo cambiar las implementaciones de las clases de la capa de repositorio.
 Para una mayor consistencia en esta versión, las clases del repositorio extienden a una clase base.
 Dicha clase base, se encarga de inicializar el archivo de texto si no existe para cada una de las clases que hereden de ella.
 En caso de inconsistencia de datos post-validación, o problemas con el archivo, se lanzan excepciones.
+En esta versión del sistema, se utilizan dos archivos de texto, uno para los expedientes y otro para los trámites, de los cuales
+cada uno es manejado por una clase de repositorio distinta, `RepositorioExpedienteTxt` y `RepositorioTramiteTxt` respectivamente.
+Los repositorios implementan las interfaces `IExpedienteRepositorio` e `ITramiteRepositorio`, las cuales contienen los métodos que las clases de la capa de aplicación esperan.
 
 ## Capa de Interfaz de Usuario
+
 En esta versión, la capa de interfaz de usuario es simplemente una consola. La misma se utiliza de manera estática
 escribiendo código de los ejemplos de aquí abajo dentro de el método `Main`. La consola deberá mostrar
 los resultados esperados de cada uno de los casos de uso.
 
 ---
+
+
 ### Todos los ejemplos asumen que los archivos `Expedientes.txt` y `Tramites.txt` no existen, o están vacíos.
 ### Las salidas de consola esperadas pueden variar si los archivos ya contienen datos, y al momento de imprimir expedientes o trámites, las fechas de creación y/o modificación pueden variar con respecto al resultado esperado que se detalla en cada caso de uso. Se recomienda borrar los archivos antes de ejecutar cada uno de los ejemplos para obtener las salidas esperadas lo más parecidas posibles.
+### Los ejemplos no incluyen la importación de las clases, por lo que se debe importar cada clase que se utilice en los ejemplos. Tanto Visual Studio Code, como Visual Studio y Rider permiten importar clases automáticamente con un atajo de teclado. Este dato se omitió en los ejemplos para acortar la longitud de los mismos ya que el IDE se puede encargar automáticamente de eso. De todas maneras, el Program.cs de la consola ya tiene importadas todas las clases necesarias para ejecutar los ejemplos, para facilitar su ejecución.
 
 ---
 # Dar de alta un expediente
