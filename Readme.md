@@ -17,8 +17,8 @@ Las clases no dependen de implementaciones concretas, sino de interfaces, lo que
 de las clases de la capa de repositorio sin tener que modificar las clases de la capa de aplicación.
 La capa aplicación está separada en diferentes carpetas, cada una con un propósito específico:
 - **Casos de Uso**: Contiene los casos de uso de la aplicación con los que interactúa la capa de interfaz de usuario. Devuelven resultados y lanzan excepciones en caso de errores. Entre ellos se encuentran los casos de uso de dar de alta, dar de baja, modificar, buscar y listar expedientes con y sin trámites, y los casos de uso de dar de alta, baja, modificar y listar trámites.
-- **Entidades**: Contiene las clases que representan las entidades de la aplicación. En este caso, las entidades son `Expediente` y `Tramite`.
-- **Enumerativos**: Contiene los enumerativos de la aplicación. En este caso, los enumerativos son `EtiquetaTramite`, que representa las distintas etiquetas que puede tener un trámite, y `EstadoExpediente`, que representa los distintos estados que puede tener un expediente.
+- **Entidades**: Contiene las clases que representan las entidades de la aplicación. En este caso, las entidades son `Expediente`, `Tramite` y `Usuario`.
+- **Enumerativos**: Contiene los enumerativos de la aplicación. En este caso, los enumerativos son `EtiquetaTramite`, que representa las distintas etiquetas que puede tener un trámite; `EstadoExpediente`, que representa los distintos estados que puede tener un expediente y `Permisos`, que representa los distintos permisos que puede tener un usuario.
 - **Excepciones**: Contiene las excepciones personalizadas de la aplicación. En este caso, las excepciones son `AutorizacionException`, `RepositorioException` y `ValidacionException`.
 - **Interfaces**: Contiene las interfaces de la aplicación. Las interfaces están divididas en distitos tipos. Las interfaces de repositorio son `IExpedienteRepositorio` e `ITramiteRepositorio`, la interfaz de servicio es `IServicioAutorizacion`, y las interfaces de validadores son `IExpedienteValidador` e `ITramiteValidador`.
 - **Servicios**: Contiene las clases que implementan la lógica de negocio de la aplicación y/o automatización de tareas. En este caso, el servicio `EspeficicacionCambioEstado` se encarga de definir el estado de un expediente en función de los trámites que tenga asociados luego de que alguno sea agregado, eliminado o editado. El servicio `ServicioActualizacionEstado` se encarga de verificar si un expediente debe cambiar de estado y de actualizarlo en caso de ser necesario. Por último, el servicio `ServicioAutorizacionProvisorio` se encarga de autorizar o no la ejecución de un caso de uso, dependiendo del id del usuario que lo solicita y los permisos que tenga.
@@ -43,6 +43,7 @@ En caso de inconsistencia de datos post-validación, o problemas con el archivo,
 En esta versión, la capa de interfaz de usuario es simplemente una consola. La misma se utiliza de manera estática
 escribiendo código de los ejemplos de aquí abajo dentro de el método `Main`. La consola deberá mostrar
 los resultados esperados de cada uno de los casos de uso.
+
 ---
 ### Todos los ejemplos asumen que los archivos `Expedientes.txt` y `Tramites.txt` no existen, o están vacíos.
 ### Las salidas de consola esperadas pueden variar si los archivos ya contienen datos, y al momento de imprimir expedientes o trámites, las fechas de creación y/o modificación pueden variar con respecto al resultado esperado que se detalla en cada caso de uso. Se recomienda borrar los archivos antes de ejecutar cada uno de los ejemplos para obtener las salidas esperadas lo más parecidas posibles.
@@ -833,7 +834,7 @@ Donde:
 - `servicioAutorizacion` es una instancia de una clase que implementa la interfaz `IServicioAutorizacion`
 - `servicioActualizacionEstado` es una instancia de la clase `ServicioActualizacionEstado`
 
-Además, se debe generar una instancia de la clase `ExpedienteAltaCasoDeUso`, debido a que no se pueden almacenar trámites sin estar vinculados a un expediente. (Los parámetros están explicados en [[#Dar de alta un expediente]])
+Además, se debe generar una instancia de la clase `ExpedienteAltaCasoDeUso`, debido a que no se pueden almacenar trámites sin estar vinculados a un expediente. (Los parámetros están explicados en la sección "Dar de alta un expediente")
 
 Para testear el caso de uso, se debe llamar al método `Ejecutar` de la instancia
 de `TramiteAltaCasoDeUso`, el cual recibe los siguientes 2 parámetros:
@@ -1031,12 +1032,14 @@ ServicioActualizacionEstado servicioActualizacionEstado =
 ExpedienteAltaCasoDeUso expedienteAltaCasoDeUso =  
     new(expedienteRepositorio, expedienteValidador, servicioAutorizacion);  
 TramiteAltaCasoDeUso tramiteAltaCasoDeUso =  
-    new(tramiteRepositorio, tramiteValidador, servicioAutorizacion, servicioActualizacionEstado);TramiteBajaCasoDeUso tramiteBajaCasoDeUso =  
+    new(tramiteRepositorio, tramiteValidador, servicioAutorizacion, servicioActualizacionEstado);
+TramiteBajaCasoDeUso tramiteBajaCasoDeUso =  
     new(tramiteRepositorio, servicioActualizacionEstado, servicioAutorizacion);  
 Expediente expediente = new() { Caratula = "Carátula de prueba del expediente" };  
   
-try {  
-    expedienteAltaCasoDeUso.Ejecutar(expediente, usuario.Id);    Console.WriteLine($"Expediente guardado con ID {expediente.Id}");}  
+try {
+    expedienteAltaCasoDeUso.Ejecutar(expediente, usuario.Id);
+    Console.WriteLine($"Expediente guardado con ID {expediente.Id}");}  
 catch (AutorizacionException ex) {  
     Console.WriteLine($"Error de autorización: {ex.Message}");}  
 catch (ValidacionException ex) {  
@@ -1047,7 +1050,9 @@ catch (Exception ex) {
     Console.WriteLine($"Error inesperado: {ex.Message}");}  
   
 Tramite tramite = new() {  
-                             Contenido    = "Contenido de prueba del trámite1",                             IdExpediente = expediente.Id,                         };  
+                             Contenido    = "Contenido de prueba del trámite1",
+                             IdExpediente = expediente.Id,
+			};  	
 try {  
     tramiteAltaCasoDeUso.Ejecutar(tramite, usuario.Id);
     Console.WriteLine($"Trámite con ID {tramite.Id} guardado al expediente con ID {tramite.IdExpediente}"); 
@@ -1139,7 +1144,9 @@ catch (Exception ex) {
     Console.WriteLine($"Error inesperado: {ex.Message}");}  
   
 Tramite tramite = new() {  
-                            Contenido = "Contenido de prueba del trámite1", IdExpediente = expediente.Id,                        };  
+                            Contenido = "Contenido de prueba del trámite1",
+                            IdExpediente = expediente.Id,
+			};  
 try {  
     tramiteAltaCasoDeUso.Ejecutar(tramite, usuario.Id);
     Console.WriteLine($"Trámite con ID {tramite.Id} guardado al expediente con ID {tramite.IdExpediente}");  }  
@@ -1237,7 +1244,9 @@ catch (Exception ex) {
     Console.WriteLine($"Error inesperado: {ex.Message}");}  
   
 Tramite tramite = new() {  
-                            Contenido = "Contenido de prueba del trámite1", IdExpediente = expediente.Id,                        };  
+                            Contenido = "Contenido de prueba del trámite1",
+                            IdExpediente = expediente.Id,
+			};  
 try {  
     tramiteAltaCasoDeUso.Ejecutar(tramite, usuario.Id);
     Console.WriteLine($"Trámite con ID {tramite.Id} guardado al expediente con ID {tramite.IdExpediente}");}  
@@ -1251,7 +1260,10 @@ catch (Exception ex) {
     Console.WriteLine($"Error inesperado: {ex.Message}");}  
   
 try {  
-    Console.WriteLine($"Modificando trámite con ID {tramite.Id}...");    tramite.Contenido = "Contenido de prueba modificado del trámite";    tramiteModificacionCasoDeUso.Ejecutar(tramite, usuario.Id);    Console.WriteLine($"Trámite modificado con ID {tramite.Id}.");}  
+    Console.WriteLine($"Modificando trámite con ID {tramite.Id}...");
+    tramite.Contenido = "Contenido de prueba modificado del trámite";
+    tramiteModificacionCasoDeUso.Ejecutar(tramite, usuario.Id);
+    Console.WriteLine($"Trámite modificado con ID {tramite.Id}.");}  
 catch (AutorizacionException ex) {  
     Console.WriteLine($"Error de autorización: {ex.Message}");}  
 catch (ValidacionException ex) {  
@@ -1262,7 +1274,10 @@ catch (Exception ex) {
     Console.WriteLine($"Error inesperado: {ex.Message}");}  
   
 try {  
-    Console.WriteLine("Buscando trámites con etiqueta EscritoPresentado...");    Console.WriteLine("Trámites encontrados:");    List<Tramite> tramites = tramiteConsultaPorEtiquetaCasoDeUso.Ejecutar(EtiquetaTramite.EscritoPresentado);    foreach (Tramite t in tramites) {          
+    Console.WriteLine("Buscando trámites con etiqueta EscritoPresentado...");
+    Console.WriteLine("Trámites encontrados:");
+    List<Tramite> tramites = tramiteConsultaPorEtiquetaCasoDeUso.Ejecutar(EtiquetaTramite.EscritoPresentado);
+    foreach (Tramite t in tramites) {          
         Console.WriteLine(t.ToString());      
     }  
 } catch (Exception ex) {    
@@ -1270,7 +1285,10 @@ try {
 }  
   
 try {  
-    Console.WriteLine($"Modificando trámite con ID {tramite.Id} a un contenido vacío...");    tramite.Contenido = "";    tramiteModificacionCasoDeUso.Ejecutar(tramite, usuario.Id);    Console.WriteLine($"Trámite modificado con ID {tramite.Id}.");}  
+    Console.WriteLine($"Modificando trámite con ID {tramite.Id} a un contenido vacío...");
+    tramite.Contenido = "";
+    tramiteModificacionCasoDeUso.Ejecutar(tramite, usuario.Id);
+    Console.WriteLine($"Trámite modificado con ID {tramite.Id}.");}  
 catch (AutorizacionException ex) {  
     Console.WriteLine($"Error de autorización: {ex.Message}");}  
 catch (ValidacionException ex) {  
@@ -1282,6 +1300,7 @@ catch (Exception ex) {
 ```
 
 En el ejemplo anterior, la salida por consola esperada es:
+
 	Expediente guardado con ID 1
 	Trámite con ID 1 guardado al expediente con ID 1
 	Modificando trámite con ID 1...
@@ -1297,5 +1316,3 @@ En el ejemplo anterior, la salida por consola esperada es:
 	IdUsuarioUltimaModificacion: 1
 	Modificando trámite con ID 1 a un contenido vacío...
 	Error de validación: El contenido de un trámite no puede estar vacío.
-
----
