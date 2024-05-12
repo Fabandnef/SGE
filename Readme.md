@@ -1,5 +1,59 @@
-﻿### Todos los ejemplos asumen que los archivos `Expedientes.txt` y `Tramites.txt` no existen, o están vacíos.
+﻿# Sistema de Gestión de Expedientes SGE
+En este proyecto se realizó un sistema de gestión de expedientes, el cual permite dar de alta, dar de baja, buscar y listar expedientes.
+Cada expediente puede contener 0, 1 o más trámites que estén vinculados a él.
+
+El sistema se encuentra dividido en 3 capas:
+- **Capa de Aplicación**: Contiene las clases con la lógica de negocio y los casos de uso.
+- **Capa de Repositorio**: Contiene las clases que interactúan con la base de datos.
+- **Capa de Interfaz de Usuario**: Contiene las clases que interactúan con el usuario.
+
+## Capa de Aplicación
+La capa de aplicación contiene las clases con la lógica de negocio y los casos de uso.
+Esta capa está completamente aislada de la capa de repositorio y de la capa de interfaz de usuario.
+Las otras capas interactúan con ella, pero ella no interactúa con las otras capas, simplemente procesa datos
+y devuelve resultados. Siguiendo el patrón de inyección de dependencias, las clases de esta capa reciben
+como parámetros en sus constructores instancias de las clases de la capa de repositorio y de la capa de interfaz de usuario.
+Las clases no dependen de implementaciones concretas, sino de interfaces, lo que permite que se puedan cambiar las implementaciones
+de las clases de la capa de repositorio sin tener que modificar las clases de la capa de aplicación.
+La capa aplicación está separada en diferentes carpetas, cada una con un propósito específico:
+- **Casos de Uso**: Contiene los casos de uso de la aplicación con los que interactúa la capa de interfaz de usuario. Devuelven resultados y lanzan excepciones en caso de errores. Entre ellos se encuentran los casos de uso de dar de alta, dar de baja, modificar, buscar y listar expedientes con y sin trámites, y los casos de uso de dar de alta, baja, modificar y listar trámites.
+- **Entidades**: Contiene las clases que representan las entidades de la aplicación. En este caso, las entidades son `Expediente`, `Tramite` y `Usuario`.
+- **Enumerativos**: Contiene los enumerativos de la aplicación. En este caso, los enumerativos son `EtiquetaTramite`, que representa las distintas etiquetas que puede tener un trámite, `EstadoExpediente`, que representa los distintos estados que puede tener un expediente y `Permiso`, que representa los distintos permisos que puede tener un usuario.
+- **Excepciones**: Contiene las excepciones personalizadas de la aplicación. En este caso, las excepciones son `AutorizacionException`, `RepositorioException` y `ValidacionException`.
+- **Interfaces**: Contiene las interfaces de la aplicación. Las interfaces están divididas en distitos tipos. Las interfaces de repositorio son `IExpedienteRepositorio` e `ITramiteRepositorio`, la interfaz de servicio es `IServicioAutorizacion`, y las interfaces de validadores son `IExpedienteValidador` e `ITramiteValidador`.
+- **Servicios**: Contiene las clases que implementan la lógica de negocio de la aplicación y/o automatización de tareas. En este caso, el servicio `EspeficicacionCambioEstado` se encarga de definir el estado de un expediente en función de los trámites que tenga asociados luego de que alguno sea agregado, eliminado o editado. El servicio `ServicioActualizacionEstado` se encarga de verificar si un expediente debe cambiar de estado y de actualizarlo en caso de ser necesario. Por último, el servicio `ServicioAutorizacionProvisorio` se encarga de autorizar o no la ejecución de un caso de uso, dependiendo del id del usuario que lo solicita y los permisos que tenga.
+- **Validadores**: Contiene las clases que validan los datos de las entidades de la aplicación. Comprueban que los datos sean correctos antes de ser guardados en la base de datos, y en caso de errores, lanzan excepciones. En este caso, los validadores son `ExpedienteValidador` y `TramiteValidador`, que se encargan de comprobar que un Expediente tenga una carátula no vacía y que un Trámite tenga contenido no vacío, respectivamente.
+
+Cada carpeta contiene las clases que cumplen con el propósito de la misma, para mantener la organización y la cohesión de la capa de aplicación.
+
+La capa de aplicación desconoce por completo cómo se almacenan los datos y cómo se presentan al usuario, simplemente procesa datos y devuelve resultados.
+No tiene ningún tipo de dependencia con las otras capas, lo que permite que sea fácilmente testeable y reutilizable.
+Esta capa puede funcionar con cualquier tipo de base de datos y con cualquier tipo de interfaz de usuario, el único requisito es que las clases de la capa de repositorio
+y de la capa de interfaz de usuario implementen las interfaces que las clases de la capa de aplicación esperan.
+
+## Capa de Repositorio
+La capa de repositorio contiene las clases que interactúan con la base de datos.
+En esta versión, la base de datos es un archivo de texto, pero se puede cambiar fácilmente a una base de datos relacional o no relacional con
+sólo cambiar las implementaciones de las clases de la capa de repositorio.
+Para una mayor consistencia en esta versión, las clases del repositorio extienden a una clase base.
+Dicha clase base, se encarga de inicializar el archivo de texto si no existe para cada una de las clases que hereden de ella.
+En caso de inconsistencia de datos post-validación, o problemas con el archivo, se lanzan excepciones.
+En esta versión del sistema, se utilizan dos archivos de texto, uno para los expedientes y otro para los trámites, de los cuales
+cada uno es manejado por una clase de repositorio distinta, `RepositorioExpedienteTxt` y `RepositorioTramiteTxt` respectivamente.
+Los repositorios implementan las interfaces `IExpedienteRepositorio` e `ITramiteRepositorio`, las cuales contienen los métodos que las clases de la capa de aplicación esperan.
+
+## Capa de Interfaz de Usuario
+
+En esta versión, la capa de interfaz de usuario es simplemente una consola. La misma se utiliza de manera estática
+escribiendo código de los ejemplos de aquí abajo dentro de el método `Main`. La consola deberá mostrar
+los resultados esperados de cada uno de los casos de uso.
+
+---
+
+
+### Todos los ejemplos asumen que los archivos `Expedientes.txt` y `Tramites.txt` no existen, o están vacíos.
 ### Las salidas de consola esperadas pueden variar si los archivos ya contienen datos, y al momento de imprimir expedientes o trámites, las fechas de creación y/o modificación pueden variar con respecto al resultado esperado que se detalla en cada caso de uso. Se recomienda borrar los archivos antes de ejecutar cada uno de los ejemplos para obtener las salidas esperadas lo más parecidas posibles.
+### Los ejemplos no incluyen la importación de las clases, por lo que se debe importar cada clase que se utilice en los ejemplos. Tanto Visual Studio Code, como Visual Studio y Rider permiten importar clases automáticamente con un atajo de teclado. Este dato se omitió en los ejemplos para acortar la longitud de los mismos ya que el IDE se puede encargar automáticamente de eso. De todas maneras, el Program.cs de la consola ya tiene importadas todas las clases necesarias para ejecutar los ejemplos, para facilitar su ejecución.
 
 ---
 # Dar de alta un expediente
@@ -771,7 +825,7 @@ En el ejemplo anterior, la salida por consola esperada es:
 
 ---
 
-# Alta de un trámite
+# Dar de alta un trámite
 Para testear el alta de un trámite, se debe generar una instancia de la clase
 `TramiteAltaCasoDeUso`, la cual recibe 4 parámetros en su constructor:
 
@@ -787,6 +841,8 @@ Donde:
 - `servicioAutorizacion` es una instancia de una clase que implementa la interfaz `IServicioAutorizacion`
 - `servicioActualizacionEstado` es una instancia de la clase `ServicioActualizacionEstado`
 
+Además, se debe generar una instancia de la clase `ExpedienteAltaCasoDeUso`, debido a que no se pueden almacenar trámites sin estar vinculados a un expediente. (Los parámetros están explicados en la sección "Dar de alta un expediente")
+
 Para testear el caso de uso, se debe llamar al método `Ejecutar` de la instancia
 de `TramiteAltaCasoDeUso`, el cual recibe los siguientes 2 parámetros:
 
@@ -797,14 +853,155 @@ Donde:
 
 - `tramite` es una instancia de la clase `Tramite`
 - `idUsuario` es el id del usuario que está modificando al trámite
-
-Y retorna una instancia de la clase `Tramite`.
 ## Ejemplo de test
-#TODO
+
+```csharp
+Usuario                    usuario                    = new();  
+IExpedienteValidador       expedienteValidador        = new ExpedienteValidador();
+ITramiteValidador          tramiteValidador           = new TramiteValidador();  
+IExpedienteRepositorio     expedienteRepositorio      = new RepositorioExpedienteTxt();  
+ITramiteRepositorio        tramiteRepositorio         = new RepositorioTramiteTxt();  
+IServicioAutorizacion      servicioAutorizacion       = new ServicioAutorizacionProvisorio();  
+EspecificacionCambioEstado especificacionCambioEstado = new(tramiteRepositorio);  
+ServicioActualizacionEstado servicioActualizacionEstado =  
+    new(expedienteRepositorio, especificacionCambioEstado);  
+ExpedienteAltaCasoDeUso expedienteAltaCasoDeUso =  
+    new(expedienteRepositorio, expedienteValidador, servicioAutorizacion);  
+TramiteAltaCasoDeUso tramiteAltaCasoDeUso =  
+    new(tramiteRepositorio, tramiteValidador, servicioAutorizacion, servicioActualizacionEstado);  
+  
+Expediente expediente = new() { Caratula = "Carátula de prueba del expediente" };  
+  
+try {  
+    expedienteAltaCasoDeUso.Ejecutar(expediente, usuario.Id);  
+    Console.WriteLine($"Expediente guardado con ID {expediente.Id}");  
+}  
+catch (AutorizacionException ex) {  
+    Console.WriteLine($"Error de autorización: {ex.Message}");  
+}  
+catch (ValidacionException ex) {  
+    Console.WriteLine($"Error de validación: {ex.Message}");  
+}  
+catch (RepositorioException ex) {  
+    Console.WriteLine($"Error de repositorio: {ex.Message}");  
+}  
+catch (Exception ex) {  
+    Console.WriteLine($"Error inesperado: {ex.Message}");  
+}  
+  
+Tramite tramite1 = new() {  
+                            Contenido = "Contenido de prueba del trámite1" ,  
+                            IdExpediente = expediente.Id,  
+                        };  
+Tramite tramite2 = new() {  
+                            Contenido = "Contenido de prueba del trámite2" ,  
+                            IdExpediente = 0,  
+                        };  
+Tramite tramite3 = new() {  
+                            IdExpediente = expediente.Id,  
+                        };  
+Tramite tramite4 = new() {  
+                             Contenido = "Contenido de prueba del trámite3" ,  
+                        };  
+  
+try {  
+    tramiteAltaCasoDeUso.Ejecutar(tramite1, usuario.Id);  
+    Console.WriteLine($"Trámite con ID {tramite.Id} guardado al expediente con ID {tramite.IdExpediente}"); 
+}   
+catch (AutorizacionException ex) {  
+    Console.WriteLine($"Error de autorización: {ex.Message}");  
+}  
+catch (ValidacionException ex) {  
+    Console.WriteLine($"Error de validación: {ex.Message}");  
+}  
+catch (RepositorioException ex) {  
+    Console.WriteLine($"Error de repositorio: {ex.Message}");  
+}  
+catch (Exception ex) {  
+    Console.WriteLine($"Error inesperado: {ex.Message}");  
+}  
+  
+try {  
+    tramiteAltaCasoDeUso.Ejecutar(tramite1, usuario.Id);  
+    Console.WriteLine($"Trámite con ID {tramite.Id} guardado al expediente con ID {tramite.IdExpediente}");  
+}   
+catch (AutorizacionException ex) {  
+    Console.WriteLine($"Error de autorización: {ex.Message}");  
+}  
+catch (ValidacionException ex) {  
+    Console.WriteLine($"Error de validación: {ex.Message}");  
+}  
+catch (RepositorioException ex) {  
+    Console.WriteLine($"Error de repositorio: {ex.Message}");  
+}  
+catch (Exception ex) {  
+    Console.WriteLine($"Error inesperado: {ex.Message}");  
+}  
+  
+try {  
+    tramiteAltaCasoDeUso.Ejecutar(tramite2, usuario.Id);  
+    Console.WriteLine($"Trámite guardado al expediente con ID {tramite2.IdExpediente}");  
+}   
+catch (AutorizacionException ex) {  
+    Console.WriteLine($"Error de autorización: {ex.Message}");  
+}  
+catch (ValidacionException ex) {  
+    Console.WriteLine($"Error de validación: {ex.Message}");  
+}  
+catch (RepositorioException ex) {  
+    Console.WriteLine($"Error de repositorio: {ex.Message}");  
+}  
+catch (Exception ex) {  
+    Console.WriteLine($"Error inesperado: {ex.Message}");  
+}  
+  
+try {  
+    tramiteAltaCasoDeUso.Ejecutar(tramite3, usuario.Id);  
+    Console.WriteLine($"Trámite guardado al expediente con ID {tramite3.IdExpediente}");  
+}   
+catch (AutorizacionException ex) {  
+    Console.WriteLine($"Error de autorización: {ex.Message}");  
+}  
+catch (ValidacionException ex) {  
+    Console.WriteLine($"Error de validación: {ex.Message}");  
+}  
+catch (RepositorioException ex) {  
+    Console.WriteLine($"Error de repositorio: {ex.Message}");  
+}  
+catch (Exception ex) {  
+    Console.WriteLine($"Error inesperado: {ex.Message}");  
+}  
+  
+try {  
+    tramiteAltaCasoDeUso.Ejecutar(tramite4, usuario.Id);  
+    Console.WriteLine($"Trámite guardado al expediente con ID {tramite4.IdExpediente}");  
+}   
+catch (AutorizacionException ex) {  
+    Console.WriteLine($"Error de autorización: {ex.Message}");  
+}  
+catch (ValidacionException ex) {  
+    Console.WriteLine($"Error de validación: {ex.Message}");  
+}  
+catch (RepositorioException ex) {  
+    Console.WriteLine($"Error de repositorio: {ex.Message}");  
+}  
+catch (Exception ex) {  
+    Console.WriteLine($"Error inesperado: {ex.Message}");  
+}
+```
+
+En el ejemplo anterior, la salida por consola esperada es:
+
+    Expediente guardado con ID 1
+    Trámite con ID 1 guardado al expediente con ID 1
+    Error de repositorio: No se puede dar de alta un trámite con ID ya asignado.
+    Error de validación: El trámite debe estar asociado a un expediente.
+    Error de validación: El contenido de un trámite no puede estar vacío.
+    Error de validación: El trámite debe estar asociado a un expediente.
 
 ---
 
-# Baja de un trámite
+# Dar de baja un trámite
 Para testear la baja de un trámite, se debe generar una instancia de la clase
 `TramiteBajaCasoDeUso`, la cual recibe 3 parámetros en su constructor:
 
@@ -829,7 +1026,80 @@ Donde:
 - `idTramite` es el id del trámite a dar de baja
 - `idUsuarioActual` es el id del usuario que está dando de baja al trámite
 ## Ejemplo de test
-#TODO
+```csharp
+Usuario                    usuario                    = new();  
+IExpedienteValidador       expedienteValidador        = new ExpedienteValidador();
+ITramiteValidador          tramiteValidador           = new TramiteValidador();  
+IExpedienteRepositorio     expedienteRepositorio      = new RepositorioExpedienteTxt();  
+ITramiteRepositorio        tramiteRepositorio         = new RepositorioTramiteTxt();  
+IServicioAutorizacion      servicioAutorizacion       = new ServicioAutorizacionProvisorio();  
+EspecificacionCambioEstado especificacionCambioEstado = new(tramiteRepositorio);  
+  
+ServicioActualizacionEstado servicioActualizacionEstado =  
+    new(expedienteRepositorio, especificacionCambioEstado);  
+ExpedienteAltaCasoDeUso expedienteAltaCasoDeUso =  
+    new(expedienteRepositorio, expedienteValidador, servicioAutorizacion);  
+TramiteAltaCasoDeUso tramiteAltaCasoDeUso =  
+    new(tramiteRepositorio, tramiteValidador, servicioAutorizacion, servicioActualizacionEstado);
+TramiteBajaCasoDeUso tramiteBajaCasoDeUso =  
+    new(tramiteRepositorio, servicioActualizacionEstado, servicioAutorizacion);  
+Expediente expediente = new() { Caratula = "Carátula de prueba del expediente" };  
+  
+try {
+    expedienteAltaCasoDeUso.Ejecutar(expediente, usuario.Id);
+    Console.WriteLine($"Expediente guardado con ID {expediente.Id}");}  
+catch (AutorizacionException ex) {  
+    Console.WriteLine($"Error de autorización: {ex.Message}");}  
+catch (ValidacionException ex) {  
+    Console.WriteLine($"Error de validación: {ex.Message}");}  
+catch (RepositorioException ex) {  
+    Console.WriteLine($"Error de repositorio: {ex.Message}");}  
+catch (Exception ex) {  
+    Console.WriteLine($"Error inesperado: {ex.Message}");}  
+  
+Tramite tramite = new() {  
+                             Contenido    = "Contenido de prueba del trámite1",
+                             IdExpediente = expediente.Id,
+			};  	
+try {  
+    tramiteAltaCasoDeUso.Ejecutar(tramite, usuario.Id);
+    Console.WriteLine($"Trámite con ID {tramite.Id} guardado al expediente con ID {tramite.IdExpediente}"); 
+catch (AutorizacionException ex) {  
+    Console.WriteLine($"Error de autorización: {ex.Message}");}  
+catch (ValidacionException ex) {  
+    Console.WriteLine($"Error de validación: {ex.Message}");}  
+catch (RepositorioException ex) {  
+    Console.WriteLine($"Error de repositorio: {ex.Message}");}  
+catch (Exception ex) {  
+    Console.WriteLine($"Error inesperado: {ex.Message}");}  
+  
+try {  
+    tramiteBajaCasoDeUso.Ejecutar(1, usuario.Id);    
+    Console.WriteLine($"Trámite con ID 1 eliminado correctamente");}  
+catch (AutorizacionException ex) {  
+    Console.WriteLine($"Error de autorización: {ex.Message}");}  
+catch (RepositorioException ex) {  
+    Console.WriteLine($"Error de repositorio: {ex.Message}");}  
+catch (Exception ex) {  
+    Console.WriteLine($"Error inesperado: {ex.Message}");}  
+  
+try {  
+    tramiteBajaCasoDeUso.Ejecutar(1, usuario.Id);    
+    Console.WriteLine($"Trámite con ID 1 eliminado correctamente");}  
+catch (AutorizacionException ex) {  
+    Console.WriteLine($"Error de autorización: {ex.Message}");}  
+catch (RepositorioException ex) {  
+    Console.WriteLine($"Error de repositorio: {ex.Message}");}  
+catch (Exception ex) {  
+    Console.WriteLine($"Error inesperado: {ex.Message}");}
+```
+
+En el ejemplo anterior, la salida por consola esperada es:
+
+	Expediente guardado con ID 1
+	Trámite con ID 1 guardado al expediente con ID 1
+	Trámite con ID 1 eliminado correctamente
+	Error de repositorio: No se encontró el trámite a eliminar.
 
 ---
 # Buscar trámite por etiqueta
@@ -849,9 +1119,77 @@ Donde:
 
 - `etiquetaTramite` es el valor del enumerador `EtiquetaTramite` que se quiere buscar
 
-Y retorna `IEnumerable<Tramite>`
+Y retorna `List<Tramite>`
 ## Ejemplo de test
-#TODO
+```csharp
+Usuario                    usuario                    = new();  
+IExpedienteValidador       expedienteValidador        = new ExpedienteValidador(); 
+ITramiteValidador          tramiteValidador           = new TramiteValidador();  
+IExpedienteRepositorio     expedienteRepositorio      = new RepositorioExpedienteTxt();  
+ITramiteRepositorio        tramiteRepositorio         = new RepositorioTramiteTxt();  
+IServicioAutorizacion      servicioAutorizacion       = new ServicioAutorizacionProvisorio();  
+EspecificacionCambioEstado especificacionCambioEstado = new(tramiteRepositorio);  
+  
+ServicioActualizacionEstado servicioActualizacionEstado =  
+    new(expedienteRepositorio, especificacionCambioEstado);  
+ExpedienteAltaCasoDeUso expedienteAltaCasoDeUso =  
+    new(expedienteRepositorio, expedienteValidador, servicioAutorizacion);  
+TramiteAltaCasoDeUso tramiteAltaCasoDeUso =  
+    new(tramiteRepositorio, tramiteValidador, servicioAutorizacion, servicioActualizacionEstado);  
+TramiteConsultaPorEtiquetaCasoDeUso tramiteConsultaPorEtiquetaCasoDeUso =  
+    new(tramiteRepositorio);  
+Expediente expediente = new() { Caratula = "Carátula de prueba del expediente" };  
+  
+try {  
+    expedienteAltaCasoDeUso.Ejecutar(expediente, usuario.Id);
+    Console.WriteLine($"Expediente guardado con ID {expediente.Id}");}  
+catch (AutorizacionException ex) {  
+    Console.WriteLine($"Error de autorización: {ex.Message}");}  
+catch (ValidacionException ex) {  
+    Console.WriteLine($"Error de validación: {ex.Message}");}  
+catch (RepositorioException ex) {  
+    Console.WriteLine($"Error de repositorio: {ex.Message}");}  
+catch (Exception ex) {  
+    Console.WriteLine($"Error inesperado: {ex.Message}");}  
+  
+Tramite tramite = new() {  
+                            Contenido = "Contenido de prueba del trámite1",
+                            IdExpediente = expediente.Id,
+			};  
+try {  
+    tramiteAltaCasoDeUso.Ejecutar(tramite, usuario.Id);
+    Console.WriteLine($"Trámite con ID {tramite.Id} guardado al expediente con ID {tramite.IdExpediente}");  }  
+catch (AutorizacionException ex) {  
+    Console.WriteLine($"Error de autorización: {ex.Message}");}  
+catch (ValidacionException ex) {  
+    Console.WriteLine($"Error de validación: {ex.Message}");}  
+catch (RepositorioException ex) {  
+    Console.WriteLine($"Error de repositorio: {ex.Message}");}  
+catch (Exception ex) {  
+    Console.WriteLine($"Error inesperado: {ex.Message}");}  
+  
+try {  
+    List<Tramite> tramites = tramiteConsultaPorEtiquetaCasoDeUso.Ejecutar(EtiquetaTramite.EscritoPresentado);  
+    foreach (Tramite t in tramites) {        
+	    Console.WriteLine(t.ToString());    
+    }
+}  
+catch (Exception ex) {  
+    Console.WriteLine($"Error inesperado: {ex.Message}");
+}
+```
+
+En el ejemplo anterior, la salida por consola esperada es:
+
+	Expediente guardado con ID 1
+	Trámite con ID 1 guardado al expediente con ID 1
+	Id: 1
+	IdExpediente: 1
+	Etiqueta: EscritoPresentado
+	Contenido: Contenido de prueba del trámite1
+	FechaCreacion: 12/5/2024 4:54:19 p. m.
+	UltimaModificacion: 12/5/2024 4:54:19 p. m.
+	IdUsuarioUltimaModificacion: 1
 
 ---
 
@@ -880,6 +1218,110 @@ Donde:
 - `tramite` es una instancia de la clase `Tramite`
 - `idUsuario` es el id del usuario que está modificando al expediente
 ## Ejemplo de test
-#TODO
+```csharp
+Usuario                    usuario                    = new();  
+IExpedienteValidador       expedienteValidador        = new ExpedienteValidador(); 
+ITramiteValidador          tramiteValidador           = new TramiteValidador();  
+IExpedienteRepositorio     expedienteRepositorio      = new RepositorioExpedienteTxt();  
+ITramiteRepositorio        tramiteRepositorio         = new RepositorioTramiteTxt();  
+IServicioAutorizacion      servicioAutorizacion       = new ServicioAutorizacionProvisorio();  
+EspecificacionCambioEstado especificacionCambioEstado = new(tramiteRepositorio);  
+  
+ServicioActualizacionEstado servicioActualizacionEstado =  
+    new(expedienteRepositorio, especificacionCambioEstado);  
+ExpedienteAltaCasoDeUso expedienteAltaCasoDeUso =  
+    new(expedienteRepositorio, expedienteValidador, servicioAutorizacion);  
+TramiteAltaCasoDeUso tramiteAltaCasoDeUso =  
+    new(tramiteRepositorio, tramiteValidador, servicioAutorizacion, servicioActualizacionEstado);  
+TramiteModificacionCasoDeUso tramiteModificacionCasoDeUso =  
+    new(tramiteRepositorio, tramiteValidador, servicioActualizacionEstado, servicioAutorizacion);  
+TramiteConsultaPorEtiquetaCasoDeUso tramiteConsultaPorEtiquetaCasoDeUso =    
+    new(tramiteRepositorio);  
+  
+Expediente expediente = new() { Caratula = "Carátula de prueba del expediente" };  
+  
+try {  
+    expedienteAltaCasoDeUso.Ejecutar(expediente, usuario.Id);
+    Console.WriteLine($"Expediente guardado con ID {expediente.Id}");}  
+catch (AutorizacionException ex) {  
+    Console.WriteLine($"Error de autorización: {ex.Message}");}  
+catch (ValidacionException ex) {  
+    Console.WriteLine($"Error de validación: {ex.Message}");}  
+catch (RepositorioException ex) {  
+    Console.WriteLine($"Error de repositorio: {ex.Message}");}  
+catch (Exception ex) {  
+    Console.WriteLine($"Error inesperado: {ex.Message}");}  
+  
+Tramite tramite = new() {  
+                            Contenido = "Contenido de prueba del trámite1",
+                            IdExpediente = expediente.Id,
+			};  
+try {  
+    tramiteAltaCasoDeUso.Ejecutar(tramite, usuario.Id);
+    Console.WriteLine($"Trámite con ID {tramite.Id} guardado al expediente con ID {tramite.IdExpediente}");}  
+catch (AutorizacionException ex) {  
+    Console.WriteLine($"Error de autorización: {ex.Message}");}  
+catch (ValidacionException ex) {  
+    Console.WriteLine($"Error de validación: {ex.Message}");}  
+catch (RepositorioException ex) {  
+    Console.WriteLine($"Error de repositorio: {ex.Message}");}  
+catch (Exception ex) {  
+    Console.WriteLine($"Error inesperado: {ex.Message}");}  
+  
+try {  
+    Console.WriteLine($"Modificando trámite con ID {tramite.Id}...");
+    tramite.Contenido = "Contenido de prueba modificado del trámite";
+    tramiteModificacionCasoDeUso.Ejecutar(tramite, usuario.Id);
+    Console.WriteLine($"Trámite modificado con ID {tramite.Id}.");}  
+catch (AutorizacionException ex) {  
+    Console.WriteLine($"Error de autorización: {ex.Message}");}  
+catch (ValidacionException ex) {  
+    Console.WriteLine($"Error de validación: {ex.Message}");}  
+catch (RepositorioException ex) {  
+    Console.WriteLine($"Error de repositorio: {ex.Message}");}  
+catch (Exception ex) {  
+    Console.WriteLine($"Error inesperado: {ex.Message}");}  
+  
+try {  
+    Console.WriteLine("Buscando trámites con etiqueta EscritoPresentado...");
+    Console.WriteLine("Trámites encontrados:");
+    List<Tramite> tramites = tramiteConsultaPorEtiquetaCasoDeUso.Ejecutar(EtiquetaTramite.EscritoPresentado);
+    foreach (Tramite t in tramites) {          
+        Console.WriteLine(t.ToString());      
+    }  
+} catch (Exception ex) {    
+    Console.WriteLine($"Error inesperado: {ex.Message}");  
+}  
+  
+try {  
+    Console.WriteLine($"Modificando trámite con ID {tramite.Id} a un contenido vacío...");
+    tramite.Contenido = "";
+    tramiteModificacionCasoDeUso.Ejecutar(tramite, usuario.Id);
+    Console.WriteLine($"Trámite modificado con ID {tramite.Id}.");}  
+catch (AutorizacionException ex) {  
+    Console.WriteLine($"Error de autorización: {ex.Message}");}  
+catch (ValidacionException ex) {  
+    Console.WriteLine($"Error de validación: {ex.Message}");}  
+catch (RepositorioException ex) {  
+    Console.WriteLine($"Error de repositorio: {ex.Message}");}  
+catch (Exception ex) {  
+    Console.WriteLine($"Error inesperado: {ex.Message}");}
+```
 
----
+En el ejemplo anterior, la salida por consola esperada es:
+
+	Expediente guardado con ID 1
+	Trámite con ID 1 guardado al expediente con ID 1
+	Modificando trámite con ID 1...
+	Trámite modificado con ID 1.
+	Buscando trámites con etiqueta EscritoPresentado...
+	Trámites encontrados:
+	Id: 1
+	IdExpediente: 1
+	Etiqueta: EscritoPresentado
+	Contenido: Contenido de prueba modificado del trámite
+	FechaCreacion: 12/5/2024 5:08:54 p. m.
+	UltimaModificacion: 12/5/2024 5:08:54 p. m.
+	IdUsuarioUltimaModificacion: 1
+	Modificando trámite con ID 1 a un contenido vacío...
+	Error de validación: El contenido de un trámite no puede estar vacío.

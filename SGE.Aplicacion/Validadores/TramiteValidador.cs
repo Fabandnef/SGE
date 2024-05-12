@@ -27,6 +27,7 @@ public class TramiteValidador : ITramiteValidador
         if (!string.IsNullOrWhiteSpace(error)) {
             error += "\n";
         }
+
         error += "El trámite debe estar asociado a un expediente.";
 
         return string.IsNullOrWhiteSpace(error);
