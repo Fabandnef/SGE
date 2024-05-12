@@ -1087,6 +1087,7 @@ catch (Exception ex) {
 ```
 
 En el ejemplo anterior, la salida por consola esperada es:
+
 	Expediente guardado con ID 1
 	Trámite con ID 1 guardado al expediente con ID 1
 	Trámite con ID 1 eliminado correctamente
