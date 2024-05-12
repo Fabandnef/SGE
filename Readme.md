@@ -1,4 +1,50 @@
-﻿### Todos los ejemplos asumen que los archivos `Expedientes.txt` y `Tramites.txt` no existen, o están vacíos.
+﻿# Sistema de Gestión de Expedientes SGE
+En este proyecto se realizó un sistema de gestión de expedientes, el cual permite dar de alta, dar de baja, buscar y listar expedientes.
+Cada expediente puede contener 0, 1 o más trámites que estén vinculados a él.
+
+El sistema se encuentra dividido en 3 capas:
+- **Capa de Aplicación**: Contiene las clases con la lógica de negocio y los casos de uso.
+- **Capa de Repositorio**: Contiene las clases que interactúan con la base de datos.
+- **Capa de Interfaz de Usuario**: Contiene las clases que interactúan con el usuario.
+
+## Capa de Aplicación
+La capa de aplicación contiene las clases con la lógica de negocio y los casos de uso.
+Esta capa está completamente aislada de la capa de repositorio y de la capa de interfaz de usuario.
+Las otras capas interactúan con ella, pero ella no interactúa con las otras capas, simplemente procesa datos
+y devuelve resultados. Siguiendo el patrón de inyección de dependencias, las clases de esta capa reciben
+como parámetros en sus constructores instancias de las clases de la capa de repositorio y de la capa de interfaz de usuario.
+Las clases no dependen de implementaciones concretas, sino de interfaces, lo que permite que se puedan cambiar las implementaciones
+de las clases de la capa de repositorio sin tener que modificar las clases de la capa de aplicación.
+La capa aplicación está separada en diferentes carpetas, cada una con un propósito específico:
+- **Casos de Uso**: Contiene los casos de uso de la aplicación con los que interactúa la capa de interfaz de usuario. Devuelven resultados y lanzan excepciones en caso de errores. Entre ellos se encuentran los casos de uso de dar de alta, dar de baja, modificar, buscar y listar expedientes con y sin trámites, y los casos de uso de dar de alta, baja, modificar y listar trámites.
+- **Entidades**: Contiene las clases que representan las entidades de la aplicación. En este caso, las entidades son `Expediente` y `Tramite`.
+- **Enumerativos**: Contiene los enumerativos de la aplicación. En este caso, los enumerativos son `EtiquetaTramite`, que representa las distintas etiquetas que puede tener un trámite, y `EstadoExpediente`, que representa los distintos estados que puede tener un expediente.
+- **Excepciones**: Contiene las excepciones personalizadas de la aplicación. En este caso, las excepciones son `AutorizacionException`, `RepositorioException` y `ValidacionException`.
+- **Interfaces**: Contiene las interfaces de la aplicación. Las interfaces están divididas en distitos tipos. Las interfaces de repositorio son `IExpedienteRepositorio` e `ITramiteRepositorio`, la interfaz de servicio es `IServicioAutorizacion`, y las interfaces de validadores son `IExpedienteValidador` e `ITramiteValidador`.
+- **Servicios**: Contiene las clases que implementan la lógica de negocio de la aplicación y/o automatización de tareas. En este caso, el servicio `EspeficicacionCambioEstado` se encarga de definir el estado de un expediente en función de los trámites que tenga asociados luego de que alguno sea agregado, eliminado o editado. El servicio `ServicioActualizacionEstado` se encarga de verificar si un expediente debe cambiar de estado y de actualizarlo en caso de ser necesario. Por último, el servicio `ServicioAutorizacionProvisorio` se encarga de autorizar o no la ejecución de un caso de uso, dependiendo del id del usuario que lo solicita y los permisos que tenga.
+- **Validadores**: Contiene las clases que validan los datos de las entidades de la aplicación. Comprueban que los datos sean correctos antes de ser guardados en la base de datos, y en caso de errores, lanzan excepciones. En este caso, los validadores son `ExpedienteValidador` y `TramiteValidador`, que se encargan de comprobar que un Expediente tenga una carátula no vacía y que un Trámite tenga contenido no vacío, respectivamente.
+
+Cada carpeta contiene las clases que cumplen con el propósito de la misma, para mantener la organización y la cohesión de la capa de aplicación.
+
+La capa de aplicación desconoce por completo cómo se almacenan los datos y cómo se presentan al usuario, simplemente procesa datos y devuelve resultados.
+No tiene ningún tipo de dependencia con las otras capas, lo que permite que sea fácilmente testeable y reutilizable.
+Esta capa puede funcionar con cualquier tipo de base de datos y con cualquier tipo de interfaz de usuario, el único requisito es que las clases de la capa de repositorio
+y de la capa de interfaz de usuario implementen las interfaces que las clases de la capa de aplicación esperan.
+
+## Capa de Repositorio
+La capa de repositorio contiene las clases que interactúan con la base de datos.
+En esta versión, la base de datos es un archivo de texto, pero se puede cambiar fácilmente a una base de datos relacional o no relacional con 
+sólo cambiar las implementaciones de las clases de la capa de repositorio.
+Para una mayor consistencia en esta versión, las clases del repositorio extienden a una clase base.
+Dicha clase base, se encarga de inicializar el archivo de texto si no existe para cada una de las clases que hereden de ella.
+En caso de inconsistencia de datos post-validación, o problemas con el archivo, se lanzan excepciones.
+
+## Capa de Interfaz de Usuario
+En esta versión, la capa de interfaz de usuario es simplemente una consola. La misma se utiliza de manera estática
+escribiendo código de los ejemplos de aquí abajo dentro de el método `Main`. La consola deberá mostrar
+los resultados esperados de cada uno de los casos de uso.
+---
+### Todos los ejemplos asumen que los archivos `Expedientes.txt` y `Tramites.txt` no existen, o están vacíos.
 ### Las salidas de consola esperadas pueden variar si los archivos ya contienen datos, y al momento de imprimir expedientes o trámites, las fechas de creación y/o modificación pueden variar con respecto al resultado esperado que se detalla en cada caso de uso. Se recomienda borrar los archivos antes de ejecutar cada uno de los ejemplos para obtener las salidas esperadas lo más parecidas posibles.
 
 ---
