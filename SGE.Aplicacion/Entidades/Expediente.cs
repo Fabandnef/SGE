@@ -102,10 +102,10 @@ public class Expediente
 
         // Si hay trámites, los agrego al string.
         st += "\n--------------\n" +
-              "Tramites:\n";
+              $"Tramites del expediente {Id}:";
 
         foreach (Tramite tramite in Tramites) {
-            st += "--------------\n";
+            st += "\n--------------\n";
             st += tramite.ToString();
         }
 

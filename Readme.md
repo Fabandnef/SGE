@@ -1,5 +1,5 @@
 ﻿### Todos los ejemplos asumen que los archivos `Expedientes.txt` y `Tramites.txt` no existen, o están vacíos.
-### Las salidas de consola esperadas pueden variar si los archivos ya contienen datos. Se recomienda borrar los archivos antes de ejecutar cada uno de los ejemplos para obtener las salidas esperadas.
+### Las salidas de consola esperadas pueden variar si los archivos ya contienen datos, y al momento de imprimir expedientes o trámites, las fechas de creación y/o modificación pueden variar con respecto al resultado esperado que se detalla en cada caso de uso. Se recomienda borrar los archivos antes de ejecutar cada uno de los ejemplos para obtener las salidas esperadas lo más parecidas posibles.
 
 ---
 # Dar de alta un expediente
@@ -63,7 +63,7 @@ Expediente expediente4 = new()
 
 try {
     altaCasoDeUso.Ejecutar(expediente1, usuario.Id);
-    Console.WriteLine($"Expediente guardado con id: {expediente1.Id}");
+    Console.WriteLine($"Expediente guardado con ID {expediente1.Id}");
 } catch (AutorizacionException ex) {
     Console.WriteLine($"Error de autorización: {ex.Message}");
 } catch (ValidacionException ex) {
@@ -76,7 +76,7 @@ try {
 
 try {
     altaCasoDeUso.Ejecutar(expediente2, usuario.Id);
-    Console.WriteLine($"Expediente guardado con id: {expediente2.Id}");
+    Console.WriteLine($"Expediente guardado con ID {expediente2.Id}");
 } catch (AutorizacionException ex) {
     Console.WriteLine($"Error de autorización: {ex.Message}");
 } catch (ValidacionException ex) {
@@ -89,7 +89,7 @@ try {
 
 try {
     altaCasoDeUso.Ejecutar(expediente3, usuario.Id);
-    Console.WriteLine($"Expediente guardado con id: {expediente3.Id}");
+    Console.WriteLine($"Expediente guardado con ID {expediente3.Id}");
 } catch (AutorizacionException ex) {
     Console.WriteLine($"Error de autorización: {ex.Message}");
 } catch (ValidacionException ex) {
@@ -102,7 +102,7 @@ try {
 
 try {
     altaCasoDeUso.Ejecutar(expediente4, usuario.Id);
-    Console.WriteLine($"Expediente guardado con id: {expediente4.Id}");
+    Console.WriteLine($"Expediente guardado con ID {expediente4.Id}");
 } catch (AutorizacionException ex) {
     Console.WriteLine($"Error de autorización: {ex.Message}");
 } catch (ValidacionException ex) {
@@ -116,10 +116,10 @@ try {
 
 En el ejemplo anterior, la salida por consola esperada es:
 
-    Expediente guardado con id: 1
+    Expediente guardado con ID 1
     Error de validación: La carátula no puede estar vacía.
     Error de repositorio: No se puede dar de alta un expediente que ya tiene ID.
-    Expediente guardado con id: 2
+    Expediente guardado con ID 2
 
 Los datos se persistirán en el archivo `Expedientes.txt`.
 Si se intenta guardar un expediente asignando un ID manualmente, se arrojará una excepción del repositorio
@@ -172,7 +172,7 @@ int idExpediente = 0;
 try {
     altaCasoDeUso.Ejecutar(expedienteNuevo, usuario.Id);
     idExpediente = expedienteNuevo.Id;
-    Console.WriteLine($"Expediente guardado con id {idExpediente}");
+    Console.WriteLine($"Expediente guardado con ID {idExpediente}");
 } catch (AutorizacionException ex) {
     Console.WriteLine($"Error de autorización: {ex.Message}");
 } catch (ValidacionException ex) {
@@ -183,13 +183,13 @@ try {
     Console.WriteLine($"Error inesperado: {ex.Message}");
 }
 
-// Elimino el expediente
+// Elimino el expediente y trato de eliminar uno inexistente
 try {
     bajaCasoDeUso.Ejecutar(idExpediente, usuario.Id);
-    Console.WriteLine($"Expediente con id {idExpediente} eliminado");
+    Console.WriteLine($"Expediente con ID {idExpediente} eliminado");
     idExpediente = 99999;
     bajaCasoDeUso.Ejecutar(idExpediente, usuario.Id);
-    Console.WriteLine($"Expediente con id {idExpediente} eliminado");
+    Console.WriteLine($"Expediente con ID {idExpediente} eliminado");
 } catch (AutorizacionException ex) {
     Console.WriteLine($"Error de autorización: {ex.Message}");
 } catch (ValidacionException ex) {
@@ -203,8 +203,8 @@ try {
 
 En el ejemplo anterior, la salida por consola esperada es:
 
-    Expediente guardado con id 1
-    Expediente con id 1 eliminado
+    Expediente guardado con ID 1
+    Expediente con ID 1 eliminado
     Error de repositorio: No se pudo eliminar el expediente con ID 99999. Expediente no encontrado.
 
 Los datos se persistirán en el archivo `Expedientes.txt`.
@@ -225,48 +225,52 @@ Para testear el caso de uso se debe llamar al método `Ejecutar` de la instancia
 
 Donde:
 
-- `idExpediente` es el id del expediente al que se quiere buscar
+- `idExpediente` es el id del expediente que se quiere buscar
 
 Y retorna una instancia de la clase `Expediente`.
+
 ## Ejemplo de test
 
 ```csharp
-Usuario                usuario               = new();
-RepositorioTramiteTxt  tramiteRepositorio    = new();
-IExpedienteValidador   expedienteValidador   = new ExpedienteValidador();
-IExpedienteRepositorio expedienteRepositorio = new RepositorioExpedienteTxt();
-IServicioAutorizacion  servicioAutorizacion  = new ServicioAutorizacionProvisorio();
+Usuario                    usuario                    = new();
+RepositorioTramiteTxt      tramiteRepositorio         = new();
+IExpedienteValidador       expedienteValidador        = new ExpedienteValidador();
+IExpedienteRepositorio     expedienteRepositorio      = new RepositorioExpedienteTxt();
+IServicioAutorizacion      servicioAutorizacion       = new ServicioAutorizacionProvisorio();
 EspecificacionCambioEstado especificacionCambioEstado = new(tramiteRepositorio);
-ServicioActualizacionEstado servicioActualizacionEstado = new(expedienteRepositorio, especificacionCambioEstado);
-ITramiteValidador      tramiteValidador      = new TramiteValidador();
 
-ExpedienteAltaCasoDeUso expedienteAltaCasoDeUso = new(expedienteRepositorio, expedienteValidador, servicioAutorizacion);
-TramiteAltaCasoDeUso tramiteAltaCasoDeUso = new(tramiteRepositorio, tramiteValidador, servicioAutorizacion, servicioActualizacionEstado);
+ServicioActualizacionEstado servicioActualizacionEstado
+    = new(expedienteRepositorio, especificacionCambioEstado);
+
+ITramiteValidador tramiteValidador = new TramiteValidador();
+
+ExpedienteAltaCasoDeUso expedienteAltaCasoDeUso
+    = new(expedienteRepositorio, expedienteValidador, servicioAutorizacion);
+
+TramiteAltaCasoDeUso tramiteAltaCasoDeUso
+    = new(tramiteRepositorio, tramiteValidador, servicioAutorizacion, servicioActualizacionEstado);
+
 ExpedienteBuscarPorIdCasoDeUso expedienteBuscarPorIdCasoDeUso = new(expedienteRepositorio);
 
-Expediente expedienteNuevo = new()
-                             {
-                                 Caratula = "Caratula de prueba del expediente",
-                             };
+Expediente expedienteNuevo = new() {
+                                       Caratula = "Caratula de prueba del expediente",
+                                   };
 
 Tramite tramiteNuevo1 = new() {
-                                 Contenido = "Contenido de prueba del trámite 1",
-                                 IdExpediente = 1,
-                             };
+                                  Contenido    = "Contenido de prueba del trámite 1",
+                                  IdExpediente = 1,
+                              };
 
 Tramite tramiteNuevo2 = new() {
-                                 Contenido    = "Contenido de prueba del trámite 2",
-                                 IdExpediente = 1,
-                             };
+                                  Contenido    = "Contenido de prueba del trámite 2",
+                                  IdExpediente = 1,
+                              };
 
 // Añado el expediente
-try
-{
-    Expediente expedienteGuardado = expedienteAltaCasoDeUso.Ejecutar(expedienteNuevo, usuario.Id);
-    Console.WriteLine($"Expediente guardado con id: {expedienteGuardado.Id}");
-}
-catch (Exception e)
-{
+try {
+    expedienteAltaCasoDeUso.Ejecutar(expedienteNuevo, usuario.Id);
+    Console.WriteLine($"Expediente guardado con ID {expedienteNuevo.Id}");
+} catch (Exception e) {
     Console.WriteLine(e.Message);
 }
 
@@ -274,38 +278,57 @@ catch (Exception e)
 try {
     tramiteAltaCasoDeUso.Ejecutar(tramiteNuevo1, usuario.Id);
     tramiteAltaCasoDeUso.Ejecutar(tramiteNuevo2, usuario.Id);
-}
-catch (Exception e) 
-{
+} catch (Exception e) {
     Console.WriteLine(e.Message);
 }
 
 // Busco el expediente por ID sin sus trámites
 try {
-    Expediente? expedienteBuscado = expedienteBuscarPorIdCasoDeUso.Ejecutar(1);
-    Console.WriteLine($"Expediente buscado: {expedienteBuscado?.Caratula}");
-	
-	if (expedienteBuscado?.Tramites.Count == 0) {  
-	    Console.WriteLine("Sin trámites");  
-	}
-}
-catch (Exception e) 
-{
-    Console.WriteLine(e.Message);
+    int idExpediente = 1;
+    Console.WriteLine("---");
+    Console.WriteLine($"Buscando expediente con ID {idExpediente}...");
+    Expediente? expedienteBuscado = expedienteBuscarPorIdCasoDeUso.Ejecutar(idExpediente);
+    
+    if (expedienteBuscado is not null) {
+        Console.WriteLine("Expediente encontrado:");
+        Console.WriteLine(expedienteBuscado.ToString());
+    } else {
+        Console.WriteLine("No se encontró el expediente.");
+    }
+
+    idExpediente = 2;
+    Console.WriteLine("---");
+    Console.WriteLine($"Buscando expediente con ID {idExpediente}...");
+    expedienteBuscado = expedienteBuscarPorIdCasoDeUso.Ejecutar(idExpediente);
+    
+    if (expedienteBuscado is not null) {
+        Console.WriteLine(expedienteBuscado.ToString());
+    } else {
+        Console.WriteLine("No se encontró el expediente.");
+    }
+} catch (RepositorioException ex) {
+    Console.WriteLine($"Error de repositorio: {ex.Message}");
+} catch (Exception ex) {
+    Console.WriteLine($"Error inesperado: {ex.Message}");
 }
 ```
 
 En el ejemplo anterior, la salida por consola esperada es:
 
-    Expediente guardado con id: 1
-    Expediente buscado: Caratula de prueba del expediente
-	Sin trámites
+    Expediente guardado con ID 1
+    ---
+    Buscando expediente con ID 1...
+    Expediente encontrado:
+    Id: 1
+    Estado: RecienIniciado
+    Caratula: Caratula de prueba del expediente
+    FechaCreacion: 12/5/2024 12:33:10
+    UltimaModificacion: 12/5/2024 12:33:10
+    IdUsuarioUltimaModificacion: 1
+    ---
+    Buscando expediente con ID 2...
+    No se encontró el expediente.
 
-Si se vuelven a ejecutar las mismas líneas de código, la salida esperada es:
-
-    Expediente guardado con id: 2
-    Expediente buscado: Caratula de prueba del expediente
-    Sin trámites
 
 En ambos casos anteriores, los datos se guardarán en el archivo `Expedientes.txt` y en `Tramites.txt`
 
@@ -336,72 +359,127 @@ Y retorna una instancia de la clase `Expediente`.
 Usuario                    usuario                    = new();
 RepositorioTramiteTxt      tramiteRepositorio         = new();
 IExpedienteValidador       expedienteValidador        = new ExpedienteValidador();
-ITramiteValidador          tramiteValidador          = new TramiteValidador();
+ITramiteValidador          tramiteValidador           = new TramiteValidador();
 IExpedienteRepositorio     expedienteRepositorio      = new RepositorioExpedienteTxt();
 IServicioAutorizacion      servicioAutorizacion       = new ServicioAutorizacionProvisorio();
 EspecificacionCambioEstado especificacionCambioEstado = new(tramiteRepositorio);
-ServicioActualizacionEstado servicioActualizacionEstado = new(expedienteRepositorio, especificacionCambioEstado);
-ExpedienteAltaCasoDeUso expedienteAltaCasoDeUso = new(expedienteRepositorio, expedienteValidador, servicioAutorizacion);
 
-TramiteAltaCasoDeUso tramiteAltaCasoDeUso = new(tramiteRepositorio, tramiteValidador, servicioAutorizacion, servicioActualizacionEstado);
-ExpedienteBuscarPorIdConTramitesCasoDeUso expedienteBuscarPorIdConTramitesCasoDeUso = new(expedienteRepositorio, tramiteRepositorio);
+ServicioActualizacionEstado servicioActualizacionEstado
+    = new(expedienteRepositorio, especificacionCambioEstado);
 
-Expediente expedienteNuevo = new() {Caratula = "Caratula de prueba del expediente",};
-Tramite tramiteNuevo1 = new() {Contenido = "Contenido de prueba del trámite 1", IdExpediente = 1,};
-Tramite tramiteNuevo2 = new() {Contenido = "Contenido de prueba del trámite 2",IdExpediente = 1,};
+ExpedienteAltaCasoDeUso expedienteAltaCasoDeUso
+    = new(expedienteRepositorio, expedienteValidador, servicioAutorizacion);
+
+TramiteAltaCasoDeUso tramiteAltaCasoDeUso
+    = new(tramiteRepositorio, tramiteValidador, servicioAutorizacion, servicioActualizacionEstado);
+
+ExpedienteBuscarPorIdConTramitesCasoDeUso expedienteBuscarPorIdConTramitesCasoDeUso
+    = new(expedienteRepositorio, tramiteRepositorio);
+
+Expediente expediente = new() { Caratula = "Caratula de prueba del expediente", };
 
 // Añado el expediente
 try {
-    Expediente expedienteGuardado = expedienteAltaCasoDeUso.Ejecutar(expedienteNuevo, usuario.Id);
-    Console.WriteLine($"Expediente guardado con id: {expedienteGuardado.Id}");
+    expedienteAltaCasoDeUso.Ejecutar(expediente, usuario.Id);
+    Console.WriteLine($"Expediente guardado con ID {expediente.Id}");
+} catch (AutorizacionException ex) {
+    Console.WriteLine($"Error de autorización: {ex.Message}");
+} catch (ValidacionException ex) {
+    Console.WriteLine($"Error de validación: {ex.Message}");
+} catch (RepositorioException ex) {
+    Console.WriteLine($"Error de repositorio: {ex.Message}");
+} catch (Exception ex) {
+    Console.WriteLine($"Error inesperado: {ex.Message}");
 }
-catch (Exception e) {
-    Console.WriteLine(e.Message);
-}
+
+Tramite tramite1 = new() { Contenido = "Contenido de prueba del trámite 1", IdExpediente = expediente.Id, };
+Tramite tramite2 = new() { Contenido = "Contenido de prueba del trámite 2", IdExpediente = expediente.Id, };
 
 //Añado los trámites
 try {
-    tramiteAltaCasoDeUso.Ejecutar(tramiteNuevo1, usuario.Id);
-    tramiteAltaCasoDeUso.Ejecutar(tramiteNuevo2, usuario.Id);
-}
-catch (Exception e) {
-    Console.WriteLine(e.Message);
+    tramiteAltaCasoDeUso.Ejecutar(tramite1, usuario.Id);
+    Console.WriteLine($"Trámite 1 guardado con ID {tramite1.Id} (ID Expediente: {tramite1.IdExpediente})");
+    tramiteAltaCasoDeUso.Ejecutar(tramite2, usuario.Id);
+    Console.WriteLine($"Trámite 2 guardado con ID {tramite2.Id} (ID Expediente: {tramite2.IdExpediente})");
+} catch (AutorizacionException ex) {
+    Console.WriteLine($"Error de autorización: {ex.Message}");
+} catch (ValidacionException ex) {
+    Console.WriteLine($"Error de validación: {ex.Message}");
+} catch (RepositorioException ex) {
+    Console.WriteLine($"Error de repositorio: {ex.Message}");
+} catch (Exception ex) {
+    Console.WriteLine($"Error inesperado: {ex.Message}");
 }
 
 // Busco el expediente por ID con sus trámites
 try {
-    Expediente? expedienteBuscado = expedienteBuscarPorIdConTramitesCasoDeUso.Ejecutar(1);
-    Console.WriteLine($"Expediente buscado: {expedienteBuscado?.Caratula}");
-    Console.WriteLine("Tramites: ");
+    int idExpediente = 1;
+    Console.WriteLine("---");
+    Console.WriteLine($"Buscando expediente con ID {idExpediente}");
+    Expediente? expedienteBuscado = expedienteBuscarPorIdConTramitesCasoDeUso.Ejecutar(idExpediente);
 
-    if (expedienteBuscado?.Tramites != null) {  
-	    foreach (Tramite tramite in expedienteBuscado.Tramites) {  
-	        Console.WriteLine($"Id: {tramite.Id}, Contenido: {tramite.Contenido}");  
-	    }  
-	}
-}
-catch (Exception e) {
-    Console.WriteLine(e.Message);
+    if (expedienteBuscado is not null) {
+        Console.WriteLine("Expediente encontrado:");
+        Console.WriteLine(expedienteBuscado.ToString());
+    } else {
+        Console.WriteLine("No se encontró el expediente");
+    }
+
+    idExpediente = 9999;
+    Console.WriteLine("---");
+    Console.WriteLine($"Buscando expediente con ID {idExpediente}");
+    expedienteBuscado = expedienteBuscarPorIdConTramitesCasoDeUso.Ejecutar(idExpediente);
+
+    if (expedienteBuscado is not null) {
+        Console.WriteLine("Expediente encontrado:");
+        Console.WriteLine(expedienteBuscado.ToString());
+    } else {
+        Console.WriteLine("No se encontró el expediente");
+    }
+} catch (RepositorioException ex) {
+    Console.WriteLine($"Error de repositorio: {ex.Message}");
+} catch (Exception ex) {
+    Console.WriteLine($"Error inesperado: {ex.Message}");
 }
 ```
 
 En el ejemplo anterior, la salida por consola esperada es:
 
-    Expediente guardado con id: 1
-	Expediente buscado: Caratula de prueba del expediente
-	Tramites: 
-	Id: 1, Contenido: Contenido de prueba del trámite 1
-	Id: 2, Contenido: Contenido de prueba del trámite 2
+    Expediente guardado con ID 1
+    Trámite 1 guardado con ID 1 (ID Expediente: 1)
+    Trámite 2 guardado con ID 2 (ID Expediente: 1)
+    ---
+    Buscando expediente con ID 1
+    Expediente encontrado:
+    Id: 1
+    Estado: RecienIniciado
+    Caratula: Caratula de prueba del expediente
+    FechaCreacion: 12/5/2024 13:23:53
+    UltimaModificacion: 12/5/2024 13:23:53
+    IdUsuarioUltimaModificacion: 1
+    --------------
+    Tramites del expediente 1:
+    --------------
+    Id: 1
+    IdExpediente: 1
+    Etiqueta: EscritoPresentado
+    Contenido: Contenido de prueba del trámite 1
+    FechaCreacion: 12/5/2024 13:23:53
+    UltimaModificacion: 12/5/2024 13:23:53
+    IdUsuarioUltimaModificacion: 1
+    --------------
+    Id: 2
+    IdExpediente: 1
+    Etiqueta: EscritoPresentado
+    Contenido: Contenido de prueba del trámite 2
+    FechaCreacion: 12/5/2024 13:23:53
+    UltimaModificacion: 12/5/2024 13:23:53
+    IdUsuarioUltimaModificacion: 1
+    --------------
+    ---
+    Buscando expediente con ID 9999
+    No se encontró el expediente
 
-Si se vuelven a ejecutar las mismas líneas de código, la salida esperada es:
-
-    Expediente guardado con id: 2
-	Expediente buscado: Caratula de prueba del expediente
-	Tramites: 
-	Id: 1, Contenido: Contenido de prueba del trámite 1
-	Id: 2, Contenido: Contenido de prueba del trámite 2
-	Id: 3, Contenido: Contenido de prueba del trámite 1
-	Id: 4, Contenido: Contenido de prueba del trámite 2
 
 En ambos casos anteriores, los datos se guardarán en el archivo `Expedientes.txt` y en `Tramites.txt`
 
@@ -420,53 +498,99 @@ Para testear el caso de uso se debe llamar al método `Ejecutar` de la instancia
 
 ```csharp
 Usuario                    usuario                    = new();
-IExpedienteValidador       expedienteValidador        = new ExpedienteValidador();
 IExpedienteRepositorio     expedienteRepositorio      = new RepositorioExpedienteTxt();
+IExpedienteValidador       expedienteValidador        = new ExpedienteValidador();
+ITramiteRepositorio        tramiteRepositorio         = new RepositorioTramiteTxt();
+ITramiteValidador          tramiteValidador           = new TramiteValidador();
+EspecificacionCambioEstado especificacionCambioEstado = new(tramiteRepositorio);
 IServicioAutorizacion      servicioAutorizacion       = new ServicioAutorizacionProvisorio();
 
-ExpedienteAltaCasoDeUso expedienteAltaCasoDeUso = new(expedienteRepositorio, expedienteValidador, servicioAutorizacion);
+ServicioActualizacionEstado servicioActualizacionEstado
+    = new(expedienteRepositorio, especificacionCambioEstado);
+
+ExpedienteAltaCasoDeUso expedienteAltaCasoDeUso
+    = new(expedienteRepositorio, expedienteValidador, servicioAutorizacion);
+
 ExpedienteListarCasoDeUso expedienteListarCasoDeUso = new(expedienteRepositorio);
 
-Expediente expedienteNuevo1 = new() { Caratula = "Caratula de prueba del expediente1",};
-Expediente expedienteNuevo2 = new() {Caratula = "Caratula de prueba del expediente2",};
+TramiteAltaCasoDeUso tramiteAltaCasoDeUso = new(tramiteRepositorio, tramiteValidador, servicioAutorizacion, servicioActualizacionEstado);
+
+Expediente expediente1 = new() { Caratula = "Caratula de prueba del expediente1", };
+Expediente expediente2 = new() { Caratula = "Caratula de prueba del expediente2", };
 
 // Añado los expedientes
 try {
-    Expediente expedienteGuardado1 = expedienteAltaCasoDeUso.Ejecutar(expedienteNuevo1, usuario.Id);
-    Console.WriteLine($"Expediente guardado con id: {expedienteGuardado1.Id}");
-    Expediente expedienteGuardado2 = expedienteAltaCasoDeUso.Ejecutar(expedienteNuevo2, usuario.Id);
-    Console.WriteLine($"Expediente guardado con id: {expedienteGuardado2.Id}");
+    expedienteAltaCasoDeUso.Ejecutar(expediente1, usuario.Id);
+    Console.WriteLine($"Expediente guardado con ID {expediente1.Id}");
+    expedienteAltaCasoDeUso.Ejecutar(expediente2, usuario.Id);
+    Console.WriteLine($"Expediente guardado con ID {expediente2.Id}");
+} catch (AutorizacionException ex) {
+    Console.WriteLine($"Error de autorización: {ex.Message}");
+} catch (ValidacionException ex) {
+    Console.WriteLine($"Error de validación: {ex.Message}");
+} catch (RepositorioException ex) {
+    Console.WriteLine($"Error de repositorio: {ex.Message}");
+} catch (Exception ex) {
+    Console.WriteLine($"Error inesperado: {ex.Message}");
 }
-catch (Exception e) {
-    Console.WriteLine(e.Message);
+
+Tramite tramite1 = new() { Contenido = "Contenido del trámite 1", IdExpediente = expediente1.Id, };
+
+try {
+    tramiteAltaCasoDeUso.Ejecutar(tramite1, usuario.Id);
+    Console.WriteLine($"Trámite guardado con ID {expediente1.Id} (ID Expediente: {expediente1.Id})");
+} catch (AutorizacionException ex) {
+    Console.WriteLine($"Error de autorización: {ex.Message}");
+} catch (ValidacionException ex) {
+    Console.WriteLine($"Error de validación: {ex.Message}");
+} catch (RepositorioException ex) {
+    Console.WriteLine($"Error de repositorio: {ex.Message}");
+} catch (Exception ex) {
+    Console.WriteLine($"Error inesperado: {ex.Message}");
 }
 
 // Listo los expedientes
-List<Expediente> expedientes = expedienteListarCasoDeUso.Ejecutar().ToList();
+try {
+    Console.WriteLine();
+    Console.WriteLine("Buscando expedientes...");
+    List<Expediente> expedientes = expedienteListarCasoDeUso.Ejecutar();
 
-foreach (Expediente expediente in expedientes) {
-    Console.WriteLine(expediente.Caratula);
+    Console.WriteLine("Expedientes encontrados:");
+    foreach (Expediente expediente in expedientes) {
+        Console.WriteLine();
+        Console.WriteLine(expediente.ToString());
+    }
+} catch (RepositorioException ex) {
+    Console.WriteLine($"Error de repositorio: {ex.Message}");
+} catch (Exception ex) {
+    Console.WriteLine($"Error inesperado: {ex.Message}");
 }
 ```
 
 En el ejemplo anterior, la salida por consola esperada es:
 
-    Expediente guardado con id: 1
-	Expediente guardado con id: 2
-	Caratula de prueba del expediente1
-	Caratula de prueba del expediente2
+    Expediente guardado con ID 1
+    Expediente guardado con ID 2
+    Trámite guardado con ID 1 (ID Expediente: 1)
+    
+    Buscando expedientes...
+    Expedientes encontrados:
+    
+    Id: 1
+    Estado: RecienIniciado
+    Caratula: Caratula de prueba del expediente1
+    FechaCreacion: 12/5/2024 13:34:23
+    UltimaModificacion: 12/5/2024 13:34:23
+    IdUsuarioUltimaModificacion: 1
+    
+    Id: 2
+    Estado: RecienIniciado
+    Caratula: Caratula de prueba del expediente2
+    FechaCreacion: 12/5/2024 13:34:23
+    UltimaModificacion: 12/5/2024 13:34:23
+    IdUsuarioUltimaModificacion: 1
 
-
-Si se vuelven a ejecutar las mismas líneas de código, la salida esperada es:
-
-    Expediente guardado con id: 3
-	Expediente guardado con id: 4
-	Caratula de prueba del expediente1
-	Caratula de prueba del expediente2
-	Caratula de prueba del expediente1
-	Caratula de prueba del expediente2
-
-En ambos casos anteriores, los datos se guardarán en el archivo `Expedientes.txt`
+En ambos casos anteriores, los datos se guardarán en el archivo `Expedientes.txt` y en `Tramites.txt`
 
 ---
 
@@ -483,7 +607,112 @@ Donde:
 
 Para testear el caso de uso se debe llamar al método `Ejecutar` de la instancia de `ExpedienteListarConTramitesCasoDeUso`, la cual retorna `List<Expediente>`
 ## Ejemplo de test
-#TODO
+
+```csharp
+Usuario                    usuario                    = new();
+IExpedienteRepositorio     expedienteRepositorio      = new RepositorioExpedienteTxt();
+IExpedienteValidador       expedienteValidador        = new ExpedienteValidador();
+ITramiteRepositorio        tramiteRepositorio         = new RepositorioTramiteTxt();
+ITramiteValidador          tramiteValidador           = new TramiteValidador();
+EspecificacionCambioEstado especificacionCambioEstado = new(tramiteRepositorio);
+IServicioAutorizacion      servicioAutorizacion       = new ServicioAutorizacionProvisorio();
+
+ServicioActualizacionEstado servicioActualizacionEstado
+    = new(expedienteRepositorio, especificacionCambioEstado);
+
+ExpedienteAltaCasoDeUso expedienteAltaCasoDeUso
+    = new(expedienteRepositorio, expedienteValidador, servicioAutorizacion);
+
+ExpedienteListarConTramitesCasoDeUso expedienteListarConTramitesCasoDeUso = new(expedienteRepositorio, tramiteRepositorio);
+
+TramiteAltaCasoDeUso tramiteAltaCasoDeUso = new(tramiteRepositorio, tramiteValidador, servicioAutorizacion, servicioActualizacionEstado);
+
+Expediente expediente1 = new() { Caratula = "Caratula de prueba del expediente1", };
+Expediente expediente2 = new() { Caratula = "Caratula de prueba del expediente2", };
+
+// Añado los expedientes
+try {
+    expedienteAltaCasoDeUso.Ejecutar(expediente1, usuario.Id);
+    Console.WriteLine($"Expediente guardado con ID {expediente1.Id}");
+    expedienteAltaCasoDeUso.Ejecutar(expediente2, usuario.Id);
+    Console.WriteLine($"Expediente guardado con ID {expediente2.Id}");
+} catch (AutorizacionException ex) {
+    Console.WriteLine($"Error de autorización: {ex.Message}");
+} catch (ValidacionException ex) {
+    Console.WriteLine($"Error de validación: {ex.Message}");
+} catch (RepositorioException ex) {
+    Console.WriteLine($"Error de repositorio: {ex.Message}");
+} catch (Exception ex) {
+    Console.WriteLine($"Error inesperado: {ex.Message}");
+}
+
+Tramite tramite1 = new() { Contenido = "Contenido del trámite 1", IdExpediente = expediente1.Id, };
+
+try {
+    tramiteAltaCasoDeUso.Ejecutar(tramite1, usuario.Id);
+    Console.WriteLine($"Trámite guardado con ID {expediente1.Id} (ID Expediente: {expediente1.Id})");
+} catch (AutorizacionException ex) {
+    Console.WriteLine($"Error de autorización: {ex.Message}");
+} catch (ValidacionException ex) {
+    Console.WriteLine($"Error de validación: {ex.Message}");
+} catch (RepositorioException ex) {
+    Console.WriteLine($"Error de repositorio: {ex.Message}");
+} catch (Exception ex) {
+    Console.WriteLine($"Error inesperado: {ex.Message}");
+}
+
+// Listo los expedientes
+try {
+    Console.WriteLine();
+    Console.WriteLine("Buscando expedientes...");
+    List<Expediente> expedientes = expedienteListarConTramitesCasoDeUso.Ejecutar();
+
+    Console.WriteLine("Expedientes encontrados:");
+    foreach (Expediente expediente in expedientes) {
+        Console.WriteLine();
+        Console.WriteLine(expediente.ToString());
+    }
+} catch (RepositorioException ex) {
+    Console.WriteLine($"Error de repositorio: {ex.Message}");
+} catch (Exception ex) {
+    Console.WriteLine($"Error inesperado: {ex.Message}");
+}
+```
+
+En el ejemplo anterior, la salida esperada por consola es:
+
+    Expediente guardado con ID 1
+    Expediente guardado con ID 2
+    Trámite guardado con ID 1 (ID Expediente: 1)
+    
+    Buscando expedientes...
+    Expedientes encontrados:
+    
+    Id: 1
+    Estado: RecienIniciado
+    Caratula: Caratula de prueba del expediente1
+    FechaCreacion: 12/5/2024 13:37:48
+    UltimaModificacion: 12/5/2024 13:37:48
+    IdUsuarioUltimaModificacion: 1
+    --------------
+    Tramites del expediente 1:
+    --------------
+    Id: 1
+    IdExpediente: 1
+    Etiqueta: EscritoPresentado
+    Contenido: Contenido del trámite 1
+    FechaCreacion: 12/5/2024 13:37:48
+    UltimaModificacion: 12/5/2024 13:37:48
+    IdUsuarioUltimaModificacion: 1
+    --------------
+    
+    Id: 2
+    Estado: RecienIniciado
+    Caratula: Caratula de prueba del expediente2
+    FechaCreacion: 12/5/2024 13:37:48
+    UltimaModificacion: 12/5/2024 13:37:48
+    IdUsuarioUltimaModificacion: 1
+
 
 ---
 
