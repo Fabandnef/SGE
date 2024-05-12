@@ -21,7 +21,7 @@ public class TramiteModificacionCasoDeUso(
         if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.TramiteModificacion)) {
             throw new AutorizacionException("El usuario no tiene permisos para realizar esta acción.");
         }
-        
+
         if (!tramiteValidador.Validar(tramite, out string error)) {
             throw new ValidacionException(error);
         }

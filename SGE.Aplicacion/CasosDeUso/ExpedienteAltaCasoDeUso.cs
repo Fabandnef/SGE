@@ -27,7 +27,7 @@ public class ExpedienteAltaCasoDeUso(
 
         expediente.FechaCreacion               = DateTime.Now;
         expediente.UltimaModificacion          = DateTime.Now;
-        expediente.IdUsuarioUltimaModificacion = idUsuario;        
+        expediente.IdUsuarioUltimaModificacion = idUsuario;
         expedienteRepositorio.Alta(expediente);
     }
     #endregion

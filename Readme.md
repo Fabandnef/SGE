@@ -38,6 +38,9 @@ sólo cambiar las implementaciones de las clases de la capa de repositorio.
 Para una mayor consistencia en esta versión, las clases del repositorio extienden a una clase base.
 Dicha clase base, se encarga de inicializar el archivo de texto si no existe para cada una de las clases que hereden de ella.
 En caso de inconsistencia de datos post-validación, o problemas con el archivo, se lanzan excepciones.
+En esta versión del sistema, se utilizan dos archivos de texto, uno para los expedientes y otro para los trámites, de los cuales
+cada uno es manejado por una clase de repositorio distinta, `RepositorioExpedienteTxt` y `RepositorioTramiteTxt` respectivamente.
+Los repositorios implementan las interfaces `IExpedienteRepositorio` e `ITramiteRepositorio`, las cuales contienen los métodos que las clases de la capa de aplicación esperan.
 
 ## Capa de Interfaz de Usuario
 

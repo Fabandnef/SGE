@@ -96,7 +96,8 @@ public sealed class RepositorioExpedienteTxt : RepositorioTxt, IExpedienteReposi
 
         // Si no se encontró el expediente, tirar una excepción.
         if (expedienteParaEliminar == -1) {
-            throw new RepositorioException($"No se pudo eliminar el expediente con ID {idExpediente}. Expediente no encontrado.");
+            throw new
+                RepositorioException($"No se pudo eliminar el expediente con ID {idExpediente}. Expediente no encontrado.");
         }
 
         // Eliminar el expediente y guardar los cambios.
