@@ -20,6 +20,10 @@ public class TramiteValidador : ITramiteValidador
             error += "El contenido de un trámite no puede estar vacío.\n";
         }
         
+        if ((tramite.FechaCreacion != DateTime.MinValue) && tramite.Id.Equals(0)) {
+            error += "No se puede dar de alta un trámite que ya tenga asignado un ID.\n";
+        }
+        
         if (tramite.IdExpediente <= 0) {
             error += "El trámite debe estar asociado a un expediente.\n";
         }

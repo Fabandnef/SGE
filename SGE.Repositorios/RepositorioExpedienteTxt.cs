@@ -1,5 +1,6 @@
 ﻿using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Enumerativos;
+using SGE.Aplicacion.Excepciones;
 using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Repositorios;
@@ -44,7 +45,7 @@ public sealed class RepositorioExpedienteTxt : RepositorioTxt, IExpedienteReposi
         Expediente? expediente = BuscarPorId(idExpediente);
 
         if (expediente is null) {
-            return;
+            throw new RepositorioException("No se encontró el expediente a modificar.");
         }
 
         if (expediente.Estado == estadoExpediente) {
@@ -56,17 +57,24 @@ public sealed class RepositorioExpedienteTxt : RepositorioTxt, IExpedienteReposi
     }
 
     /// <inheritdoc />
-    public Expediente Alta(Expediente expediente)
+    public void Alta(Expediente expediente)
     {
-        expediente.Id = ++_ultimoId;
+        if (expediente.Id != 0) {
+            throw new RepositorioException("No se puede dar de alta un expediente que ya tiene ID.\n");
+        }
 
+        expediente.Id = ++_ultimoId;
         using StreamWriter sw = new(RutaArchivo, true);
-        sw.WriteLine(Encode(expediente));
-        return expediente;
+
+        try {
+            sw.WriteLine(Encode(expediente));
+        } catch (Exception e) {
+            throw new RepositorioException("Error al guardar el expediente.", e);
+        }
     }
 
     /// <inheritdoc />
-    public bool Baja(int idExpediente)
+    public void Baja(int idExpediente)
     {
         List<Expediente> expedientes = LeerExpedientes();
 
@@ -77,25 +85,23 @@ public sealed class RepositorioExpedienteTxt : RepositorioTxt, IExpedienteReposi
         while (
             (i            < expedientes.Count)
          && (-1           == expedienteParaEliminar)
-         && (idExpediente <= expedientes[i].Id)
+         && (idExpediente >= expedientes[i].Id)
         ) {
-            if (expedientes[i].Id == idExpediente) {
+            if (expedientes[i].Id.Equals(idExpediente)) {
                 expedienteParaEliminar = i;
+            } else {
+                i++;
             }
-
-            i++;
         }
 
-        // Si no se encontró el expediente, devolver false.
+        // Si no se encontró el expediente, tirar una excepción.
         if (expedienteParaEliminar == -1) {
-            return false;
+            throw new RepositorioException("No se encontró el expediente a eliminar.");
         }
 
         // Eliminar el expediente y guardar los cambios.
         expedientes.RemoveAt(expedienteParaEliminar);
         GuardarExpedientes(expedientes);
-
-        return true;
     }
 
     /// <inheritdoc />
@@ -157,7 +163,7 @@ public sealed class RepositorioExpedienteTxt : RepositorioTxt, IExpedienteReposi
         }
 
         if (!found) {
-            return;
+            throw new RepositorioException("No se encontró el expediente a modificar.");
         }
 
         expedientes[expedienteIndice] = expediente;
@@ -207,8 +213,12 @@ public sealed class RepositorioExpedienteTxt : RepositorioTxt, IExpedienteReposi
     {
         using StreamWriter sw = new(RutaArchivo);
 
-        foreach (Expediente expediente in expedientes) {
-            sw.WriteLine(Encode(expediente));
+        try {
+            foreach (Expediente expediente in expedientes) {
+                sw.WriteLine(Encode(expediente));
+            }
+        } catch (Exception e) {
+            throw new RepositorioException("Error al guardar los expedientes.", e);
         }
     }
 

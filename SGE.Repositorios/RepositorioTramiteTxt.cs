@@ -1,5 +1,6 @@
 ﻿using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Enumerativos;
+using SGE.Aplicacion.Excepciones;
 using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Repositorios;
@@ -33,46 +34,60 @@ public sealed class RepositorioTramiteTxt : RepositorioTxt, ITramiteRepositorio
         if ((new FileInfo(RutaArchivo).Length > 0) && (_ultimoId == 0)) {
             _ultimoId = ObtenerUltimoId();
         }
-
     }
     #endregion
 
     #region IMPLEMENTACIONES DE INTERFACES -------------------------------------------------------------
     #region ITramiteRepositorio
     /// <inheritdoc />
-    public Tramite Alta(Tramite tramite)
+    public void Alta(Tramite tramite)
     {
+        if (tramite.Id != 0) {
+            throw new RepositorioException("No se puede dar de alta un trámite con ID ya asignado.");
+        }
+
+        if (tramite.IdExpediente == 0) {
+            throw new RepositorioException("No se puede dar de alta un trámite sin expediente.");
+        }
+
         tramite.Id = ++_ultimoId;
         using StreamWriter sw = new(RutaArchivo, true);
-        sw.WriteLine(Encode(tramite));
-        return tramite;
+
+        try {
+            sw.WriteLine(Encode(tramite));
+        } catch (Exception e) {
+            throw new RepositorioException("Error al guardar el trámite.", e);
+        }
     }
 
     /// <inheritdoc />
-    public bool Baja(int idTramite)
+    public void Baja(int idTramite)
     {
         List<Tramite> tramites = LeerTramites().ToList();
 
         int i                 = 0;
         int lineaParaEliminar = -1;
 
-        while ((i < tramites.Count) && (lineaParaEliminar == -1)) {
+        while (
+            (i         < tramites.Count)
+         && (-1        == lineaParaEliminar)
+         && (idTramite >= tramites[i].Id)
+        ) {
             if (tramites[i].Id.Equals(idTramite)) {
                 lineaParaEliminar = i;
+            } else {
+                i++;
             }
-
-            i++;
         }
 
+        // Si no se encontró el trámite, tirar una excepción
         if (lineaParaEliminar == -1) {
-            return false;
+            throw new RepositorioException("No se encontró el trámite a eliminar.");
         }
 
         // Eliminar y guardar
         tramites.RemoveAt(lineaParaEliminar);
         GuardarTramites(tramites);
-
-        return true;
     }
 
     /// <inheritdoc />
@@ -102,7 +117,7 @@ public sealed class RepositorioTramiteTxt : RepositorioTxt, ITramiteRepositorio
         }
 
         if (lineaParaEditar == -1) {
-            return;
+            throw new RepositorioException("No se encontró el trámite a modificar.");
         }
 
         // Editar y guardar
@@ -262,8 +277,12 @@ public sealed class RepositorioTramiteTxt : RepositorioTxt, ITramiteRepositorio
     {
         using StreamWriter sw = new(RutaArchivo);
 
-        foreach (Tramite tramite in tramites) {
-            sw.WriteLine(Encode(tramite));
+        try {
+            foreach (Tramite tramite in tramites) {
+                sw.WriteLine(Encode(tramite));
+            }
+        } catch (Exception e) {
+            throw new RepositorioException("Error al guardar los trámites.", e);
         }
     }
 

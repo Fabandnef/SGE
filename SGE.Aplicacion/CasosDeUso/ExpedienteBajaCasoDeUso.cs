@@ -18,10 +18,7 @@ public class ExpedienteBajaCasoDeUso(
             throw new AutorizacionException("El usuario no tiene permisos para dar de baja un expediente.");
         }
 
-        if (!expedienteRepositorio.Baja(idExpediente)) {
-            throw new RepositorioException("El expediente a eliminar no existe.");
-        }
-
+        expedienteRepositorio.Baja(idExpediente);
         tramiteRepositorio.BajaPorExpediente(idExpediente);
     }
     #endregion

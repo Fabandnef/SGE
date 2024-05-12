@@ -14,7 +14,7 @@ public class ExpedienteAltaCasoDeUso(
 )
 {
     #region METODOS PUBLICOS ---------------------------------------------------------------------------
-    public Expediente Ejecutar(Expediente expediente, int idUsuario)
+    public void Ejecutar(Expediente expediente, int idUsuario)
     {
         if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.ExpedienteAlta)) {
             throw
@@ -27,11 +27,8 @@ public class ExpedienteAltaCasoDeUso(
 
         expediente.FechaCreacion               = DateTime.Now;
         expediente.UltimaModificacion          = DateTime.Now;
-        expediente.IdUsuarioUltimaModificacion = idUsuario;
-
-        Expediente e = expedienteRepositorio.Alta(expediente);
-
-        return e;
+        expediente.IdUsuarioUltimaModificacion = idUsuario;        
+        expedienteRepositorio.Alta(expediente);
     }
     #endregion
 }
