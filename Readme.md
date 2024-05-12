@@ -53,6 +53,7 @@ los resultados esperados de cada uno de los casos de uso.
 
 ### Todos los ejemplos asumen que los archivos `Expedientes.txt` y `Tramites.txt` no existen, o están vacíos.
 ### Las salidas de consola esperadas pueden variar si los archivos ya contienen datos, y al momento de imprimir expedientes o trámites, las fechas de creación y/o modificación pueden variar con respecto al resultado esperado que se detalla en cada caso de uso. Se recomienda borrar los archivos antes de ejecutar cada uno de los ejemplos para obtener las salidas esperadas lo más parecidas posibles.
+### Los ejemplos no incluyen la importación de las clases, por lo que se debe importar cada clase que se utilice en los ejemplos. Tanto Visual Studio Code, como Visual Studio y Rider permiten importar clases automáticamente con un atajo de teclado. Este dato se omitió en los ejemplos para acortar la longitud de los mismos ya que el IDE se puede encargar automáticamente de eso. De todas maneras, el Program.cs de la consola ya tiene importadas todas las clases necesarias para ejecutar los ejemplos, para facilitar su ejecución.
 
 ---
 # Dar de alta un expediente
