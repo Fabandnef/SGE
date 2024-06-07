@@ -22,7 +22,7 @@ public class Usuario : ITimestampable
     
     public string Password { get; set; }
     
-    public List<Permiso> Permisos { get; set; } = [];
+    public virtual List<Permiso> Permisos { get; set; } = [];
     #endregion
 
     public DateTime  CreatedAt { get; set; }

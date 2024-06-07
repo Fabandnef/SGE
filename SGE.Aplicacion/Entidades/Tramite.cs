@@ -33,7 +33,7 @@ public class Tramite : ITimestampable
     /// </summary>
     public int IdUsuarioUltimaModificacion { get; set; }
     
-    public Usuario UsuarioUltimaModificacion { get; set; } = null!;
+    public virtual Usuario UsuarioUltimaModificacion { get; set; } = null!;
 
     /// <summary>
     ///     La fecha en la que se realizó la última modificación en el trámite. La fecha se actualiza

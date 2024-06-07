@@ -14,7 +14,7 @@ static public class SgeSqlite
         using SgeContext contexto = new();
 
         try {
-//            contexto.Database.EnsureDeleted();
+            contexto.Database.EnsureDeleted();
 
             if (!contexto.Database.EnsureCreated()) {
                 return;

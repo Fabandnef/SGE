@@ -7,7 +7,7 @@ using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Repositorios;
 
-public class SgeContext : DbContext
+public sealed class SgeContext : DbContext
 {
     public DbSet<Expediente> Expedientes { get; set; }
     public DbSet<Tramite> Tramites { get; set; }

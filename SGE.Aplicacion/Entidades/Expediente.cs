@@ -27,12 +27,12 @@ public class Expediente : ITimestampable
     /// </summary>
     public int IdUsuarioUltimaModificacion { get; set; }
 
-    public Usuario UsuarioUltimaModificacion { get; set; } = null!;
+    public virtual Usuario UsuarioUltimaModificacion { get; set; } = null!;
 
     /// <summary>
     ///     Lista de trámites asociados al expediente. Se inicializa como una lista vacía.
     /// </summary>
-    public List<Tramite> Tramites { get; set; } = [];
+    public virtual List<Tramite> Tramites { get; set; } = [];
 
     /// <summary>
     ///     La fecha de la última modificación del expediente. Se basa en la fecha de creación si no

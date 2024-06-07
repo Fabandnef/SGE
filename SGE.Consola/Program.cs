@@ -22,9 +22,13 @@ public class Program
         IServicioDeClaves servicioDeClaves = new ServicioDeClaves();
 
         Expediente expediente = contexto.Expedientes
-                                        .Include("UsuarioUltimaModificacion.Permisos")
-                                        .Include("Tramites")
+//                                        .Include("UsuarioUltimaModificacion.Permisos")
+//                                        .Include("Tramites")
                                         .First();
+
+        contexto.Entry(expediente)
+                .Collection(e => e.Tramites)
+                .Load();
     }
     #endregion
 }

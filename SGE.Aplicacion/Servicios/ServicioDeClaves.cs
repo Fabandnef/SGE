@@ -10,7 +10,7 @@ public class ServicioDeClaves : IServicioDeClaves
     {
         string salt = new Random().Next(1000, 9999).ToString();
         byte[] bytes = Encoding.UTF8.GetBytes(salt + plainText);
-        byte[] hash = SHA256.HashData(bytes);
+        byte[] hash = SHA512.HashData(bytes);
         return salt + Convert.ToBase64String(hash);
     }
     
@@ -18,7 +18,7 @@ public class ServicioDeClaves : IServicioDeClaves
     {
         string salt      = hash[..4];
         byte[] bytes     = Encoding.UTF8.GetBytes(salt + plainText);
-        byte[] hashBytes = SHA256.HashData(bytes);
+        byte[] hashBytes = SHA512.HashData(bytes);
         return Convert.ToBase64String(hashBytes) == hash[4..];
     }
 }
