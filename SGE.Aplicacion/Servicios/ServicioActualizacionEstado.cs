@@ -47,7 +47,7 @@ public class ServicioActualizacionEstado(
             return;
         }
 
-        expedienteRepositorio.ActualizarEstado(tramite.IdExpediente, estado.Value);
+        expedienteRepositorio.ActualizarEstado(tramite.ExpedienteId, estado.Value);
     }
     #endregion
 }

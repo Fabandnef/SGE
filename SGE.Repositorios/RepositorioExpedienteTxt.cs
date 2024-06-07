@@ -186,8 +186,8 @@ public sealed class RepositorioExpedienteTxt : RepositorioTxt, IExpedienteReposi
         return new Expediente {
                                   Id                          = int.Parse(partes[0]),
                                   Caratula                    = partes[1],
-                                  FechaCreacion               = DateTime.Parse(partes[2]),
-                                  UltimaModificacion          = DateTime.Parse(partes[3]),
+                                  CreatedAt               = DateTime.Parse(partes[2]),
+                                  UpdatedAt          = DateTime.Parse(partes[3]),
                                   IdUsuarioUltimaModificacion = int.Parse(partes[4]),
                                   Estado                      = Enum.Parse<EstadoExpediente>(partes[5]),
                               };
@@ -201,8 +201,8 @@ public sealed class RepositorioExpedienteTxt : RepositorioTxt, IExpedienteReposi
     private string Encode(Expediente expediente)
         => $"{expediente.Id}\x1F"                          +
            $"{expediente.Caratula}\x1F"                    +
-           $"{expediente.FechaCreacion}\x1F"               +
-           $"{expediente.UltimaModificacion}\x1F"          +
+           $"{expediente.CreatedAt}\x1F"               +
+           $"{expediente.UpdatedAt}\x1F"          +
            $"{expediente.IdUsuarioUltimaModificacion}\x1F" +
            $"{expediente.Estado}";
 

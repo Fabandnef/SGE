@@ -1,4 +1,5 @@
-﻿using SGE.Aplicacion.CasosDeUso;
+﻿using Microsoft.EntityFrameworkCore;
+using SGE.Aplicacion.CasosDeUso;
 using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Excepciones;
 using SGE.Aplicacion.Interfaces.Repositorios;
@@ -15,7 +16,15 @@ public class Program
     #region METODOS PUBLICOS ---------------------------------------------------------------------------
     static public void Main(string[] args)
     {
-        // Lugar para ser completado con código de prueba.
+        SgeSqlite.SetUp();
+
+        using SgeContext  contexto         = new();
+        IServicioDeClaves servicioDeClaves = new ServicioDeClaves();
+
+        Expediente expediente = contexto.Expedientes
+                                        .Include("UsuarioUltimaModificacion.Permisos")
+                                        .Include("Tramites")
+                                        .First();
     }
     #endregion
 }

@@ -14,7 +14,7 @@ public class ExpedienteBajaCasoDeUso(
     #region METODOS PUBLICOS ---------------------------------------------------------------------------
     public void Ejecutar(int idExpediente, int idUsuario)
     {
-        if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.ExpedienteBaja)) {
+        if (!servicioAutorizacion.PoseeElPermiso(idUsuario, PermisoEnum.ExpedienteBaja)) {
             throw new AutorizacionException("El usuario no tiene permisos para dar de baja un expediente.");
         }
 

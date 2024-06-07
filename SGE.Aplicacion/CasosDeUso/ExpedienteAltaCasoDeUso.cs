@@ -16,7 +16,7 @@ public class ExpedienteAltaCasoDeUso(
     #region METODOS PUBLICOS ---------------------------------------------------------------------------
     public void Ejecutar(Expediente expediente, int idUsuario)
     {
-        if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.ExpedienteAlta)) {
+        if (!servicioAutorizacion.PoseeElPermiso(idUsuario, PermisoEnum.ExpedienteAlta)) {
             throw
                 new AutorizacionException($"El usuario {idUsuario} no tiene permisos para dar de alta un expediente.");
         }
@@ -25,8 +25,8 @@ public class ExpedienteAltaCasoDeUso(
             throw new ValidacionException(error);
         }
 
-        expediente.FechaCreacion               = DateTime.Now;
-        expediente.UltimaModificacion          = DateTime.Now;
+        expediente.CreatedAt               = DateTime.Now;
+        expediente.UpdatedAt          = DateTime.Now;
         expediente.IdUsuarioUltimaModificacion = idUsuario;
         expedienteRepositorio.Alta(expediente);
     }

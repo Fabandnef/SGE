@@ -12,8 +12,8 @@ public interface IServicioAutorizacion
     ///     Indica si un usuario posee un permiso dado.
     /// </summary>
     /// <param name="idUsuario">Identificador del usuario.</param>
-    /// <param name="permiso">Permiso a verificar.</param>
+    /// <param name="permisoEnum">Permiso a verificar.</param>
     /// <returns><c>True</c> si el usuario posee el permiso, <c>False</c> caso contrario.</returns>
-    bool PoseeElPermiso(int idUsuario, Permiso permiso);
+    bool PoseeElPermiso(int idUsuario, PermisoEnum permisoEnum);
     #endregion
 }

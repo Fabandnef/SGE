@@ -18,7 +18,7 @@ public class TramiteAltaCasoDeUso(
     #region METODOS PUBLICOS ---------------------------------------------------------------------------
     public void Ejecutar(Tramite tramite, int idUsuario)
     {
-        if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.TramiteAlta)) {
+        if (!servicioAutorizacion.PoseeElPermiso(idUsuario, PermisoEnum.TramiteAlta)) {
             throw new AutorizacionException("El usuario no tiene permisos para realizar esta acción.");
         }
 
@@ -26,8 +26,8 @@ public class TramiteAltaCasoDeUso(
             throw new ValidacionException(error);
         }
 
-        tramite.FechaCreacion               = DateTime.Now;
-        tramite.UltimaModificacion          = DateTime.Now;
+        tramite.CreatedAt               = DateTime.Now;
+        tramite.UpdatedAt          = DateTime.Now;
         tramite.IdUsuarioUltimaModificacion = idUsuario;
 
         tramiteRepositorio.Alta(tramite);

@@ -8,6 +8,7 @@ namespace SGE.Repositorios;
 /// <summary>
 ///     Repositorio de trámites en un archivo de texto.
 /// </summary>
+[Obsolete("Usar RepositorioTramiteSql en su lugar.", false)]
 public sealed class RepositorioTramiteTxt : RepositorioTxt, ITramiteRepositorio
 {
     #region CONSTANTES ---------------------------------------------------------------------------------
@@ -91,7 +92,7 @@ public sealed class RepositorioTramiteTxt : RepositorioTxt, ITramiteRepositorio
     {
         List<Tramite> tramites = LeerTramites();
 
-        tramites.RemoveAll(tramite => tramite.IdExpediente == idExpediente);
+        tramites.RemoveAll(tramite => tramite.ExpedienteId == idExpediente);
 
         GuardarTramites(tramites);
     }
@@ -195,7 +196,7 @@ public sealed class RepositorioTramiteTxt : RepositorioTxt, ITramiteRepositorio
         while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
             Tramite t = Decode(linea);
 
-            if (t.IdExpediente == expediente.Id) {
+            if (t.ExpedienteId == expediente.Id) {
                 tramites.Add(t);
             }
         }
@@ -216,11 +217,11 @@ public sealed class RepositorioTramiteTxt : RepositorioTxt, ITramiteRepositorio
         while (!string.IsNullOrEmpty(linea = sr.ReadLine())) {
             Tramite t = Decode(linea);
 
-            if (t.IdExpediente != idExpediente) {
+            if (t.ExpedienteId != idExpediente) {
                 continue;
             }
 
-            if ((ultimoTramite == null) || (t.FechaCreacion > ultimoTramite.FechaCreacion)) {
+            if ((ultimoTramite == null) || (t.CreatedAt > ultimoTramite.CreatedAt)) {
                 ultimoTramite = t;
             }
         }
@@ -242,11 +243,11 @@ public sealed class RepositorioTramiteTxt : RepositorioTxt, ITramiteRepositorio
 
         return new Tramite {
                                Id                          = int.Parse(partes[0]),
-                               IdExpediente                = int.Parse(partes[1]),
+                               ExpedienteId                = int.Parse(partes[1]),
                                Etiqueta                    = Enum.Parse<EtiquetaTramite>(partes[2]),
                                Contenido                   = partes[3],
-                               FechaCreacion               = DateTime.Parse(partes[4]),
-                               UltimaModificacion          = DateTime.Parse(partes[5]),
+                               CreatedAt               = DateTime.Parse(partes[4]),
+                               UpdatedAt          = DateTime.Parse(partes[5]),
                                IdUsuarioUltimaModificacion = int.Parse(partes[6]),
                            };
     }
@@ -258,11 +259,11 @@ public sealed class RepositorioTramiteTxt : RepositorioTxt, ITramiteRepositorio
     /// <returns>Línea de texto codificada.</returns>
     private string Encode(Tramite tramite)
         => $"{tramite.Id}\x1F"                 +
-           $"{tramite.IdExpediente}\x1F"       +
+           $"{tramite.ExpedienteId}\x1F"       +
            $"{tramite.Etiqueta}\x1F"           +
            $"{tramite.Contenido}\x1F"          +
-           $"{tramite.FechaCreacion}\x1F"      +
-           $"{tramite.UltimaModificacion}\x1F" +
+           $"{tramite.CreatedAt}\x1F"      +
+           $"{tramite.UpdatedAt}\x1F" +
            $"{tramite.IdUsuarioUltimaModificacion}";
 
     /// <summary>

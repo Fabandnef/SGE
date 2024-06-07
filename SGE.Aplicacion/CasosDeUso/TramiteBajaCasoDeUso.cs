@@ -15,7 +15,7 @@ public class TramiteBajaCasoDeUso(
     #region METODOS PUBLICOS ---------------------------------------------------------------------------
     public void Ejecutar(int idTramite, int idUsuarioActual)
     {
-        if (!servicioAutorizacion.PoseeElPermiso(idUsuarioActual, Permiso.TramiteBaja)) {
+        if (!servicioAutorizacion.PoseeElPermiso(idUsuarioActual, PermisoEnum.TramiteBaja)) {
             throw new AutorizacionException("El usuario no tiene permisos para realizar esta acción.");
         }
 

@@ -18,7 +18,7 @@ public class TramiteModificacionCasoDeUso(
     #region METODOS PUBLICOS ---------------------------------------------------------------------------
     public void Ejecutar(Tramite tramite, int idUsuario)
     {
-        if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.TramiteModificacion)) {
+        if (!servicioAutorizacion.PoseeElPermiso(idUsuario, PermisoEnum.TramiteModificacion)) {
             throw new AutorizacionException("El usuario no tiene permisos para realizar esta acción.");
         }
 
@@ -27,7 +27,7 @@ public class TramiteModificacionCasoDeUso(
         }
 
         tramite.IdUsuarioUltimaModificacion = idUsuario;
-        tramite.UltimaModificacion          = DateTime.Now;
+        tramite.UpdatedAt          = DateTime.Now;
 
         repositorioTramite.Modificar(tramite);
         servicioActualizacionEstado.ActualizarEstado(tramite);

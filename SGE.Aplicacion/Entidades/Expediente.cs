@@ -1,4 +1,5 @@
 ﻿using SGE.Aplicacion.Enumerativos;
+using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Aplicacion.Entidades;
 
@@ -7,20 +8,8 @@ namespace SGE.Aplicacion.Entidades;
 ///     La construcción de un expediente se realiza a través de un constructor vacío y la asignación
 ///     de los valores de las propiedades autoimplementadas.
 /// </summary>
-public class Expediente
+public class Expediente : ITimestampable
 {
-    #region CAMPOS -------------------------------------------------------------------------------------
-    /// <summary>
-    ///     La fecha en la que se creó el expediente.
-    /// </summary>
-    private DateTime _fechaCreacion;
-
-    /// <summary>
-    ///     Identificador único del expediente.
-    /// </summary>
-    private int _id;
-    #endregion
-
     #region PROPIEDADES PUBLICAS -----------------------------------------------------------------------
     /// <summary>
     ///     La carátula del expediente, que es un resumen del contenido del mismo.
@@ -38,6 +27,8 @@ public class Expediente
     /// </summary>
     public int IdUsuarioUltimaModificacion { get; set; }
 
+    public Usuario UsuarioUltimaModificacion { get; set; } = null!;
+
     /// <summary>
     ///     Lista de trámites asociados al expediente. Se inicializa como una lista vacía.
     /// </summary>
@@ -49,35 +40,21 @@ public class Expediente
     ///     un trámite del expediente, si es que dicha acción genera una actualización del
     ///     estado del expediente.
     /// </summary>
-    public DateTime UltimaModificacion { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
     /// <summary>
     ///     La fecha de creación del expediente. Se permite la asignación de la fecha de creación solo
     ///     si el valor actual es la fecha mínima, o sea, si no fue asignado. La funcionalidad final
     ///     termina siendo la misma que si fuera de solo lectura.
     /// </summary>
-    public DateTime FechaCreacion {
-        get => _fechaCreacion;
-        set {
-            if (_fechaCreacion == DateTime.MinValue) {
-                _fechaCreacion = value;
-            }
-        }
-    }
+    public DateTime CreatedAt { get; set; }
 
     /// <summary>
     ///     Identificador único del expediente. Ya que el ID se calcula antes de ser insertado, se
     ///     permite la asignación del ID solo si el valor actual es 0, o sea, si no fue asignado.
     ///     La funcionalidad final termina siendo la misma que si el ID fuera de solo lectura.
     /// </summary>
-    public int Id {
-        get => _id;
-        set {
-            if (_id == 0) {
-                _id = value;
-            }
-        }
-    }
+    public int Id { get; set; }
     #endregion
 
     #region METODOS PUBLICOS ---------------------------------------------------------------------------
@@ -91,8 +68,8 @@ public class Expediente
         string st = $"Id: {Id}\n"                                 +
                     $"Estado: {Estado}\n"                         +
                     $"Caratula: {Caratula}\n"                     +
-                    $"FechaCreacion: {FechaCreacion}\n"           +
-                    $"UltimaModificacion: {UltimaModificacion}\n" +
+                    $"FechaCreacion: {CreatedAt}\n"           +
+                    $"UpdatedAt: {UpdatedAt}\n" +
                     $"IdUsuarioUltimaModificacion: {IdUsuarioUltimaModificacion}";
 
         // Si no hay trámites, devuelvo solo el expediente.
@@ -114,4 +91,5 @@ public class Expediente
         return st;
     }
     #endregion
+
 }
