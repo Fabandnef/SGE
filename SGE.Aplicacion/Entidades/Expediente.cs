@@ -51,10 +51,10 @@ public class Expediente : ITimestampable
 
     /// <summary>
     ///     Identificador único del expediente. Ya que el ID se calcula antes de ser insertado, se
-    ///     permite la asignación del ID solo si el valor actual es 0, o sea, si no fue asignado.
+    ///     permite la asignación del ID solo si el valor actual es null, o sea, si no fue asignado.
     ///     La funcionalidad final termina siendo la misma que si el ID fuera de solo lectura.
     /// </summary>
-    public int Id { get; set; }
+    public int? Id { get; set; }
     #endregion
 
     #region METODOS PUBLICOS ---------------------------------------------------------------------------

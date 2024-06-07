@@ -2,14 +2,7 @@
 
 namespace SGE.Repositorios;
 
-abstract public class RepositorioSqlite
+abstract public class RepositorioSqlite(SgeContext context)
 {
-    protected SgeContext Context;
-    
-    #region CONSTRUCTORES ------------------------------------------------------------------------------
-    protected RepositorioSqlite(SgeContext context)
-    {
-        Context = context;
-    }
-    #endregion
+    readonly protected SgeContext Context = context;
 }

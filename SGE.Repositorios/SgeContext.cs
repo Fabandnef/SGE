@@ -37,12 +37,12 @@ public sealed class SgeContext : DbContext
     {
         modelBuilder.Entity<Expediente>()
                     .HasOne(expediente => expediente.UsuarioUltimaModificacion)
-                    .WithOne()
-                    .HasForeignKey<Expediente>(expediente => expediente.IdUsuarioUltimaModificacion);
+                    .WithMany()
+                    .HasForeignKey(expediente => expediente.IdUsuarioUltimaModificacion);
         
         modelBuilder.Entity<Tramite>()
                     .HasOne(tramite => tramite.UsuarioUltimaModificacion)
-                    .WithOne()
-                    .HasForeignKey<Tramite>(tramite => tramite.IdUsuarioUltimaModificacion);
+                    .WithMany()
+                    .HasForeignKey(tramite => tramite.IdUsuarioUltimaModificacion);
     }
 }

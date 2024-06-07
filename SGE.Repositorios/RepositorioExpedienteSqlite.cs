@@ -1,5 +1,6 @@
 ﻿using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Enumerativos;
+using SGE.Aplicacion.Excepciones;
 using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Repositorios;
@@ -12,23 +13,28 @@ public class RepositorioExpedienteSqlite(SgeContext context) : RepositorioSqlite
             Expediente? expediente = BuscarPorId(idExpediente);
 
             if (expediente is null) {
-                throw new Exception($"No se encontró el expediente con id {idExpediente}.");
+                throw new RepositorioException($"No se encontró el expediente con id {idExpediente}.");
             }
 
             expediente.Estado = estadoExpediente;
             Modificar(expediente);
         } catch (Exception e) {
-            throw new Exception($"Error al actualizar el estado del expediente con id {idExpediente}. {e.Message}");
+            throw new
+                RepositorioException($"Error al actualizar el estado del expediente con id {idExpediente}. {e.Message}");
         }
     }
 
     public void Alta(Expediente expediente)
     {
+        if (expediente.Id != null) {
+            throw new RepositorioException("Error al dar de alta un expediente. No se pueden asignar los ID manualmente.");
+        }
+        
         try {
             Context.Expedientes.Add(expediente);
             Context.SaveChanges();
         } catch (Exception e) {
-            throw new Exception($"Error al dar de alta el expediente con id {expediente.Id}. {e.Message}");
+            throw new RepositorioException($"Error al dar de alta el expediente con id {expediente.Id}. {e.Message}");
         }
     }
 
@@ -38,13 +44,13 @@ public class RepositorioExpedienteSqlite(SgeContext context) : RepositorioSqlite
             Expediente? expediente = BuscarPorId(idExpediente);
 
             if (expediente is null) {
-                throw new Exception($"No se encontró el expediente con id {idExpediente}.");
+                throw new RepositorioException($"No se encontró el expediente con id {idExpediente}.");
             }
 
             Context.Expedientes.Remove(expediente);
             Context.SaveChanges();
         } catch (Exception e) {
-            throw new Exception($"Error al dar de baja el expediente con id {idExpediente}. {e.Message}");
+            throw new RepositorioException($"Error al dar de baja el expediente con id {idExpediente}. {e.Message}");
         }
     }
 
@@ -57,7 +63,7 @@ public class RepositorioExpedienteSqlite(SgeContext context) : RepositorioSqlite
         try {
             Context.SaveChanges();
         } catch (Exception e) {
-            throw new Exception($"Error al modificar el expediente con id {expediente.Id}. {e.Message}");
+            throw new RepositorioException($"Error al modificar el expediente con id {expediente.Id}. {e.Message}");
         }
     }
 }

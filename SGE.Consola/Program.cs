@@ -18,17 +18,48 @@ public class Program
     {
         SgeSqlite.SetUp();
 
-        using SgeContext  contexto         = new();
-        IServicioDeClaves servicioDeClaves = new ServicioDeClaves();
+        using SgeContext       context               = new();
+        Usuario?               usuario               = context.Usuarios.Find(1);
+        ITramiteRepositorio    tramiteRepositorio    = new RepositorioTramiteSqlite(context);
+        IExpedienteValidador   expedienteValidador   = new ExpedienteValidador();
+        IExpedienteRepositorio expedienteRepositorio = new RepositorioExpedienteSqlite(context);
+        IServicioAutorizacion  servicioAutorizacion  = new ServicioAutorizacionProvisorio();
 
-        Expediente expediente = contexto.Expedientes
-//                                        .Include("UsuarioUltimaModificacion.Permisos")
-//                                        .Include("Tramites")
-                                        .First();
+        ExpedienteAltaCasoDeUso altaCasoDeUso = new(expedienteRepositorio, expedienteValidador, servicioAutorizacion);
+        ExpedienteBajaCasoDeUso bajaCasoDeUso = new(expedienteRepositorio, tramiteRepositorio, servicioAutorizacion);
 
-        contexto.Entry(expediente)
-                .Collection(e => e.Tramites)
-                .Load();
+        Expediente expedienteNuevo = new() { Caratula = "Caratula de prueba del expediente", };
+
+        int idExpediente = 0; 
+        try {
+            altaCasoDeUso.Ejecutar(expedienteNuevo, usuario.Id);
+            idExpediente = (int)expedienteNuevo.Id;
+            Console.WriteLine($"Expediente guardado con ID {idExpediente}");
+        } catch (AutorizacionException ex) {
+            Console.WriteLine($"Error de autorización: {ex.Message}");
+        } catch (ValidacionException ex) {
+            Console.WriteLine($"Error de validación: {ex.Message}");
+        } catch (RepositorioException ex) {
+            Console.WriteLine($"Error de repositorio: {ex.Message}");
+        } catch (Exception ex) {
+            Console.WriteLine($"Error inesperado: {ex.Message}");
+        }
+
+        try {
+            bajaCasoDeUso.Ejecutar(idExpediente, usuario.Id);
+            Console.WriteLine($"Expediente con ID {idExpediente} eliminado");
+            idExpediente = 99999;
+            bajaCasoDeUso.Ejecutar(idExpediente, usuario.Id);
+            Console.WriteLine($"Expediente con ID {idExpediente} eliminado");
+        } catch (AutorizacionException ex) {
+            Console.WriteLine($"Error de autorización: {ex.Message}");
+        } catch (ValidacionException ex) {
+            Console.WriteLine($"Error de validación: {ex.Message}");
+        } catch (RepositorioException ex) {
+            Console.WriteLine($"Error de repositorio: {ex.Message}");
+        } catch (Exception ex) {
+            Console.WriteLine($"Error inesperado: {ex.Message}");
+        }
     }
     #endregion
 }

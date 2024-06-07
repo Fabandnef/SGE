@@ -22,7 +22,7 @@ public sealed class RepositorioTramiteTxt : RepositorioTxt, ITramiteRepositorio
     /// <summary>
     ///     Último ID asignado a un trámite.
     /// </summary>
-    static private int _ultimoId;
+    static private int? _ultimoId = 0;
     #endregion
 
     #region CONSTRUCTORES ------------------------------------------------------------------------------
@@ -305,7 +305,7 @@ public sealed class RepositorioTramiteTxt : RepositorioTxt, ITramiteRepositorio
     ///     Obtiene el último ID de los trámites.
     /// </summary>
     /// <returns>Último ID de los trámites.</returns>
-    private int ObtenerUltimoId()
+    private int? ObtenerUltimoId()
     {
         using StreamReader sr = new(RutaArchivo);
 
