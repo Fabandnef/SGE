@@ -1,4 +1,5 @@
 ﻿using SGE.Aplicacion.Enumerativos;
+using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Aplicacion.Entidades;
 
@@ -7,21 +8,8 @@ namespace SGE.Aplicacion.Entidades;
 ///     La construcción de un trámite se realiza a través de un constructor vacío y la asignación
 ///     de los valores de las propiedades autoimplementadas.
 /// </summary>
-public class Tramite
+public class Tramite : ITimestampable
 {
-    #region CAMPOS -------------------------------------------------------------------------------------
-    /// <summary>
-    ///     La fecha en la que se creó el trámite. Campo privado para evitar modificaciones
-    ///     externas a través de la propiedad pública.
-    /// </summary>
-    private DateTime _fechaCreacion;
-
-    /// <summary>
-    ///     Identificador único del trámite.
-    /// </summary>
-    private int _id;
-    #endregion
-
     #region PROPIEDADES PUBLICAS -----------------------------------------------------------------------
     /// <summary>
     ///     El contenido del trámite, en formato de texto.
@@ -38,46 +26,34 @@ public class Tramite
     ///     El identificador del expediente al que pertenece el trámite. Se asocia a un expediente
     ///     a través de este identificador. Solo se permite la asignación del valor al crear el trámite.
     /// </summary>
-    public int IdExpediente { get; init; }
+    public int? ExpedienteId { get; set; }
 
     /// <summary>
     ///     El usuario que realizó la última modificación en el trámite.
     /// </summary>
     public int IdUsuarioUltimaModificacion { get; set; }
+    
+    public virtual Usuario UsuarioUltimaModificacion { get; set; } = null!;
 
     /// <summary>
     ///     La fecha en la que se realizó la última modificación en el trámite. La fecha se actualiza
     ///     automáticamente cada vez que se modifica el trámite.
     /// </summary>
-    public DateTime UltimaModificacion { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
     /// <summary>
     ///     La fecha en la que se creó el trámite. Se permite la asignación de la fecha solo si el
     ///     valor actual es la fecha mínima, o sea, si no fue asignado. La funcionalidad final termina
     ///     siendo la misma que si fuera de solo lectura.
     /// </summary>
-    public DateTime FechaCreacion {
-        get => _fechaCreacion;
-        set {
-            if (_fechaCreacion == DateTime.MinValue) {
-                _fechaCreacion = value;
-            }
-        }
-    }
+    public DateTime CreatedAt { get; set; }
 
     /// <summary>
     ///     Identificador único del trámite. Ya que el ID se calcula antes de ser insertado, se
-    ///     permite la asignación del ID solo si el valor actual es 0, o sea, si no fue asignado.
+    ///     permite la asignación del ID solo si el valor actual es null, o sea, si no fue asignado.
     ///     La funcionalidad final termina siendo la misma que si el ID fuera de solo lectura.
     /// </summary>
-    public int Id {
-        get => _id;
-        set {
-            if (_id == 0) {
-                _id = value;
-            }
-        }
-    }
+    public int? Id { get; set; }
     #endregion
 
     #region METODOS PUBLICOS ---------------------------------------------------------------------------
@@ -88,11 +64,12 @@ public class Tramite
     /// <returns>String representando todos los elementos del trámite</returns>
     public override string ToString()
         => $"Id: {Id}\n"                                 +
-           $"IdExpediente: {IdExpediente}\n"             +
+           $"IdExpediente: {ExpedienteId}\n"             +
            $"Etiqueta: {Etiqueta}\n"                     +
            $"Contenido: {Contenido}\n"                   +
-           $"FechaCreacion: {FechaCreacion}\n"           +
-           $"UltimaModificacion: {UltimaModificacion}\n" +
+           $"FechaCreacion: {CreatedAt}\n"           +
+           $"UpdatedAt: {UpdatedAt}\n" +
            $"IdUsuarioUltimaModificacion: {IdUsuarioUltimaModificacion}";
     #endregion
+
 }

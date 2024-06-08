@@ -14,7 +14,7 @@ public class ExpedienteBuscarPorIdConTramitesCasoDeUso(
         Expediente? expediente = expedienteRepositorio.BuscarPorId(idExpediente);
 
         if (expediente != null) {
-            expediente = tramiteRepositorio.ObtenerTramitesPorExpediente(expediente);
+//            expediente = tramiteRepositorio.ObtenerTramitesPorExpediente(expediente);
         }
 
         return expediente;

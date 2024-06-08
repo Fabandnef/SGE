@@ -1,4 +1,5 @@
-﻿using SGE.Aplicacion.Enumerativos;
+﻿using SGE.Aplicacion.Entidades;
+using SGE.Aplicacion.Enumerativos;
 using SGE.Aplicacion.Excepciones;
 using SGE.Aplicacion.Interfaces.Repositorios;
 using SGE.Aplicacion.Interfaces.Servicios;
@@ -12,9 +13,9 @@ public class ExpedienteBajaCasoDeUso(
 )
 {
     #region METODOS PUBLICOS ---------------------------------------------------------------------------
-    public void Ejecutar(int idExpediente, int idUsuario)
+    public void Ejecutar(int idExpediente, Usuario usuario)
     {
-        if (!servicioAutorizacion.PoseeElPermiso(idUsuario, Permiso.ExpedienteBaja)) {
+        if (!servicioAutorizacion.PoseeElPermiso(usuario, PermisoEnum.ExpedienteBaja)) {
             throw new AutorizacionException("El usuario no tiene permisos para dar de baja un expediente.");
         }
 

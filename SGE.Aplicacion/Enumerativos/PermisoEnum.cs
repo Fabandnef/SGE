@@ -29,8 +29,9 @@
 ///         </item>
 ///     </list>
 /// </summary>
-public enum Permiso
+public enum PermisoEnum
 {
+    AdminGeneral,
     ExpedienteAlta,
     ExpedienteBaja,
     ExpedienteModificacion,

@@ -20,7 +20,7 @@ public class TramiteValidador : ITramiteValidador
             error += "El contenido de un trámite no puede estar vacío.";
         }
 
-        if (tramite.IdExpediente > 0) {
+        if (tramite.ExpedienteId > 0) {
             return string.IsNullOrWhiteSpace(error);
         }
 

@@ -43,11 +43,11 @@ public class ServicioActualizacionEstado(
     {
         EstadoExpediente? estado = especificacionCambioEstado.DefinirEstado(tramite);
 
-        if (estado is null) {
+        if (estado is null || tramite.ExpedienteId is null) {
             return;
         }
 
-        expedienteRepositorio.ActualizarEstado(tramite.IdExpediente, estado.Value);
+        expedienteRepositorio.ActualizarEstado(tramite.ExpedienteId ?? 0, estado.Value);
     }
     #endregion
 }
