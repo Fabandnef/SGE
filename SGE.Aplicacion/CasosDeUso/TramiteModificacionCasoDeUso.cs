@@ -9,7 +9,7 @@ using SGE.Aplicacion.Servicios;
 namespace SGE.Aplicacion.CasosDeUso;
 
 public class TramiteModificacionCasoDeUso(
-    ITramiteRepositorio         repositorioTramite,
+    IRepositorioTramite         repositorioTramite,
     ITramiteValidador           tramiteValidador,
     ServicioActualizacionEstado servicioActualizacionEstado,
     IServicioAutorizacion       servicioAutorizacion

@@ -9,7 +9,7 @@ using SGE.Aplicacion.Servicios;
 namespace SGE.Aplicacion.CasosDeUso;
 
 public class TramiteAltaCasoDeUso(
-    ITramiteRepositorio         tramiteRepositorio,
+    IRepositorioTramite         repositorioTramite,
     ITramiteValidador           tramiteValidador,
     IServicioAutorizacion       servicioAutorizacion,
     ServicioActualizacionEstado servicioActualizacionEstado
@@ -28,7 +28,7 @@ public class TramiteAltaCasoDeUso(
 
         tramite.IdUsuarioUltimaModificacion = usuario.Id;
 
-        tramiteRepositorio.Alta(tramite);
+        repositorioTramite.Alta(tramite);
         servicioActualizacionEstado.ActualizarEstado(tramite);
     }
     #endregion

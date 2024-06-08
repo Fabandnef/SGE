@@ -4,7 +4,7 @@ using SGE.Aplicacion.Excepciones;
 
 namespace SGE.Aplicacion.Interfaces.Repositorios;
 
-public interface ITramiteRepositorio
+public interface IRepositorioTramite
 {
     #region METODOS PUBLICOS ---------------------------------------------------------------------------
     /// <summary>

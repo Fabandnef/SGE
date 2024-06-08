@@ -5,7 +5,7 @@ using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Repositorios;
 
-public class RepositorioExpedienteSqlite(SgeContext context) : RepositorioSqlite(context), IExpedienteRepositorio
+public class RepositorioExpedienteSqlite(SgeContext context) : RepositorioSqlite(context), IRepositorioExpediente
 {
     public void ActualizarEstado(int idExpediente, EstadoExpediente estadoExpediente)
     {

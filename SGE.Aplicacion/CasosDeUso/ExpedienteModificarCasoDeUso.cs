@@ -8,7 +8,7 @@ using SGE.Aplicacion.Interfaces.Validadores;
 namespace SGE.Aplicacion.CasosDeUso;
 
 public class ExpedienteModificarCasoDeUso(
-    IExpedienteRepositorio expedienteRepositorio,
+    IRepositorioExpediente repositorioExpediente,
     IExpedienteValidador   expedienteValidador,
     IServicioAutorizacion  servicioAutorizacion
 )
@@ -25,7 +25,7 @@ public class ExpedienteModificarCasoDeUso(
         }
 
         expediente.IdUsuarioUltimaModificacion = usuario.Id;
-        expedienteRepositorio.Modificar(expediente);
+        repositorioExpediente.Modificar(expediente);
     }
     #endregion
 }

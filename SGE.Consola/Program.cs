@@ -29,25 +29,25 @@ public class Program
 
         IExpedienteValidador       expedienteValidador        = new ExpedienteValidador();
         ITramiteValidador          tramiteValidador           = new TramiteValidador();
-        IExpedienteRepositorio     expedienteRepositorio      = new RepositorioExpedienteSqlite(context);
-        ITramiteRepositorio        tramiteRepositorio         = new RepositorioTramiteSqlite(context);
+        IRepositorioExpediente     repositorioExpediente      = new RepositorioExpedienteSqlite(context);
+        IRepositorioTramite        repositorioTramite         = new RepositorioTramiteSqlite(context);
         IServicioAutorizacion      servicioAutorizacion       = new ServicioAutorizacionProvisorio();
-        EspecificacionCambioEstado especificacionCambioEstado = new(tramiteRepositorio);
+        EspecificacionCambioEstado especificacionCambioEstado = new(repositorioTramite);
 
         ServicioActualizacionEstado servicioActualizacionEstado =
-            new(expedienteRepositorio, especificacionCambioEstado);
+            new(repositorioExpediente, especificacionCambioEstado);
 
         ExpedienteAltaCasoDeUso expedienteAltaCasoDeUso =
-            new(expedienteRepositorio, expedienteValidador, servicioAutorizacion);
+            new(repositorioExpediente, expedienteValidador, servicioAutorizacion);
 
         TramiteAltaCasoDeUso tramiteAltaCasoDeUso =
-            new(tramiteRepositorio, tramiteValidador, servicioAutorizacion, servicioActualizacionEstado);
+            new(repositorioTramite, tramiteValidador, servicioAutorizacion, servicioActualizacionEstado);
 
         TramiteModificacionCasoDeUso tramiteModificacionCasoDeUso =
-            new(tramiteRepositorio, tramiteValidador, servicioActualizacionEstado, servicioAutorizacion);
+            new(repositorioTramite, tramiteValidador, servicioActualizacionEstado, servicioAutorizacion);
 
         TramiteConsultaPorEtiquetaCasoDeUso tramiteConsultaPorEtiquetaCasoDeUso =
-            new(tramiteRepositorio);
+            new(repositorioTramite);
 
         Expediente expediente = new() { Caratula = "Carátula de prueba del expediente" };
 

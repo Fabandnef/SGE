@@ -5,7 +5,7 @@ using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Repositorios;
 
-internal class RepositorioPermisoSqlite(SgeContext context) : RepositorioSqlite(context), IPermisoRepositorio
+internal class RepositorioPermisoSqlite(SgeContext context) : RepositorioSqlite(context), IRepositorioPermiso
 {
     public void Agregar(Permiso permiso)
     {
