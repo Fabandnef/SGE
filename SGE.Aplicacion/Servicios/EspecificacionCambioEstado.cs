@@ -7,8 +7,8 @@ namespace SGE.Aplicacion.Servicios;
 /// <summary>
 ///     Clase que define la especificación para el cambio de estado de un expediente.
 /// </summary>
-/// <param name="tramiteRepositorio">Repositorio de trámites.</param>
-public class EspecificacionCambioEstado(ITramiteRepositorio tramiteRepositorio)
+/// <param name="repositorioTramite">Repositorio de trámites.</param>
+public class EspecificacionCambioEstado(IRepositorioTramite repositorioTramite)
 {
     #region METODOS PUBLICOS ---------------------------------------------------------------------------
     /// <summary>
@@ -18,7 +18,7 @@ public class EspecificacionCambioEstado(ITramiteRepositorio tramiteRepositorio)
     /// <returns><see cref="EstadoExpediente" /> que corresponde al expediente.</returns>
     public EstadoExpediente? DefinirEstado(int idExpediente)
     {
-        Tramite? tramite = tramiteRepositorio.ObtenerUltimoPorExpediente(idExpediente);
+        Tramite? tramite = repositorioTramite.ObtenerUltimoPorExpediente(idExpediente);
 
         return tramite is null ? null : DefinirEstado(tramite);
     }

@@ -6,7 +6,7 @@ using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Repositorios;
 
-public class RepositorioTramiteSqlite(SgeContext context) : RepositorioSqlite(context), ITramiteRepositorio
+public class RepositorioTramiteSqlite(SgeContext context) : RepositorioSqlite(context), IRepositorioTramite
 {
     public void Alta(Tramite tramite)
     {

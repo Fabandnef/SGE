@@ -7,7 +7,7 @@ namespace SGE.Aplicacion.Interfaces.Repositorios;
 /// <summary>
 ///     Interfaz para cualquier clase que implemente un repositorio de expedientes.
 /// </summary>
-public interface IExpedienteRepositorio
+public interface IRepositorioExpediente
 {
     #region METODOS PUBLICOS ---------------------------------------------------------------------------
     /// <summary>

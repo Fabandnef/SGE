@@ -2,7 +2,7 @@
 
 namespace SGE.Aplicacion.Interfaces.Repositorios;
 
-public interface IPermisoRepositorio
+public interface IRepositorioPermiso
 {
     public void Agregar(Permiso permiso);
     

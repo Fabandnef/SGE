@@ -3,9 +3,9 @@ using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Aplicacion.CasosDeUso;
 
-public class ExpedienteListarCasoDeUso(IExpedienteRepositorio expedienteRepositorio)
+public class ExpedienteListarCasoDeUso(IRepositorioExpediente repositorioExpediente)
 {
     #region METODOS PUBLICOS ---------------------------------------------------------------------------
-    public List<Expediente> Ejecutar() => expedienteRepositorio.Listar();
+    public List<Expediente> Ejecutar() => repositorioExpediente.Listar();
     #endregion
 }

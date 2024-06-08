@@ -8,7 +8,7 @@ using SGE.Aplicacion.Servicios;
 namespace SGE.Aplicacion.CasosDeUso;
 
 public class TramiteBajaCasoDeUso(
-    ITramiteRepositorio         tramiteRepositorio,
+    IRepositorioTramite         repositorioTramite,
     ServicioActualizacionEstado servicioActualizacionEstado,
     IServicioAutorizacion       servicioAutorizacion
 )
@@ -20,7 +20,7 @@ public class TramiteBajaCasoDeUso(
             throw new AutorizacionException("El usuario no tiene permisos para realizar esta acción.");
         }
 
-        tramiteRepositorio.Baja(idTramite);
+        repositorioTramite.Baja(idTramite);
         servicioActualizacionEstado.ActualizarEstado(idTramite);
     }
     #endregion
