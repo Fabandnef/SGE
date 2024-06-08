@@ -22,9 +22,12 @@ public class Usuario : ITimestampable
     
     public string Password { get; set; }
     
-    public virtual List<Permiso> Permisos { get; set; } = [];
-    #endregion
+    public List<Permiso> Permisos { get; set; } = [];
+    
+    public bool IsAdmin => Permisos.Any(p => p.Nombre == PermisoEnum.AdminGeneral.ToString());
 
     public DateTime  CreatedAt { get; set; }
+    
     public DateTime  UpdatedAt { get; set; }
+    #endregion
 }

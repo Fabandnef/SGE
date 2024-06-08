@@ -26,7 +26,7 @@ public class RepositorioExpedienteSqlite(SgeContext context) : RepositorioSqlite
 
     public void Alta(Expediente expediente)
     {
-        if (expediente.Id != null) {
+        if (expediente.Id != 0) {
             throw new RepositorioException("Error al dar de alta un expediente. No se pueden asignar los ID manualmente.");
         }
         

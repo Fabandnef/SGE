@@ -1,4 +1,5 @@
-﻿using SGE.Aplicacion.Entidades;
+﻿using Microsoft.EntityFrameworkCore;
+using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Enumerativos;
 using SGE.Aplicacion.Excepciones;
 using SGE.Aplicacion.Interfaces.Repositorios;
@@ -56,11 +57,11 @@ public class RepositorioTramiteSqlite(SgeContext context) : RepositorioSqlite(co
     }
 
     public List<Tramite> ObtenerPorEtiqueta(EtiquetaTramite etiquetaTramite)
-        => Context.Tramites.Where(t => t.Etiqueta == etiquetaTramite).ToList();
+        => Context.Tramites.Include("UsuarioUltimaModificacion").Where(t => t.Etiqueta == etiquetaTramite).ToList();
 
-    public Tramite? ObtenerPorId(int idTramite) => Context.Tramites.Find(idTramite);
+    public Tramite? ObtenerPorId(int idTramite) => Context.Tramites.Include("UsuarioUltimaModificacion").FirstOrDefault(t => t.Id == idTramite);
 
-    public List<Tramite> ObtenerTramites() => Context.Tramites.ToList();
+    public List<Tramite> ObtenerTramites() => Context.Tramites.Include("UsuarioUltimaModificacion").ToList();
 
     public Expediente ObtenerTramitesPorExpediente(Expediente expediente)
     {

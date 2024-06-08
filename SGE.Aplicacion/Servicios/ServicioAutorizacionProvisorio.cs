@@ -1,4 +1,5 @@
-﻿using SGE.Aplicacion.Enumerativos;
+﻿using SGE.Aplicacion.Entidades;
+using SGE.Aplicacion.Enumerativos;
 using SGE.Aplicacion.Interfaces.Servicios;
 
 namespace SGE.Aplicacion.Servicios;
@@ -12,7 +13,10 @@ public class ServicioAutorizacionProvisorio : IServicioAutorizacion
     #region IMPLEMENTACIONES DE INTERFACES -------------------------------------------------------------
     #region IServicioAutorizacion
     /// <inheritdoc />
-    public bool PoseeElPermiso(int idUsuario, PermisoEnum permisoEnum) => idUsuario == 1;
+    public bool PoseeElPermiso(Usuario usuario, PermisoEnum permisoEnum)
+    {
+        return usuario.IsAdmin || usuario.Permisos.Any(p => p.Nombre == permisoEnum.ToString());
+    }
     #endregion
     #endregion
 }
