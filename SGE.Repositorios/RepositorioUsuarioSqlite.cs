@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Excepciones;
 using SGE.Aplicacion.Interfaces.Repositorios;
