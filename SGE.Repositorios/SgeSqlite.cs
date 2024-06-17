@@ -1,5 +1,5 @@
-﻿using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
+﻿using System.Data.Common;
+using Microsoft.EntityFrameworkCore;
 using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Enumerativos;
 using SGE.Aplicacion.Interfaces.Servicios;
@@ -11,17 +11,26 @@ static public class SgeSqlite
 {
     static public void SetUp()
     {
-        using SgeContext contexto = new();
+        using SgeContext context = new();
 
         try {
-            contexto.Database.EnsureDeleted();
 
-            if (!contexto.Database.EnsureCreated()) {
+//            context.Database.EnsureDeleted();
+            
+            if (!context.Database.EnsureCreated()) {
                 return;
             }
+            
+            DbConnection connection = context.Database.GetDbConnection();
+            connection.Open();
+            using (DbCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "PRAGMA journal_mode=DELETE;";
+                command.ExecuteNonQuery();
+            }
 
-            AddPermisos(contexto);
-            SeedData(contexto);
+            AddPermisos(context);
+            SeedData(context);
         } catch (Exception ex) {
             Console.WriteLine(ex.Message);
         }
