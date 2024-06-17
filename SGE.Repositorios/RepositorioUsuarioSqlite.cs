@@ -1,4 +1,5 @@
-﻿using SGE.Aplicacion.Entidades;
+using Microsoft.EntityFrameworkCore;
+using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Excepciones;
 using SGE.Aplicacion.Interfaces.Repositorios;
 
@@ -38,7 +39,7 @@ public class RepositorioUsuarioSqlite(SgeContext context) : RepositorioSqlite(co
 
     public Usuario? GetUsuario(string email)
     {
-        return Context.Usuarios.FirstOrDefault(u => u.Email == email);
+        return Context.Usuarios.Include("Permisos").FirstOrDefault(u => u.Email == email);
     }
 
     public List<Usuario> GetUsuarios() => Context.Usuarios.ToList();

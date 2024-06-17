@@ -1,4 +1,5 @@
-﻿using SGE.Aplicacion.Entidades;
+﻿using Microsoft.EntityFrameworkCore;
+using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Enumerativos;
 using SGE.Aplicacion.Excepciones;
 using SGE.Aplicacion.Interfaces.Repositorios;
@@ -54,9 +55,12 @@ public class RepositorioExpedienteSqlite(SgeContext context) : RepositorioSqlite
         }
     }
 
-    public Expediente? BuscarPorId(int idExpediente) => Context.Expedientes.Find(idExpediente);
+    public Expediente? BuscarPorId(int idExpediente) => Context.Expedientes.Include("Tramites").FirstOrDefault(e => e.Id == idExpediente);
 
-    public List<Expediente> Listar() => Context.Expedientes.ToList();
+    public List<Expediente> Listar(int pagina) => Context.Expedientes.Include("UsuarioUltimaModificacion")
+                                                         .Skip((pagina - 1) * 10).Take(10).ToList();
+    
+    public int ContarTotal() => Context.Expedientes.Count();
 
     public void Modificar(Expediente expediente)
     {

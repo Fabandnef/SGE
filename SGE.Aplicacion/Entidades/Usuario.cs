@@ -14,17 +14,19 @@ public class Usuario : ITimestampable
     /// </summary>
     public int Id { get; set; }
     
-    public string Nombre { get; set; }
+    public required string Nombre { get; set; }
     
-    public string Apellido { get; set; }
+    public required string Apellido { get; set; }
     
-    public string Email { get; set; }
+    public string NombreCompleto => $"{Nombre} {Apellido}";
     
-    public string Password { get; set; }
+    public required string Email { get; set; }
+    
+    public required string Password { get; set; }
     
     public List<Permiso> Permisos { get; set; } = [];
     
-    public bool IsAdmin => Permisos.Any(p => p.Nombre == PermisoEnum.AdminGeneral.ToString());
+    public bool IsAdmin => Permisos.Any(p => p.Nombre == PermisoEnum.AdminGeneral.ToString()) || (Id == 1);
 
     public DateTime  CreatedAt { get; set; }
     

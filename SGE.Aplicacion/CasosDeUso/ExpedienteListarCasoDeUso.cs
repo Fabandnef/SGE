@@ -6,6 +6,6 @@ namespace SGE.Aplicacion.CasosDeUso;
 public class ExpedienteListarCasoDeUso(IRepositorioExpediente repositorioExpediente)
 {
     #region METODOS PUBLICOS ---------------------------------------------------------------------------
-    public List<Expediente> Ejecutar() => repositorioExpediente.Listar();
+    public List<Expediente> Ejecutar(int page) => repositorioExpediente.Listar(page);
     #endregion
 }

@@ -1,0 +1,28 @@
+﻿@page "/expediente/{Id:int?}"
+@using SGE.Aplicacion.CasosDeUso
+
+@inject ExpedienteBuscarPorIdConTramitesCasoDeUso _expedienteBuscarPorIdConTramitesCasoDeUso
+
+@if (Expediente == null) {
+    <p>Expediente no encontrado</p>
+} else {
+    <div>@Expediente.Caratula</div>
+
+    @foreach (Tramite tramite in Expediente.Tramites) {
+        <div>@tramite.Contenido</div>
+    }
+}
+
+@code {
+    [Parameter]
+    public int? Id { get;                set; }
+
+    private Expediente? Expediente { get; set; }
+
+    protected override void OnInitialized() {
+        if (Id.HasValue) {
+            Expediente = _expedienteBuscarPorIdConTramitesCasoDeUso.Ejecutar(Id.Value);
+        }
+    }
+
+}

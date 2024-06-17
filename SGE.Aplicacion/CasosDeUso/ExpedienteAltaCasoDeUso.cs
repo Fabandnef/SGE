@@ -18,7 +18,7 @@ public class ExpedienteAltaCasoDeUso(
     {
         if (!servicioAutorizacion.PoseeElPermiso(usuario, PermisoEnum.ExpedienteAlta)) {
             throw
-                new AutorizacionException($"El usuario {usuario.Id} no tiene permisos para dar de alta un expediente.");
+                new AutorizacionException($"El usuario {usuario.Nombre} {usuario.Apellido} no tiene permisos para dar de alta un expediente.");
         }
 
         if (!expedienteValidador.Validar(expediente, out string error)) {

@@ -17,7 +17,7 @@ public class ExpedienteValidador : IExpedienteValidador
         error = "";
 
         if (string.IsNullOrWhiteSpace(expediente.Caratula)) {
-            error += "La carátula no puede estar vacía.";
+            error += "La carátula no puede estar vacía ni pueden ser solo espacios en blanco.";
         }
 
         return string.IsNullOrWhiteSpace(error);
