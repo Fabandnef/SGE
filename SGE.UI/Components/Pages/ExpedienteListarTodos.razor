@@ -15,6 +15,7 @@
 @inject IRepositorioUsuario             _repositorioUsuario
 @inject Usuario                         _usuario
 
+<DialogoEliminarExpediente @ref="DialogoEliminar" OnConfirmado="@(args => EliminarExpediente((Expediente)args))" />
 <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
     <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
         <!-- Start coding here -->
@@ -79,11 +80,10 @@
             <div class="overflow-x-auto">
                 <div class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <div class="flex text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <div class="px-4 py-3 w-3/12" scope="col">Carátula</div>
-                        <div class="px-4 py-3 w-2/12" scope="col">Estado</div>
-                        <div class="px-4 py-3 w-2/12" scope="col">Último usuario</div>
+                        <div class="px-4 py-3 w-4/12 lg:w-6/12" scope="col">Carátula (Estado)</div>
+                        <div class="px-4 py-3 w-1/12" scope="col">Trámites</div>
+                        <div class="px-4 py-3 w-2/12" scope="col">Última edición</div>
                         <div class="px-4 py-3 w-2/12 hidden lg:inline" scope="col">Creado</div>
-                        <div class="px-4 py-3 w-2/12 hidden 2xl:inline" scope="col">Última edición</div>
                         <div class="px-4 py-3 w-5/12 lg:w-3/12 2xl:w-1/12" scope="col">
                             <span class="sr-only">Acciones</span>
                         </div>
@@ -95,22 +95,23 @@
                     } else {
                         @foreach (Expediente e in _expedientes) {
                             <div class="flex border-b dark:border-gray-700 cursor-default">
-                                <div class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white w-3/12 truncate overflow-ellipsis" scope="row">
-                                    <span class="align-middle" title="@e.Caratula">@e.Caratula</span>
+                                <div class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white overflow-hidden w-4/12 lg:w-6/12 my-auto flex flex-grow-0" scope="row">
+                                    <span class="align-middle flex-nowrap truncate" title="@e.Caratula">
+                                        @e.Caratula
+                                    </span>
+                                    <span class="pl-1 font-normal relative italic">(@Enum.GetName(typeof(EstadoExpediente), e.Estado))</span>
                                 </div>
-                                <div class="px-4 py-3 w-2/12 truncate overflow-ellipsis">
-                                    <span class="align-middle" title="@Enum.GetName(typeof(EstadoExpediente), e.Estado)">@Enum.GetName(typeof(EstadoExpediente), e.Estado)</span>
+                                <div class="px-4 py-3 w-1/12 truncate overflow-ellipsis hidden lg:inline my-auto mx-auto text-center">
+                                    @e.Tramites.Count
                                 </div>
-                                <div class="px-4 py-3 w-2/12 truncate overflow-ellipsis">
+                                <div class="px-4 py-3 w-2/12 truncate overflow-ellipsis flex flex-grow-0 flex-col my-auto">
                                     <span class="align-middle" title="@(e.UsuarioUltimaModificacion.NombreCompleto)">@(e.UsuarioUltimaModificacion.NombreCompleto)</span>
+                                    <span class="align-middle text-2xs">@e.UpdatedAt</span>
                                 </div>
-                                <div class="px-4 py-3 w-2/12 truncate overflow-ellipsis hidden lg:inline">
+                                <div class="px-4 py-3 w-2/12 truncate overflow-ellipsis hidden lg:inline my-auto">
                                     <span class="align-middle">@e.CreatedAt</span>
                                 </div>
-                                <div class="px-4 py-3 w-2/12 truncate overflow-ellipsis hidden 2xl:inline">
-                                    <span class="align-middle">@e.UpdatedAt</span>
-                                </div>
-                                <div class="px-4 py-2 gap-1 w-5/12 lg:w-3/12 2xl:w-1/12 flex justify-end">
+                                <div class="px-4 py-2 gap-1 w-5/12 lg:w-3/12 2xl:w-1/12 flex justify-end my-auto">
                                     <button class="min-w-9 max-w-9 items-center py-1 px-2 text-sm font-medium border bg-green-500 border-green-600 dark:bg-green-900 dark:border-green-800 bg-opacity-25 dark:bg-opacity-25 text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                                             id="view-expediente-@e.Id"
                                             @onclick="() => VerExpediente(e)" type="button">
@@ -123,7 +124,7 @@
                                     </button>
                                     <button class="min-w-9 max-w-9 items-center py-1 px-2 text-sm font-medium border bg-red-500 border-red-600 dark:bg-red-700 dark:border-red-600 bg-opacity-25 dark:bg-opacity-25 text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                                             id="view-expediente-@e.Id"
-                                            @onclick="() => EliminarExpediente(e)" type="button">
+                                            @onclick="() => EliminarExpedienteConfirmar(e)" type="button">
                                         <i class="fa fa-duotone fa-trash fa-lg"></i>
                                     </button>
                                 </div>
@@ -135,7 +136,7 @@
             <nav aria-label="Table navigation" class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4">
                 <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
                     Mostrando
-                    <span class="font-semibold text-gray-900 dark:text-white">@(((_page - 1) * 10) + 1 > 0 ? ((_page - 1) * 10) + 1 : "0") - @((_page * 10) < _totalExpedientes ? _page * 10 : _totalExpedientes)</span>
+                    <span class="font-semibold text-gray-900 dark:text-white">@(_totalExpedientes > 0 ? ((_page - 1) * 10) + 1 : "0") - @((_page * 10) < _totalExpedientes ? _page * 10 : _totalExpedientes)</span>
                     de
                     <span class="font-semibold text-gray-900 dark:text-white">@_totalExpedientes</span>
                 </span>
@@ -181,20 +182,18 @@
 
     [Parameter] public int? Page { get; set; } = 1;
 
-    private List<Expediente> _expedientes      = [];
-    private int              _totalExpedientes = 0;
-    private string           _error            = "";
-    private int              _page             = 0;
-    private int              _totalPages       = 0;
-    private bool             _hasPreviousPage => _page > 1;
-    private bool             _hasNextPage     => _page < _totalPages;
+    private List<Expediente>          _expedientes      = [];
+    private int                       _totalExpedientes = 0;
+    private string                    _error            = "";
+    private int                       _page             = 0;
+    private int                       _totalPages       = 0;
+    private bool                      _hasPreviousPage => _page > 1;
+    private bool                      _hasNextPage     => _page < _totalPages;
+    public  DialogoEliminarExpediente DialogoEliminar  { get; set; } = null!;
 
     protected override void OnInitialized() {
         try {
-            _totalExpedientes = _expedienteContarTotalCasoDeUso.Ejecutar();
-            _totalPages       = (int)Math.Ceiling((double)_totalExpedientes / 10);
-            _page             = Page ?? 1;
-            _expedientes      = _expedienteListarCasoDeUso.Ejecutar(_page);
+            Init();
         } catch (Exception e) {
             _error = e.Message;
         }
@@ -212,6 +211,13 @@
         } catch (RepositorioException e) {
             _error = e.Message;
         }
+    }
+    
+    private void Init() {
+        _totalExpedientes = _expedienteContarTotalCasoDeUso.Ejecutar();
+        _totalPages       = (int)Math.Ceiling((double)_totalExpedientes / 10);
+        _page             = Page ?? 1;
+        _expedientes      = _expedienteListarCasoDeUso.Ejecutar(_page);
     }
 
     private void NextPage() {
@@ -235,17 +241,22 @@
     private void EditarExpediente(Expediente expediente) {
         NavigationManager.NavigateTo($"/expediente/editar/{expediente.Id}");
     }
+    
+    private void EliminarExpedienteConfirmar(Expediente expediente) {
+        DialogoEliminar.Mostrar(expediente);
+    }
 
     private void EliminarExpediente(Expediente expediente) {
         try {
             _expedienteBajaCasoDeUso.Ejecutar(expediente.Id, CurrentSession.Usuario!);
-            InvokeAsync(StateHasChanged);
+            Init();
+            StateHasChanged();
         } catch (RepositorioException e) {
             _error = e.Message;
         } catch (AutorizacionException e) {
             _error = e.Message;
         } finally {
-            InvokeAsync(StateHasChanged);
+            StateHasChanged();
         }
     }
 
