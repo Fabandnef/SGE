@@ -23,8 +23,9 @@ public sealed class SgeContext : DbContext
     {
         foreach (EntityEntry entry in ChangeTracker.Entries()) {
             if (entry is { State: EntityState.Added, Entity: ITimestampable newTimestampable }) {
-                newTimestampable.CreatedAt = DateTime.Now;
-                newTimestampable.UpdatedAt = DateTime.Now;
+                DateTime now = DateTime.Now;
+                newTimestampable.CreatedAt = now;
+                newTimestampable.UpdatedAt = now;
             } else if (entry is { State: EntityState.Modified, Entity: ITimestampable editedTimestampable }) {
                 editedTimestampable.UpdatedAt = DateTime.Now;
             }
