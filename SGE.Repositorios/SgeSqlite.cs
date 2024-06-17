@@ -30,7 +30,6 @@ static public class SgeSqlite
             }
 
             AddPermisos(context);
-            SeedData(context);
         } catch (Exception ex) {
             Console.WriteLine(ex.Message);
         }
