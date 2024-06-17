@@ -6,13 +6,13 @@ using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Repositorios;
 
-public class RepositorioTramiteSqlite(SgeContext context) : RepositorioSqlite(context), IRepositorioTramite
+public class RepositorioTramiteSqlite(SgeContext context) : IRepositorioTramite
 {
     public void Alta(Tramite tramite)
     {
         try {
-            Context.Tramites.Add(tramite);
-            Context.SaveChanges();
+            context.Tramites.Add(tramite);
+            context.SaveChanges();
         } catch (Exception e) {
             throw new RepositorioException($"Error al dar de alta el trámite con id {tramite.Id}. {e.Message}");
         }
@@ -27,8 +27,8 @@ public class RepositorioTramiteSqlite(SgeContext context) : RepositorioSqlite(co
                 throw new RepositorioException($"No se encontró el trámite con id {idTramite}.");
             }
 
-            Context.Tramites.Remove(tramite);
-            Context.SaveChanges();
+            context.Tramites.Remove(tramite);
+            context.SaveChanges();
         } catch (Exception e) {
             throw new RepositorioException($"Error al dar de baja el trámite con id {idTramite}. {e.Message}");
         }
@@ -37,10 +37,10 @@ public class RepositorioTramiteSqlite(SgeContext context) : RepositorioSqlite(co
     public void BajaPorExpediente(int idExpediente)
     {
         try {
-            List<Tramite> tramites = Context.Tramites.Where(t => t.ExpedienteId == idExpediente).ToList();
+            List<Tramite> tramites = context.Tramites.Where(t => t.ExpedienteId == idExpediente).ToList();
 
-            Context.Tramites.RemoveRange(tramites);
-            Context.SaveChanges();
+            context.Tramites.RemoveRange(tramites);
+            context.SaveChanges();
         } catch (Exception e) {
             throw new
                 RepositorioException($"Error al dar de baja los trámites del expediente con id {idExpediente}. {e.Message}");
@@ -50,26 +50,26 @@ public class RepositorioTramiteSqlite(SgeContext context) : RepositorioSqlite(co
     public void Modificar(Tramite tramite)
     {
         try {
-            Context.SaveChanges();
+            context.SaveChanges();
         } catch (Exception e) {
             throw new RepositorioException($"Error al modificar el trámite con id {tramite.Id}. {e.Message}");
         }
     }
 
     public List<Tramite> ObtenerPorEtiqueta(EtiquetaTramite etiquetaTramite)
-        => Context.Tramites.Include("UsuarioUltimaModificacion").Where(t => t.Etiqueta == etiquetaTramite).ToList();
+        => context.Tramites.Include("UsuarioUltimaModificacion").Where(t => t.Etiqueta == etiquetaTramite).ToList();
 
-    public Tramite? ObtenerPorId(int idTramite) => Context.Tramites.Include("UsuarioUltimaModificacion").FirstOrDefault(t => t.Id == idTramite);
+    public Tramite? ObtenerPorId(int idTramite) => context.Tramites.Include("UsuarioUltimaModificacion").FirstOrDefault(t => t.Id == idTramite);
 
-    public List<Tramite> ObtenerTramites() => Context.Tramites.Include("UsuarioUltimaModificacion").ToList();
+    public List<Tramite> ObtenerTramites() => context.Tramites.Include("UsuarioUltimaModificacion").ToList();
 
     public Expediente ObtenerTramitesPorExpediente(Expediente expediente)
     {
-        Context.Entry(expediente).Collection(e => e.Tramites).Load();
+        context.Entry(expediente).Collection(e => e.Tramites).Load();
         return expediente;
     }
 
     public Tramite? ObtenerUltimoPorExpediente(int idExpediente)
-        => Context.Tramites.Where(t => t.ExpedienteId == idExpediente).OrderByDescending(t => t.UpdatedAt)
+        => context.Tramites.Where(t => t.ExpedienteId == idExpediente).OrderByDescending(t => t.UpdatedAt)
                   .FirstOrDefault();
 }

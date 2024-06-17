@@ -26,15 +26,30 @@ public class Program
 
         SgeSqlite.SetUp();
 
+        // -------------------------
+        // INYECCIÓN DE DEPENDENCIAS
+        // -------------------------
+        
+        // SINGLETONS
+        // Session almacena los datos de la sesión del usuario
         builder.Services.AddSingleton<Session>();
+        
+        // SCOPED
+        // SgeContext es el contexto de la base de datos
         builder.Services.AddScoped<SgeContext>();
+        // Usuario es la entidad que representa al usuario
         builder.Services.AddScoped<Usuario>();
+        // Repositorios
         builder.Services.AddScoped<IRepositorioExpediente, RepositorioExpedienteSqlite>();
         builder.Services.AddScoped<IRepositorioTramite, RepositorioTramiteSqlite>();
         builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuarioSqlite>();
         builder.Services.AddScoped<IExpedienteValidador, ExpedienteValidador>();
+        // Servicios
         builder.Services.AddScoped<IServicioDeClaves, ServicioDeClaves>();
         builder.Services.AddScoped<IServicioAutorizacion, ServicioAutorizacionProvisorio>();
+        
+        // TRANSIENT
+        // Casos de uso
         builder.Services.AddTransient<ExpedienteListarCasoDeUso>();
         builder.Services.AddTransient<ExpedienteAltaCasoDeUso>();
         builder.Services.AddTransient<ExpedienteBajaCasoDeUso>();

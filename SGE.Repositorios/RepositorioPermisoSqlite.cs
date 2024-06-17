@@ -5,13 +5,13 @@ using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Repositorios;
 
-internal class RepositorioPermisoSqlite(SgeContext context) : RepositorioSqlite(context), IRepositorioPermiso
+internal class RepositorioPermisoSqlite(SgeContext context) : IRepositorioPermiso
 {
     public void Agregar(Permiso permiso)
     {
         try {
-            Context.Permisos.Add(permiso);
-            Context.SaveChanges();
+            context.Permisos.Add(permiso);
+            context.SaveChanges();
         } catch (Exception e) {
             throw new RepositorioException($"Error al agregar el permiso con id {permiso.Id}. {e.Message}");
         }
@@ -20,8 +20,8 @@ internal class RepositorioPermisoSqlite(SgeContext context) : RepositorioSqlite(
     public void Modificar(Permiso permiso)
     {
         try {
-            Context.Permisos.Update(permiso);
-            Context.SaveChanges();
+            context.Permisos.Update(permiso);
+            context.SaveChanges();
         } catch (Exception e) {
             throw new RepositorioException($"Error al modificar el permiso con id {permiso.Id}. {e.Message}");
         }
@@ -30,8 +30,8 @@ internal class RepositorioPermisoSqlite(SgeContext context) : RepositorioSqlite(
     public void Eliminar(Permiso permiso)
     {
         try {
-            Context.Permisos.Remove(permiso);
-            Context.SaveChanges();
+            context.Permisos.Remove(permiso);
+            context.SaveChanges();
         } catch (Exception e) {
             throw new RepositorioException($"Error al eliminar el permiso con id {permiso.Id}. {e.Message}");
         }
