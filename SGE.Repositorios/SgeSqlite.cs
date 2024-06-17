@@ -15,7 +15,7 @@ static public class SgeSqlite
 
         try {
 
-            context.Database.EnsureDeleted();
+//            context.Database.EnsureDeleted();
             
             if (!context.Database.EnsureCreated()) {
                 return;
