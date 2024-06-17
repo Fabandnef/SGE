@@ -72,48 +72,4 @@ static public class SgeSqlite
 
         contexto.SaveChanges();
     }
-
-    static private void SeedData(SgeContext contexto)
-    {
-        IServicioDeClaves servicioDeClaves = new ServicioDeClaves();
-
-        contexto.Usuarios.Add(new Usuario {
-                                              Nombre   = "Fabrizio",
-                                              Apellido = "Girardi",
-                                              Email    = "fabro.la22@gmail.com",
-                                              Password = servicioDeClaves.Encrypt("123456"),
-                                              Permisos = [
-                                                             contexto.Permisos
-                                                                     .First(p => p.Nombre == PermisoEnum
-                                                                                            .AdminGeneral
-                                                                                            .ToString()
-                                                                           ),
-                                                         ],
-                                          });
-
-        contexto.SaveChanges();
-
-        Usuario usuario = contexto.Usuarios
-                                  .First(u => u.Email == "fabro.la22@gmail.com");
-
-        contexto.Expedientes
-                .AddRange(new Expediente {
-                                             Caratula                    = "Expediente de prueba",
-                                             IdUsuarioUltimaModificacion = usuario.Id,
-                                         });
-
-        contexto.SaveChanges();
-
-        Expediente expediente = contexto.Expedientes
-                                        .First(e => e.Id == 1);
-
-        contexto.Tramites
-                .AddRange(new Tramite {
-                                          ExpedienteId                = expediente.Id,
-                                          Contenido                   = "Trámite de prueba",
-                                          IdUsuarioUltimaModificacion = usuario.Id,
-                                      });
-
-        contexto.SaveChanges();
-    }
 }
