@@ -1,11 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
-using SGE.Aplicacion.Entidades;
+﻿using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Excepciones;
 using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Repositorios;
 
-internal class RepositorioPermisoSqlite(SgeContext context) : IRepositorioPermiso
+public class RepositorioPermisoSqlite(SgeContext context) : IRepositorioPermiso
 {
     public void Agregar(Permiso permiso)
     {

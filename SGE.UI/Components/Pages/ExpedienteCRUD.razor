@@ -125,8 +125,7 @@
             ResetMessages();
             IsEditable = false;
             ExpedienteModificarCasoDeUso.Ejecutar(Expediente, CurrentSession.Usuario!);
-            _success = "Expediente modificado correctamente.";
-            DialogoAlertaObjeto.Mostrar(_success);
+            DialogoAlertaObjeto.Mostrar("Expediente modificado correctamente.");
             StateHasChanged();
         } catch (Exception e) {
             _error = e.Message;

@@ -5,5 +5,5 @@ namespace SGE.Aplicacion.CasosDeUso;
 
 public class UsuarioRefrescarCasoDeUso(IRepositorioUsuario repositorioUsuario)
 {
-    public Usuario Ejecutar(Usuario usuario) => repositorioUsuario.Refresh(usuario)!;
+    public Usuario Ejecutar(Usuario usuario) => repositorioUsuario.Refresh(usuario);
 }
