@@ -1,136 +1,138 @@
 ﻿@using SGE.Aplicacion.CasosDeUso
-@inject ExpedienteBuscarPorIdConTramitesCasoDeUso ExpedienteBuscarPorIdConTramitesCasoDeUso
-@inject ExpedienteModificarCasoDeUso ExpedienteModificarCasoDeUso
-@using SGE.Aplicacion.Validadores
-@inject Session                                   CurrentSession
-<!-- Main modal -->
-<div id="updateProductModal" tabindex="-1" aria-hidden="true" class="overflow-y-auto overflow-x-hidden fixed z-50 justify-center items-center w-full h-modal md:h-full">
-    <div class="relative p-4 w-full h-full md:h-auto">
-        <!-- Modal content -->
-        <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-            <!-- Modal header -->
-            <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                    Expediente N°@Expediente?.Id
-                </h3>
-            </div>
-            <!-- Modal body -->
-            <form @onsubmit="ModificarExpediente">
-                <div class="grid gap-4 mb-4 sm:grid-cols-2">
-                    <div>
-                        <label for="estado" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estado</label>
-                        <p name="estado" id="estado" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">@SepararMayusculas(Expediente?.Estado.ToString())</p>
-                    </div>
-                    <div>
-                        <label for="fechaCreacion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Creado</label>
-                        <p name="fechaCreacion" id="fechaCreacion" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">@Expediente?.CreatedAt</p>
-                    </div>
-                    <div>
-                        <label for="IdUsuarioModificacion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Modificado por</label>
-                        <p name="IdUsuarioModificacion" id="IdUsuarioModificacion" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">@Expediente?.IdUsuarioUltimaModificacion</p>
-                    </div>
-                    <div>
-                        <label for="fechaModificacion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Modificado</label>
-                        <p name="fechaModificacion" id="fechaModificacion" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">@Expediente?.UpdatedAt</p>
-                    </div>
-                    <div class="sm:col-span-2">
-                        <label for="caratula" class="mb-2 text-sm font-medium text-gray-900 dark:text-white">Carátula</label>
-                        <div class="flex items-center space-x-2">
-                            @if (IsEditable) {
-                                <input @bind="_caratula" @ref="_caratulaInput" type="text" name="caratula" id="caratula" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="...">
-                            } else {
-                                <p name="caratula" id="caratula" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">@_caratula</p>
-                            }
-                            <button type="button" @onclick="ToggleIsEditable" class="p-2.5 rounded-lg border border-gray-300 bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-                                <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
 
+@inject ExpedienteBuscarPorIdConTramitesCasoDeUso ExpedienteBuscarPorIdConTramitesCasoDeUso
+@inject ExpedienteModificarCasoDeUso              ExpedienteModificarCasoDeUso
+@inject Session                                   CurrentSession
+
+<DialogoAlerta @ref="DialogoAlertaObjeto"/>
+<section class="bg-gray-50 dark:bg-gray-900">
+    <div class="bg-white mt-8 max-w-2xl px-6 py-8 mx-auto lg:py-12 sm:rounded-lg shadow-md">
+        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Expediente #@Expediente.Id</h2>
+        <form @onsubmit="ModificarExpediente">
+            <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
+                <div class="sm:col-span-2">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="caratula">Carátula</label>
+                    @if (IsEditable) {
+                        <input @bind="Expediente.Caratula" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" id="caratula"
+                               name="caratula" @onfocus="ResetMessages" placeholder="Ingrese una carátula para el expediente..."
+                               @ref="_inputCaratula" type="text">
+                    } else {
+                        <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                               id="caratula" name="caratula" readonly type="text" value="@Expediente.Caratula">
+                    }
                 </div>
-                <div class="flex items-center space-x-4">
-                    <button type="submit" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                        Modificar expediente
-                    </button>
-                    
-                    <button type="button" class="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
-                        <svg class="mr-1 -ml-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                        Borrar
-                    </button>
+                <div class="w-full">
+                    <label class="block  mb-2 text-sm font-medium text-gray-900 dark:text-white" for="estado">Estado</label>
+                    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                           id="estado" name="estado" readonly type="text" value="@Expediente.Estado.ToString()"/>
+                </div>
+                <div class="w-full">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="created_at">Fecha de creación</label>
+                    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                           id="created_at" name="created_at" readonly type="text" value="@Expediente.CreatedAt"/>
                 </div>
                 <div>
-                    <p>@_error</p>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="usuario">Usuario última modificación</label>
+                    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                           id="usuario" name="usuario" readonly type="text" value="@Expediente.UsuarioUltimaModificacion.NombreCompleto"/>
                 </div>
-            </form>
-        </div>
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="updated_at">Fecha de última modificación</label>
+                    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                           id="updated_at" name="updated_at" readonly type="text" value="@Expediente.UpdatedAt"/>
+                </div>
+                <hr class="col-span-2"/>
+                <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Tramites: @Expediente.Tramites.Count
+                </div>
+                <div class="flex justify-end align-top">
+                    <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                            type="button">
+                    Agregar trámite
+                    </button>
+                </div>
+                @if (Expediente.Tramites.Count > 0) {
+                    <div class="col-span-2">
+                        <div class="grid gap-1 grid-cols-1 lg:grid-cols-6 sm:gap-2">
+                            @foreach (Tramite tramite in Expediente.Tramites) {
+                                <div>
+                                    @tramite.Contenido
+                                </div>
+                                <div>
+                                    @tramite.Etiqueta.ToString()
+                                </div>
+                                <div>
+                                    @tramite.UsuarioUltimaModificacion.NombreCompleto
+                                </div>
+                                <div>
+                                    @tramite.CreatedAt
+                                </div>
+                                <div>
+                                    @tramite.UpdatedAt
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="flex items-center space-x-4">
+                @if (IsEditable) {
+                    <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="submit">
+                        Guardar cambios
+                    </button>
+                } else {
+                    <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                            @onclick="Editar" type="button">
+                        Editar
+                    </button>
+                }
+            </div>
+
+        </form>
     </div>
-</div>
+</section>
 
 @code{
-    [Parameter] 
-    public Expediente?   Expediente { get; set; }
-    [Parameter] 
-    public List<Tramite> Tramites   { get; set; } = [];
+    [Parameter] public required Expediente Expediente { get; set; }
+    [Parameter] public          bool       IsEditable { get; set; }
 
-    private ElementReference _caratulaInput;
-    private bool IsEditable { get; set; } = false;
+    private DialogoAlerta    DialogoAlertaObjeto { get; set; } = null!;
+    private ElementReference _inputCaratula;
+    private string           _error   = "";
+    private string           _success = "";
 
-    private string? _caratula;
-    private string  _error    = "";
-    
-    
-    protected override void OnInitialized() {
-        if (Expediente == null) return;
-        
-        _caratula            = Expediente.Caratula;
-    }
-    
-    private string SepararMayusculas(string? value) { 
-        if (value == null) return string.Empty;
-        
-        return string.Concat(value.Select(x => char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ');
+    private void ResetMessages() {
+        _error   = "";
+        _success = "";
     }
 
-    private void ToggleIsEditable()
-    {
-        IsEditable = !IsEditable;
+    protected override Task OnAfterRenderAsync(bool firstRender) {
+        if (!IsEditable) return base.OnAfterRenderAsync(firstRender);
 
-        if (IsEditable) {
-            InvokeAsync(async () =>
-                        {
-                            await Task.Delay(100); // Espero un rato para que se actualice el DOM
-                            await _caratulaInput.FocusAsync();
-                        });
+        _inputCaratula.FocusAsync();
+
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void Editar() {
+        ResetMessages();
+        IsEditable = true;
+        StateHasChanged();
+    }
+
+    private void ModificarExpediente() {
+        try {
+            ResetMessages();
+            IsEditable = false;
+            ExpedienteModificarCasoDeUso.Ejecutar(Expediente, CurrentSession.Usuario!);
+            _success = "Expediente modificado correctamente.";
+            DialogoAlertaObjeto.Mostrar(_success);
+            StateHasChanged();
+        } catch (Exception e) {
+            _error = e.Message;
+            DialogoAlertaObjeto.Mostrar(_error, true);
+            StateHasChanged();
         }
-        
     }
 
-    private void ModificarExpediente()
-    {
-        if (Expediente == null) return;
-
-        if (CurrentSession.Usuario == null) return;
-        
-        Expediente nuevo = new()
-        {
-            Id = Expediente.Id,
-            Caratula = _caratula,
-            Estado = Expediente.Estado,
-            CreatedAt = Expediente.CreatedAt,
-            UpdatedAt = DateTime.Now,
-            IdUsuarioUltimaModificacion = CurrentSession.Usuario.Id,
-        };
-        
-        ExpedienteValidador expedienteValidador = new();
-        
-        if (expedienteValidador.Validar(nuevo, out _error)) {
-            ExpedienteModificarCasoDeUso.Ejecutar(nuevo, CurrentSession.Usuario);
-            _caratula = nuevo.Caratula;
-            _error    = "Se ha modificado el expediente con éxito";
-        }
-        
-    }
-    
 }

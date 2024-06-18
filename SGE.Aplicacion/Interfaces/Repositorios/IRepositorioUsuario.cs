@@ -11,6 +11,8 @@ public interface IRepositorioUsuario
     public void Delete(Usuario usuario);
     
     public Usuario? GetUsuario(string email);
+
+    public Usuario Refresh(Usuario usuario);
     
     public List<Usuario> GetUsuarios();
 }

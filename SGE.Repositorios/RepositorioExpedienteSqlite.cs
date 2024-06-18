@@ -55,7 +55,7 @@ public class RepositorioExpedienteSqlite(SgeContext context) : IRepositorioExped
         }
     }
 
-    public Expediente? BuscarPorId(int idExpediente) => context.Expedientes.Include("Tramites").FirstOrDefault(e => e.Id == idExpediente);
+    public Expediente? BuscarPorId(int idExpediente) => context.Expedientes.Include("Tramites").Include("UsuarioUltimaModificacion").Include("Tramites.UsuarioUltimaModificacion").FirstOrDefault(e => e.Id == idExpediente);
 
     public List<Expediente> Listar(int pagina) => context.Expedientes.Include("UsuarioUltimaModificacion")
                                                          .Skip((pagina - 1) * 10).Take(10).ToList();

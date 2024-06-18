@@ -1,10 +1,13 @@
 ﻿@implements IDisposable
-@using SGE.Aplicacion.Entidades
+@using SGE.Aplicacion.CasosDeUso
+
 @inherits LayoutComponentBase
-@inject Session           CurrentSession
-@inject NavigationManager NavigationManager
+
+@inject Session                   CurrentSession
+@inject NavigationManager         NavigationManager
+@inject UsuarioRefrescarCasoDeUso UsuarioRefrescarCasoDeUso
 <div class="h-full w-full flex flex-col">
-    <NavBar Usuario="@Usuario" OnToggleMenu="ToggleMenu"/>
+    <NavBar OnToggleMenu="ToggleMenu" Usuario="@Usuario"/>
 
     <div class="flex flex-grow flex-row">
         <div>
@@ -18,11 +21,11 @@
 </div>
 
 @code {
-    
+
     private bool _menuVisible;
-    
+
     private Usuario? Usuario => CurrentSession.Usuario;
-    
+
     private void ToggleMenu() {
         _menuVisible = !_menuVisible;
         StateHasChanged();
@@ -30,46 +33,54 @@
 
     protected override void OnInitialized() {
         string currentUri = NavigationManager.ToBaseRelativePath(NavigationManager.Uri).ToLower();
-        if ((CurrentSession.Usuario == null) 
-         && !string.IsNullOrEmpty(currentUri) 
-         && !currentUri.StartsWith("login") 
+
+        if ((CurrentSession.Usuario == null)
+         && !string.IsNullOrEmpty(currentUri)
+         && !currentUri.StartsWith("login")
          && !currentUri.StartsWith("register")) {
             NavigationManager.NavigateTo("/", true);
+        } else if (CurrentSession.Usuario != null) {
+            CurrentSession.Usuario = UsuarioRefrescarCasoDeUso.Ejecutar(CurrentSession.Usuario);
         }
+
         NavigationManager.RegisterLocationChangingHandler(LocationChangingHandler);
         NavigationManager.LocationChanged += LocationChanged;
         base.OnInitialized();
     }
-    
+
     void LocationChanged(object? sender, LocationChangedEventArgs e) {
         string currentUri = NavigationManager.ToBaseRelativePath(NavigationManager.Uri).ToLower();
+
         if ((CurrentSession.Usuario == null) && !currentUri.StartsWith("login") && !currentUri.StartsWith("register")) {
             NavigationManager.NavigateTo("/login", true);
         }
-        
+
         if ((CurrentSession.Usuario != null) && (currentUri.StartsWith("login") || currentUri.StartsWith("register"))) {
             NavigationManager.NavigateTo("/", true);
         }
-    }
-    
-    private ValueTask LocationChangingHandler(LocationChangingContext arg) {
-        // If url is not login or register and user is not logged in, redirect to login
         
+        // Si está logueado, refrescar los permisos
+        // (Entity guarda en caché los objetos de la DB en el contexto)
+        if (CurrentSession.Usuario != null) {
+            CurrentSession.Usuario = UsuarioRefrescarCasoDeUso.Ejecutar(CurrentSession.Usuario);
+        }
+    }
+
+    private ValueTask LocationChangingHandler(LocationChangingContext arg) {
         if (!arg.IsNavigationIntercepted) {
             return ValueTask.CompletedTask;
         }
-        
+
         string currentUri = NavigationManager.ToBaseRelativePath(arg.TargetLocation).ToLower();
+
         if ((CurrentSession.Usuario == null) && !currentUri.StartsWith("login") && !currentUri.StartsWith("register")) {
             arg.PreventNavigation();
         }
-        
+
         return ValueTask.CompletedTask;
     }
-    
-    void IDisposable.Dispose()
-    {
-        // Unsubscribe from the event when our component is disposed
+
+    void IDisposable.Dispose() {
         NavigationManager.LocationChanged -= LocationChanged;
     }
 

@@ -35,8 +35,6 @@ public class Program
         builder.Services.AddSingleton<Session>();
         
         // SCOPED
-        // SgeContext es el contexto de la base de datos
-        builder.Services.AddScoped<SgeContext>();
         // Usuario es la entidad que representa al usuario
         builder.Services.AddScoped<Usuario>();
         // Repositorios
@@ -49,6 +47,8 @@ public class Program
         builder.Services.AddScoped<IServicioAutorizacion, ServicioAutorizacionProvisorio>();
         
         // TRANSIENT
+        // SgeContext es el contexto de la base de datos
+        builder.Services.AddTransient<SgeContext>();
         // Casos de uso
         builder.Services.AddTransient<ExpedienteListarCasoDeUso>();
         builder.Services.AddTransient<ExpedienteAltaCasoDeUso>();
@@ -58,6 +58,7 @@ public class Program
         builder.Services.AddTransient<ExpedienteBuscarPorIdConTramitesCasoDeUso>();
         builder.Services.AddTransient<UsuarioLoginCasoDeUso>();
         builder.Services.AddTransient<UsuarioRegistrarCasoDeUso>();
+        builder.Services.AddTransient<UsuarioRefrescarCasoDeUso>();
 
         WebApplication app = builder.Build();
 

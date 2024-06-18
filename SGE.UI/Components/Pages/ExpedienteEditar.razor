@@ -1,8 +1,26 @@
-﻿@page "/expediente/editar/{Id:int?}"
+﻿@page "/expediente/{Id:int?}/editar"
+@using SGE.Aplicacion.CasosDeUso
 
-<ExpedienteCRUD IdExpediente="@Id" />
+@inject ExpedienteBuscarPorIdConTramitesCasoDeUso _expedienteBuscarPorIdConTramitesCasoDeUso
+@inject NavigationManager                         NavigationManager
+
+@if (Expediente == null) {
+    <p>Expediente no encontrado</p>
+} else {
+    <ExpedienteCRUD Expediente="@Expediente" IsEditable="true"/>
+}
 
 @code {
-    [Parameter]
-    public int Id{ get; set; }
+    [Parameter] public int? Id { get; set; }
+
+    private Expediente? Expediente { get; set; }
+
+    protected override void OnInitialized() {
+        if (Id == null) {
+            NavigationManager.NavigateTo("/expediente/listar");
+            return;
+        }
+        
+        Expediente = _expedienteBuscarPorIdConTramitesCasoDeUso.Ejecutar(Id.Value);
+    }
 }

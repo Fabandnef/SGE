@@ -2,28 +2,26 @@
 @using SGE.Aplicacion.CasosDeUso
 
 @inject ExpedienteBuscarPorIdConTramitesCasoDeUso _expedienteBuscarPorIdConTramitesCasoDeUso
+@inject NavigationManager                         NavigationManager
 
 @if (Expediente == null) {
     <p>Expediente no encontrado</p>
 } else {
-    <ExpedienteCRUD Expediente="@Expediente" />
-    <div>@Expediente.Caratula</div>
-
-    @foreach (Tramite tramite in Expediente.Tramites) {
-        <div>@tramite.Contenido</div>
-    }
+    <ExpedienteCRUD Expediente="@Expediente"/>
 }
 
 @code {
-    [Parameter]
-    public int? Id { get;                set; }
+    [Parameter] public int? Id { get; set; }
 
     private Expediente? Expediente { get; set; }
 
     protected override void OnInitialized() {
-        if (Id.HasValue) {
-            Expediente = _expedienteBuscarPorIdConTramitesCasoDeUso.Ejecutar(Id.Value);
+        if (Id == null) {
+            NavigationManager.NavigateTo("/expediente/listar");
+            return;
         }
+        
+        Expediente = _expedienteBuscarPorIdConTramitesCasoDeUso.Ejecutar(Id.Value);
     }
 
 }
