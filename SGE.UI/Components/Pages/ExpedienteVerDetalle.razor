@@ -6,6 +6,9 @@
 @if (Expediente == null) {
     <p>Expediente no encontrado</p>
 } else {
+    <ExpedienteCRUD Expediente=@Expediente>
+        
+    </ExpedienteCRUD>
     <div>@Expediente.Caratula</div>
 
     @foreach (Tramite tramite in Expediente.Tramites) {

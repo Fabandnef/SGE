@@ -1,0 +1,10 @@
+﻿@page "/expediente/editar/{Id:int?}"
+
+<ExpedienteCRUD IdExpediente=@Id>
+    
+</ExpedienteCRUD>
+
+@code {
+    [Parameter]
+    public int Id{ get; set; }
+}
