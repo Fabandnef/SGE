@@ -26,7 +26,7 @@ public class Tramite : ITimestampable
     ///     El identificador del expediente al que pertenece el trámite. Se asocia a un expediente
     ///     a través de este identificador. Solo se permite la asignación del valor al crear el trámite.
     /// </summary>
-    public int? ExpedienteId { get; set; }
+    public int ExpedienteId { get; set; }
 
     /// <summary>
     ///     El usuario que realizó la última modificación en el trámite.

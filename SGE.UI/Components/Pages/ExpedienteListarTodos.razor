@@ -168,7 +168,7 @@
 
     protected override void OnParametersSet() {
         try {
-            _page = Page ?? 1;
+            _page = Page ?? (_totalPages > 0 ? 1 : 0);
 
             if (_page > _totalPages) {
                 NavigationManager.NavigateTo($"/expediente/listar/{_totalPages}");
