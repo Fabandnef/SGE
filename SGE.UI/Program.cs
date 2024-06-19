@@ -42,6 +42,7 @@ public class Program
         builder.Services.AddScoped<IRepositorioTramite, RepositorioTramiteSqlite>();
         builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuarioSqlite>();
         builder.Services.AddScoped<IExpedienteValidador, ExpedienteValidador>();
+        builder.Services.AddScoped<ITramiteValidador, TramiteValidador>();
         // Servicios
         builder.Services.AddScoped<IServicioDeClaves, ServicioDeClaves>();
         builder.Services.AddScoped<IServicioAutorizacion, ServicioAutorizacionProvisorio>();
@@ -56,10 +57,15 @@ public class Program
         builder.Services.AddTransient<ExpedienteContarTotalCasoDeUso>();
         builder.Services.AddTransient<ExpedienteModificarCasoDeUso>();
         builder.Services.AddTransient<ExpedienteBuscarPorIdConTramitesCasoDeUso>();
+        builder.Services.AddTransient<TramiteAltaCasoDeUso>();
         builder.Services.AddTransient<UsuarioLoginCasoDeUso>();
         builder.Services.AddTransient<UsuarioRegistrarCasoDeUso>();
         builder.Services.AddTransient<UsuarioRefrescarCasoDeUso>();
 
+        //Servicios
+        builder.Services.AddTransient<ServicioActualizacionEstado>();
+        builder.Services.AddTransient<EspecificacionCambioEstado>();
+        
         WebApplication app = builder.Build();
 
         // Configure the HTTP request pipeline.
