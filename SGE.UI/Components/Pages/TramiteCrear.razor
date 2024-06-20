@@ -1,4 +1,4 @@
-﻿@page "/expediente/{ExpedienteId:int}/tramite/crear"
+﻿@page "/expedientes/{ExpedienteId:int}/tramite/crear"
 
 @using SGE.Aplicacion.CasosDeUso
 @using SGE.Aplicacion.Enumerativos
@@ -52,7 +52,7 @@
     {
         try {
             _tramiteAltaCasoDeUso.Ejecutar(_tramite, CurrentSession.Usuario!);
-            NavigationManager.NavigateTo($"/expediente/{ExpedienteId}");
+            NavigationManager.NavigateTo($"/expedientes/{ExpedienteId}");
         }
         catch (Exception e) {
             DialogoObjeto.Mostrar(e.Message, true);

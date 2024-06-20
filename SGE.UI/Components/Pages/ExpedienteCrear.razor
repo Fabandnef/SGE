@@ -1,4 +1,4 @@
-﻿@page "/expediente/crear"
+﻿@page "/expedientes/crear"
 
 @using SGE.Aplicacion.CasosDeUso
 @using SGE.Aplicacion.Enumerativos
@@ -43,7 +43,7 @@
         
         try {
             _expedienteAltaCasoDeUso.Ejecutar(expediente, CurrentSession.Usuario!);
-            NavigationManager.NavigateTo($"/expediente/{expediente.Id}");
+            NavigationManager.NavigateTo($"/expedientes/{expediente.Id}");
         } catch (Exception e) {
             _error = e.Message;
         }
