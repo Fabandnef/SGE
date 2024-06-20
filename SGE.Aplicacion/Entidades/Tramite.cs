@@ -53,7 +53,7 @@ public class Tramite : ITimestampable
     ///     permite la asignación del ID solo si el valor actual es null, o sea, si no fue asignado.
     ///     La funcionalidad final termina siendo la misma que si el ID fuera de solo lectura.
     /// </summary>
-    public int? Id { get; set; }
+    public int Id { get; set; }
     #endregion
 
     #region METODOS PUBLICOS ---------------------------------------------------------------------------

@@ -1,11 +1,9 @@
-﻿@implements IDisposable
-@using SGE.Aplicacion.CasosDeUso
+﻿@using SGE.Aplicacion.CasosDeUso
 
 @inherits LayoutComponentBase
 
 @inject Session                   CurrentSession
 @inject NavigationManager         NavigationManager
-@inject UsuarioRefrescarCasoDeUso UsuarioRefrescarCasoDeUso
 <div class="h-full w-full flex flex-col">
     <NavBar OnToggleMenu="ToggleMenu" Usuario="@Usuario"/>
 
@@ -39,49 +37,9 @@
          && !currentUri.StartsWith("login")
          && !currentUri.StartsWith("register")) {
             NavigationManager.NavigateTo("/", true);
-        } else if (CurrentSession.Usuario != null) {
-            CurrentSession.Usuario = UsuarioRefrescarCasoDeUso.Ejecutar(CurrentSession.Usuario);
-        }
-
-        NavigationManager.RegisterLocationChangingHandler(LocationChangingHandler);
-        NavigationManager.LocationChanged += LocationChanged;
-        base.OnInitialized();
-    }
-
-    void LocationChanged(object? sender, LocationChangedEventArgs e) {
-        string currentUri = NavigationManager.ToBaseRelativePath(NavigationManager.Uri).ToLower();
-
-        if ((CurrentSession.Usuario == null) && !currentUri.StartsWith("login") && !currentUri.StartsWith("register")) {
-            NavigationManager.NavigateTo("/login", true);
-        }
-
-        if ((CurrentSession.Usuario != null) && (currentUri.StartsWith("login") || currentUri.StartsWith("register"))) {
-            NavigationManager.NavigateTo("/", true);
         }
         
-        // Si está logueado, refrescar los permisos
-        // (Entity guarda en caché los objetos de la DB en el contexto)
-        if (CurrentSession.Usuario != null) {
-            CurrentSession.Usuario = UsuarioRefrescarCasoDeUso.Ejecutar(CurrentSession.Usuario);
-        }
-    }
-
-    private ValueTask LocationChangingHandler(LocationChangingContext arg) {
-        if (!arg.IsNavigationIntercepted) {
-            return ValueTask.CompletedTask;
-        }
-
-        string currentUri = NavigationManager.ToBaseRelativePath(arg.TargetLocation).ToLower();
-
-        if ((CurrentSession.Usuario == null) && !currentUri.StartsWith("login") && !currentUri.StartsWith("register")) {
-            arg.PreventNavigation();
-        }
-
-        return ValueTask.CompletedTask;
-    }
-
-    void IDisposable.Dispose() {
-        NavigationManager.LocationChanged -= LocationChanged;
+        base.OnInitialized();
     }
 
 }

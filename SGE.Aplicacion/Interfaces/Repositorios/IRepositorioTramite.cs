@@ -52,7 +52,9 @@ public interface IRepositorioTramite
     ///     Obtiene todos los trámites.
     /// </summary>
     /// <returns><see cref="List{T}" /> de <see cref="Tramite" />.</returns>
-    List<Tramite> ObtenerTramites();
+    List<Tramite> ObtenerTramites(int pagina = 1);
+    
+    int ContarTotal();
 
     /// <summary>
     ///     Obtiene todos los trámites de un expediente.

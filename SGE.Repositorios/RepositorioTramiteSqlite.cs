@@ -61,7 +61,10 @@ public class RepositorioTramiteSqlite(SgeContext context) : IRepositorioTramite
 
     public Tramite? ObtenerPorId(int idTramite) => context.Tramites.Include("UsuarioUltimaModificacion").FirstOrDefault(t => t.Id == idTramite);
 
-    public List<Tramite> ObtenerTramites() => context.Tramites.Include("UsuarioUltimaModificacion").ToList();
+    public List<Tramite> ObtenerTramites(int pagina = 1) => context.Tramites.Include("UsuarioUltimaModificacion")
+                                                             .Skip((pagina - 1) * 10).Take(10).ToList();
+    
+    public int ContarTotal() => context.Tramites.Count();
 
     public Expediente ObtenerTramitesPorExpediente(Expediente expediente)
     {

@@ -20,8 +20,16 @@ public class TramiteBajaCasoDeUso(
             throw new AutorizacionException("El usuario no tiene permisos para realizar esta acción.");
         }
 
+        Tramite? tramite = repositorioTramite.ObtenerPorId(idTramite);
+        
+        if (tramite is null) {
+            throw new ValidacionException($"No se encontró el trámite con id {idTramite}.");
+        }
+        
+        int idExpediente = tramite.ExpedienteId;
         repositorioTramite.Baja(idTramite);
-        servicioActualizacionEstado.ActualizarEstado(idTramite);
+        servicioActualizacionEstado.ActualizarEstado(idExpediente);
+        
     }
     #endregion
 }

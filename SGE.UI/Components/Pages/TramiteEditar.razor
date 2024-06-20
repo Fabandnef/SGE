@@ -1,0 +1,27 @@
+﻿@page "/tramites/{Id:int?}/editar"
+@using SGE.Aplicacion.CasosDeUso
+
+@inject TramiteBuscarPorIdCasoDeUso     _tramiteBuscarPorIdCasoDeUso
+@inject NavigationManager               NavigationManager
+
+@if (Tramite == null) {
+    <p>Expediente no encontrado</p>
+} else {
+    <TramiteCRUD IsEditable="true" Tramite="@Tramite"/>
+}
+
+@code {
+    [Parameter] public int? Id { get; set; }
+
+    private Tramite? Tramite { get; set; }
+
+    protected override void OnInitialized() {
+        if (Id == null) {
+            NavigationManager.NavigateTo("/tramites/listar");
+            return;
+        }
+
+        Tramite = _tramiteBuscarPorIdCasoDeUso.Ejecutar(Id.Value);
+    }
+
+}

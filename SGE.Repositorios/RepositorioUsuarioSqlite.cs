@@ -41,12 +41,6 @@ public class RepositorioUsuarioSqlite(SgeContext context) : IRepositorioUsuario
     {
         return context.Usuarios.Include("Permisos").AsNoTracking().FirstOrDefault(u => u.Email == email);
     }
-    
-    public Usuario Refresh(Usuario usuario)
-    {
-        context.Entry(usuario).State = EntityState.Detached;
-        return GetUsuario(usuario.Email)!;
-    } 
 
     public List<Usuario> GetUsuarios() => context.Usuarios.ToList();
 }

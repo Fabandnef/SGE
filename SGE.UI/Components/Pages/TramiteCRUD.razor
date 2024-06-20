@@ -1,0 +1,91 @@
+﻿@using SGE.Aplicacion.CasosDeUso
+
+@inject TramiteModificacionCasoDeUso              TramiteModificacionCasoDeUso
+@inject Session                                   CurrentSession
+
+<Dialogo @ref="DialogoObjeto"/>
+<section class="bg-gray-50 dark:bg-gray-900">
+    <div class="bg-white dark:bg-gray-800 mt-8 max-w-2xl px-6 py-8 mx-auto lg:py-12 sm:rounded-lg shadow-md">
+        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tramite #@Tramite.Id</h2>
+        <form @onsubmit="ModificarTramite">
+            <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
+                <div class="sm:col-span-2">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="caratula">Carátula</label>
+                    @if (IsEditable) {
+                        <input @bind="Tramite.Contenido" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" id="caratula"
+                               name="caratula" placeholder="Ingrese una carátula para el Tramite..." @ref="_inputContenido" type="text">
+                    } else {
+                        <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                               id="caratula" name="caratula" readonly type="text" value="@Tramite.Contenido">
+                    }
+                </div>
+                <div class="w-full">
+                    <label class="block  mb-2 text-sm font-medium text-gray-900 dark:text-white" for="estado">Estado</label>
+                    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                           id="estado" name="estado" readonly type="text" value="@Tramite.Etiqueta.ToString()"/>
+                </div>
+                <div class="w-full">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="created_at">Fecha de creación</label>
+                    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                           id="created_at" name="created_at" readonly type="text" value="@Tramite.CreatedAt"/>
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="usuario">Usuario última modificación</label>
+                    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                           id="usuario" name="usuario" readonly type="text" value="@Tramite.UsuarioUltimaModificacion.NombreCompleto"/>
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="updated_at">Fecha de última modificación</label>
+                    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                           id="updated_at" name="updated_at" readonly type="text" value="@Tramite.UpdatedAt"/>
+                </div>
+                <div class="flex items-center space-x-4">
+                    @if (IsEditable) {
+                    <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="submit">
+                        Guardar cambios
+                    </button>
+                    } else {
+                    <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                            @onclick="Editar" type="button">
+                        Editar
+                    </button>
+                    }
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+@code{
+    [Parameter] public required Tramite Tramite { get; set; }
+    [Parameter] public          bool       IsEditable { get; set; }
+
+    private Dialogo          DialogoObjeto { get; set; } = null!;
+    private ElementReference _inputContenido;
+
+    protected override Task OnAfterRenderAsync(bool firstRender) {
+        if (!IsEditable) return base.OnAfterRenderAsync(firstRender);
+
+        _inputContenido.FocusAsync();
+
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void Editar() {
+        IsEditable = true;
+        StateHasChanged();
+    }
+
+    private void ModificarTramite() {
+        try {
+            IsEditable = false;
+            TramiteModificacionCasoDeUso.Ejecutar(Tramite, CurrentSession.Usuario!);
+            DialogoObjeto.Mostrar("Tramite modificado correctamente.");
+            StateHasChanged();
+        } catch (Exception e) {
+            DialogoObjeto.Mostrar(e.Message, true);
+            StateHasChanged();
+        }
+    }
+
+}
