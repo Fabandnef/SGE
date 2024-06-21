@@ -138,7 +138,6 @@
     private Dialogo                   DialogoObjeto   { get; set; } = null!;
     private List<Expediente>          _expedientes = [];
     private int                       _totalExpedientes;
-    private string                    _error = "";
     private int                       _page;
     private int                       _totalPages;
     private bool                      HasPreviousPage => _page > 1;
@@ -148,7 +147,7 @@
         try {
             Init();
         } catch (Exception e) {
-            _error = e.Message;
+            DialogoObjeto.Mostrar(e.Message);
         }
     }
 
@@ -162,7 +161,7 @@
 
             _expedientes = _expedienteListarCasoDeUso.Ejecutar(_page);
         } catch (RepositorioException e) {
-            _error = e.Message;
+            DialogoObjeto.Mostrar(e.Message);
         }
     }
 

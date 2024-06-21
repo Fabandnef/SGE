@@ -155,7 +155,7 @@
                 NavigationManager.NavigateTo($"/tramites/listar/etiqueta/{EtiquetaId}/{_totalPages}");
             }
 
-            _tramites = _tramiteConsultaPorEtiquetaCasoDeUso.Ejecutar((EtiquetaTramite)EtiquetaId!, _page);
+            _tramites = _tramiteConsultaPorEtiquetaCasoDeUso.Ejecutar((EtiquetaTramite)EtiquetaId, _page);
         } catch (Exception e) {
             DialogoObjeto.Mostrar(e.Message, true);
         }
@@ -165,7 +165,7 @@
         _totalTramites = _tramiteContarTotalCasoDeUso.Ejecutar();
         _totalPages    = (int)Math.Ceiling((double)_totalTramites / 10);
         _page          = Page ?? 1;
-        _tramites      = _tramiteConsultaPorEtiquetaCasoDeUso.Ejecutar((EtiquetaTramite)EtiquetaId!, _page);
+        _tramites      = _tramiteConsultaPorEtiquetaCasoDeUso.Ejecutar((EtiquetaTramite)EtiquetaId, _page);
     }
 
     private void NextPage() {
@@ -202,20 +202,6 @@
             DialogoObjeto.Mostrar(e.Message, true);
         } finally {
             StateHasChanged();
-        }
-    }
-
-    private void ListarPorEtiqueta(ChangeEventArgs e) {
-        try {
-            if (!int.TryParse(e.Value!.ToString(), out int etiqueta)) {
-                etiqueta = -1;
-            }
-
-            if (etiqueta == -1) {
-                NavigationManager.NavigateTo("/tramites/listar");
-            }
-        } catch (Exception ex) {
-            DialogoObjeto.Mostrar(ex.Message, true);
         }
     }
 
