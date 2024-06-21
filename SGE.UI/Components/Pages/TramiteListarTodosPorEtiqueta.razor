@@ -1,11 +1,10 @@
-﻿@page "/tramites/listar/{Page:int?}"
+﻿@page "/tramites/listar/etiqueta/{EtiquetaId:int}/{Page:int?}"
 
 @using SGE.Aplicacion.CasosDeUso
 @using SGE.Aplicacion.Enumerativos
 
 @inject NavigationManager                   NavigationManager
 @inject Session                             CurrentSession
-@inject TramiteListarCasoDeUso              _tramiteListarCasoDeUso
 @inject TramiteContarTotalCasoDeUso         _tramiteContarTotalCasoDeUso
 @inject TramiteConsultaPorEtiquetaCasoDeUso _tramiteConsultaPorEtiquetaCasoDeUso
 @inject TramiteBajaCasoDeUso                _tramiteBajaCasoDeUso
@@ -17,13 +16,7 @@
         <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
             <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                 <div class="w-full md:w-1/2 flex">
-                    <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            @onchange="@(ListarPorEtiqueta)" id="etiqueta" name="etiqueta" title="Filtrar por etiqueta...">
-                    <option value="-1">Ver todos</option>
-                    @foreach (EtiquetaTramite etiqueta in Enum.GetValues(typeof(EtiquetaTramite))) {
-                        <option value="@((int)etiqueta)">@etiqueta</option>
-                    }
-                    </select>
+                    Filtro por etiqueta: @((EtiquetaTramite)EtiquetaId)
                 </div>
             </div>
             <div class="overflow-x-auto">
@@ -136,6 +129,7 @@
 @code {
 
     [Parameter] public int? Page { get; set; } = 1;
+    [Parameter] public int EtiquetaId { get; set; }
 
     private DialogoEliminarTramite DialogoEliminar { get; set; } = null!;
     private Dialogo                DialogoObjeto   { get; set; } = null!;
@@ -159,36 +153,34 @@
             _page = Page ?? (_totalPages > 0 ? 1 : 0);
 
             if (_page > _totalPages) {
-                NavigationManager.NavigateTo($"/tramites/listar/{_totalPages}");
+                NavigationManager.NavigateTo($"/tramites/listar/etiqueta/{EtiquetaId}/{_totalPages}");
             }
 
-            _tramites = _tramiteListarCasoDeUso.Ejecutar(_page);
+            _tramites = _tramiteConsultaPorEtiquetaCasoDeUso.Ejecutar((EtiquetaTramite)EtiquetaId!, _page);
         } catch (Exception e) {
             DialogoObjeto.Mostrar(e.Message, true);
         }
     }
 
     private void Init() {
-        // get parameter "etiqueta" from url query
-        string uri = NavigationManager.GetUriWithQueryParameter("etiqueta", "0");
         _totalTramites = _tramiteContarTotalCasoDeUso.Ejecutar();
         _totalPages    = (int)Math.Ceiling((double)_totalTramites / 10);
         _page          = Page ?? 1;
-        _tramites      = _tramiteListarCasoDeUso.Ejecutar(_page);
+        _tramites      = _tramiteConsultaPorEtiquetaCasoDeUso.Ejecutar((EtiquetaTramite)EtiquetaId!, _page);
     }
 
     private void NextPage() {
         if (!HasNextPage) return;
 
         Page = _page + 1;
-        NavigationManager.NavigateTo($"/expedientes/listar/{Page}");
+        NavigationManager.NavigateTo($"/expedientes/listar/etiqueta/{EtiquetaId}/{Page}");
     }
 
     private void PreviousPage() {
         if (!HasPreviousPage) return;
 
         Page = _page - 1;
-        NavigationManager.NavigateTo($"/tramites/listar/{Page}");
+        NavigationManager.NavigateTo($"/tramites/listar/etiqueta/{EtiquetaId}/{Page}");
     }
 
     private void VerTramite(Tramite tramite) {
@@ -223,8 +215,6 @@
             if (etiqueta == -1) {
                 NavigationManager.NavigateTo("/tramites/listar");
             }
-            
-            NavigationManager.NavigateTo($"/tramites/listar/etiqueta/{etiqueta}");
         } catch (Exception ex) {
             DialogoObjeto.Mostrar(ex.Message, true);
         }

@@ -7,7 +7,7 @@ namespace SGE.Aplicacion.CasosDeUso;
 public class TramiteConsultaPorEtiquetaCasoDeUso(IRepositorioTramite repositorioTramite)
 {
     #region METODOS PUBLICOS ---------------------------------------------------------------------------
-    public List<Tramite> Ejecutar(EtiquetaTramite etiquetaTramite)
-        => repositorioTramite.ObtenerPorEtiqueta(etiquetaTramite);
+    public List<Tramite> Ejecutar(EtiquetaTramite etiquetaTramite, int pagina = 1)
+        => repositorioTramite.ObtenerPorEtiqueta(etiquetaTramite, pagina);
     #endregion
 }

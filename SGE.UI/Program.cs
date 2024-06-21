@@ -3,6 +3,7 @@ using SGE.Aplicacion.Interfaces.Servicios;
 using SGE.Aplicacion.Interfaces.Validadores;
 using SGE.Aplicacion.Servicios;
 using SGE.Aplicacion.Validadores;
+using SGE.UI.Components.Pages;
 
 namespace SGE.UI;
 
@@ -65,6 +66,7 @@ public class Program
         builder.Services.AddTransient<TramiteConsultaPorEtiquetaCasoDeUso>();
         builder.Services.AddTransient<TramiteContarTotalCasoDeUso>();
         builder.Services.AddTransient<TramiteListarCasoDeUso>();
+        builder.Services.AddTransient<TramiteListarTodosPorEtiqueta>();
         builder.Services.AddTransient<TramiteModificacionCasoDeUso>();
         builder.Services.AddTransient<UsuarioLoginCasoDeUso>();
         builder.Services.AddTransient<UsuarioRegistrarCasoDeUso>();
