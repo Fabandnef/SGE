@@ -1,5 +1,4 @@
 ﻿@page "/expedientes/listar/{Page:int?}"
-
 @using SGE.Aplicacion.CasosDeUso
 @using SGE.Aplicacion.Excepciones
 
@@ -137,11 +136,11 @@
 
     private DialogoEliminarExpediente DialogoEliminar { get; set; } = null!;
     private Dialogo                   DialogoObjeto   { get; set; } = null!;
-    private List<Expediente>          _expedientes      = [];
-    private int                       _totalExpedientes = 0;
-    private string                    _error            = "";
-    private int                       _page             = 0;
-    private int                       _totalPages       = 0;
+    private List<Expediente>          _expedientes = [];
+    private int                       _totalExpedientes;
+    private string                    _error = "";
+    private int                       _page;
+    private int                       _totalPages;
     private bool                      HasPreviousPage => _page > 1;
     private bool                      HasNextPage     => _page < _totalPages;
 

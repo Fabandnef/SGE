@@ -39,13 +39,13 @@ public interface IRepositorioExpediente
     /// <returns><see cref="Expediente" /> encontrado, o <c>null</c> si no se encontró.</returns>
     Expediente? BuscarPorId(int idExpediente);
 
+    int ContarTotal();
+
     /// <summary>
     ///     Listar todos los expedientes.
     /// </summary>
     /// <returns><see cref="List{T}" /> de <see cref="Expediente" />.</returns>
     List<Expediente> Listar(int pagina = 1);
-    
-    int ContarTotal();
 
     /// <summary>
     ///     Modificar un expediente.

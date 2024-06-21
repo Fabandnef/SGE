@@ -12,14 +12,13 @@
                 break;
 
             case { IsAdmin: true, }:
-                NavigationManager.NavigateTo($"/usuarios/listar");
+                NavigationManager.NavigateTo("/usuarios/listar");
                 break;
-            
+
             default:
                 NavigationManager.NavigateTo($"/usuarios/{CurrentSession.Usuario.Id}");
                 break;
         }
-
     }
 
 }

@@ -1,8 +1,8 @@
 ﻿@page "/tramites/{Id:int?}"
 @using SGE.Aplicacion.CasosDeUso
 
-@inject TramiteBuscarPorIdCasoDeUso _tramiteBuscarPorIdCasoDeUso
-@inject NavigationManager                         NavigationManager
+@inject TramiteBuscarPorIdCasoDeUso     _tramiteBuscarPorIdCasoDeUso
+@inject NavigationManager               NavigationManager
 
 @if (Tramite == null) {
     <p>Expediente no encontrado</p>
@@ -20,7 +20,7 @@
             NavigationManager.NavigateTo("/tramites/listar");
             return;
         }
-        
+
         Tramite = _tramiteBuscarPorIdCasoDeUso.Ejecutar(Id.Value);
     }
 

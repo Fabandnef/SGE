@@ -1,12 +1,11 @@
 ﻿@page "/login"
-
 @using SGE.Aplicacion.CasosDeUso
 
 @inject UsuarioLoginCasoDeUso           UsuarioLoginCasoDeUso
 @inject NavigationManager               NavigationManager
 @inject Session                         CurrentSession
 
-<Dialogo @ref="DialogoObjeto" />
+<Dialogo @ref="DialogoObjeto"/>
 <div class="flex flex-grow justify-center w-full h-full">
     <section class="bg-gray-50 dark:bg-gray-900">
         <div class="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-20 lg:py-16 lg:grid-cols-12">
@@ -67,7 +66,7 @@
 
     private void DoLogin() {
         try {
-            Usuario    usuario    = UsuarioLoginCasoDeUso.Ejecutar(_email, _password);
+            Usuario usuario = UsuarioLoginCasoDeUso.Ejecutar(_email, _password);
             CurrentSession.Usuario = usuario;
             NavigationManager.NavigateTo("/about");
         } catch (Exception e) {

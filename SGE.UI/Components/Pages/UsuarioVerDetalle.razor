@@ -1,9 +1,9 @@
 ﻿@page "/usuarios/{Id:int?}"
 @using SGE.Aplicacion.CasosDeUso
 
-@inject UsuarioBuscarPorIdCasoDeUso _usuarioBuscarPorIdCasoDeUso
-@inject NavigationManager           NavigationManager
-@inject Session                     CurrentSession
+@inject UsuarioBuscarPorIdCasoDeUso     _usuarioBuscarPorIdCasoDeUso
+@inject NavigationManager               NavigationManager
+@inject Session                         CurrentSession
 
 @if (Usuario == null) {
     <p>Usuario no encontrado</p>
@@ -17,8 +17,7 @@
     private Usuario? UsuarioActual { get; set; }
     private Usuario? Usuario       { get; set; }
 
-    protected override void OnInitialized()
-    {
+    protected override void OnInitialized() {
         UsuarioActual = CurrentSession.Usuario;
 
         if (!UsuarioActual!.IsAdmin && (Id != UsuarioActual!.Id)) {
@@ -31,4 +30,5 @@
 
         Usuario = _usuarioBuscarPorIdCasoDeUso.Ejecutar(Id ?? UsuarioActual.Id);
     }
+
 }

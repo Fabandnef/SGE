@@ -2,11 +2,12 @@
 
 public class Permiso
 {
-    public int Id { get; set; }
-    
-    public required string Nombre { get; set; }
-    
+    #region PROPIEDADES PUBLICAS -----------------------------------------------------------------------
     public required string Descripcion { get; set; }
-    
+    public          int    Id          { get; set; }
+
+    public required string Nombre { get; set; }
+
     public virtual List<Usuario> Usuarios { get; set; } = [];
+    #endregion
 }

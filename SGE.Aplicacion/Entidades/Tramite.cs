@@ -29,18 +29,22 @@ public class Tramite : ITimestampable
     public int ExpedienteId { get; set; }
 
     /// <summary>
+    ///     Identificador único del trámite. Ya que el ID se calcula antes de ser insertado, se
+    ///     permite la asignación del ID solo si el valor actual es null, o sea, si no fue asignado.
+    ///     La funcionalidad final termina siendo la misma que si el ID fuera de solo lectura.
+    /// </summary>
+    public int Id { get; set; }
+
+    /// <summary>
     ///     El usuario que realizó la última modificación en el trámite.
     /// </summary>
     public int IdUsuarioUltimaModificacion { get; set; }
-    
+
     public virtual Usuario UsuarioUltimaModificacion { get; set; } = null!;
+    #endregion
 
-    /// <summary>
-    ///     La fecha en la que se realizó la última modificación en el trámite. La fecha se actualiza
-    ///     automáticamente cada vez que se modifica el trámite.
-    /// </summary>
-    public DateTime UpdatedAt { get; set; }
-
+    #region IMPLEMENTACIONES DE INTERFACES -------------------------------------------------------------
+    #region ITimestampable
     /// <summary>
     ///     La fecha en la que se creó el trámite. Se permite la asignación de la fecha solo si el
     ///     valor actual es la fecha mínima, o sea, si no fue asignado. La funcionalidad final termina
@@ -49,11 +53,11 @@ public class Tramite : ITimestampable
     public DateTime CreatedAt { get; set; }
 
     /// <summary>
-    ///     Identificador único del trámite. Ya que el ID se calcula antes de ser insertado, se
-    ///     permite la asignación del ID solo si el valor actual es null, o sea, si no fue asignado.
-    ///     La funcionalidad final termina siendo la misma que si el ID fuera de solo lectura.
+    ///     La fecha en la que se realizó la última modificación en el trámite. La fecha se actualiza
+    ///     automáticamente cada vez que se modifica el trámite.
     /// </summary>
-    public int Id { get; set; }
+    public DateTime UpdatedAt { get; set; }
+    #endregion
     #endregion
 
     #region METODOS PUBLICOS ---------------------------------------------------------------------------
@@ -63,13 +67,12 @@ public class Tramite : ITimestampable
     /// </summary>
     /// <returns>String representando todos los elementos del trámite</returns>
     public override string ToString()
-        => $"Id: {Id}\n"                                 +
-           $"IdExpediente: {ExpedienteId}\n"             +
-           $"Etiqueta: {Etiqueta}\n"                     +
-           $"Contenido: {Contenido}\n"                   +
-           $"FechaCreacion: {CreatedAt}\n"           +
-           $"UpdatedAt: {UpdatedAt}\n" +
+        => $"Id: {Id}\n"                     +
+           $"IdExpediente: {ExpedienteId}\n" +
+           $"Etiqueta: {Etiqueta}\n"         +
+           $"Contenido: {Contenido}\n"       +
+           $"FechaCreacion: {CreatedAt}\n"   +
+           $"UpdatedAt: {UpdatedAt}\n"       +
            $"IdUsuarioUltimaModificacion: {IdUsuarioUltimaModificacion}";
     #endregion
-
 }

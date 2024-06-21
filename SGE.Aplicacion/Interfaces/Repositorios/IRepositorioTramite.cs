@@ -28,6 +28,8 @@ public interface IRepositorioTramite
     /// <param name="idExpediente">ID del expediente.</param>
     void BajaPorExpediente(int idExpediente);
 
+    int ContarTotal();
+
     /// <summary>
     ///     Modifica un trámite.
     /// </summary>
@@ -38,8 +40,8 @@ public interface IRepositorioTramite
     ///     Obtiene un trámite por su etiqueta.
     /// </summary>
     /// <param name="etiquetaTramite">Etiqueta del trámite.</param>
-    /// <param name="pagina">Pagina para listar los tramites.</param>
-    /// <returns><see cref="List{T}" /> de <see cref="Tramite" />Obtener tramites con la etiqueta especificada.</returns>
+    /// <param name="pagina">Página de la lista de trámites.</param>
+    /// <returns><see cref="List{T}" /> de <see cref="Tramite" />s con la etiqueta especificada.</returns>
     List<Tramite> ObtenerPorEtiqueta(EtiquetaTramite etiquetaTramite, int pagina = 1);
 
     /// <summary>
@@ -54,8 +56,6 @@ public interface IRepositorioTramite
     /// </summary>
     /// <returns><see cref="List{T}" /> de <see cref="Tramite" />.</returns>
     List<Tramite> ObtenerTramites(int pagina = 1);
-    
-    int ContarTotal();
 
     /// <summary>
     ///     Obtiene todos los trámites de un expediente.

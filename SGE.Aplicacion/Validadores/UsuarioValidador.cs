@@ -6,7 +6,7 @@ namespace SGE.Aplicacion.Validadores;
 public class UsuarioValidador : IUsuarioValidador
 {
     #region IMPLEMENTACIONES DE INTERFACES -------------------------------------------------------------
-    #region IExpedienteValidador
+    #region IUsuarioValidador
     /// <inheritdoc />
     public bool Validar(Usuario usuario, out string error)
     {

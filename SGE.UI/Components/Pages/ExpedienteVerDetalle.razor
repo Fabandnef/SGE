@@ -20,7 +20,8 @@
             NavigationManager.NavigateTo("/expedientes/listar");
             return;
         }
-        
+
         Expediente = _expedienteBuscarPorIdConTramitesCasoDeUso.Ejecutar(Id.Value);
     }
+
 }

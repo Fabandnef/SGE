@@ -8,6 +8,8 @@ namespace SGE.Repositorios;
 
 public class RepositorioTramiteSqlite(SgeContext context) : IRepositorioTramite
 {
+    #region IMPLEMENTACIONES DE INTERFACES -------------------------------------------------------------
+    #region IRepositorioTramite
     public void Alta(Tramite tramite)
     {
         try {
@@ -47,6 +49,8 @@ public class RepositorioTramiteSqlite(SgeContext context) : IRepositorioTramite
         }
     }
 
+    public int ContarTotal() => context.Tramites.Count();
+
     public void Modificar(Tramite tramite)
     {
         try {
@@ -61,12 +65,12 @@ public class RepositorioTramiteSqlite(SgeContext context) : IRepositorioTramite
                   .Where(t => t.Etiqueta == etiquetaTramite)
                   .Skip((pagina - 1) * 10).Take(10).ToList();
 
-    public Tramite? ObtenerPorId(int idTramite) => context.Tramites.Include("UsuarioUltimaModificacion").FirstOrDefault(t => t.Id == idTramite);
+    public Tramite? ObtenerPorId(int idTramite)
+        => context.Tramites.Include("UsuarioUltimaModificacion").FirstOrDefault(t => t.Id == idTramite);
 
-    public List<Tramite> ObtenerTramites(int pagina = 1) => context.Tramites.Include("UsuarioUltimaModificacion")
-                                                             .Skip((pagina - 1) * 10).Take(10).ToList();
-    
-    public int ContarTotal() => context.Tramites.Count();
+    public List<Tramite> ObtenerTramites(int pagina = 1)
+        => context.Tramites.Include("UsuarioUltimaModificacion")
+                  .Skip((pagina - 1) * 10).Take(10).ToList();
 
     public Expediente ObtenerTramitesPorExpediente(Expediente expediente)
     {
@@ -77,4 +81,6 @@ public class RepositorioTramiteSqlite(SgeContext context) : IRepositorioTramite
     public Tramite? ObtenerUltimoPorExpediente(int idExpediente)
         => context.Tramites.Where(t => t.ExpedienteId == idExpediente).OrderByDescending(t => t.UpdatedAt)
                   .FirstOrDefault();
+    #endregion
+    #endregion
 }
