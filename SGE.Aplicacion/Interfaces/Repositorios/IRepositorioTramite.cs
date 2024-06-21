@@ -38,7 +38,8 @@ public interface IRepositorioTramite
     ///     Obtiene un trámite por su etiqueta.
     /// </summary>
     /// <param name="etiquetaTramite">Etiqueta del trámite.</param>
-    /// <returns><see cref="List{T}" /> de <see cref="Tramite" />s con la etiqueta especificada.</returns>
+    /// <param name="pagina">Pagina para listar los tramites.</param>
+    /// <returns><see cref="List{T}" /> de <see cref="Tramite" />Obtener tramites con la etiqueta especificada.</returns>
     List<Tramite> ObtenerPorEtiqueta(EtiquetaTramite etiquetaTramite, int pagina = 1);
 
     /// <summary>
