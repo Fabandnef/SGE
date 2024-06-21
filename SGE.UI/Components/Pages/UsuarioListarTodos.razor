@@ -1,0 +1,210 @@
+﻿@page "/usuario/listar/{Page:int?}"
+
+@using SGE.Aplicacion.CasosDeUso
+@using SGE.Aplicacion.Excepciones
+
+@inject NavigationManager           NavigationManager
+@inject Session                     CurrentSession
+@inject UsuarioListarCasoDeUso      _usuarioListarCasoDeUso
+@inject UsuarioContarTotalCasoDeUso _usuarioContarTotalCasoDeUso
+@inject UsuarioBajaCasoDeUso        _usuarioBajaCasoDeUso
+
+<DialogoEliminarUsuario @ref="DialogoEliminar" OnConfirmado="@(args => EliminarUsuario((Usuario)args))" />
+<DialogoAlerta @ref="DialogoAlertaObjeto"/>
+<section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
+    <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
+        <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+            <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+                <div class="w-full md:w-1/2">
+                    <form class="flex items-center">
+                        <label class="sr-only" for="simple-search">Buscar</label>
+                        <div class="relative w-full">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path clip-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" fill-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" id="simple-search" placeholder="Buscar..." required="" type="text">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <div class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <div class="flex text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <div class="px-4 py-3 hidden lg:inline lg:w-5/12" scope="col"># - Nombre Completo</div>
+                        <div class="px-4 py-3 hidden lg:inline lg:w-1/12" scope="col">Email</div>
+                        <div class="px-4 py-3 w-2/12 text-center" scope="col">Última edición</div>
+                        <div class="px-4 py-3 hidden lg:inline lg:w-2/12 text-center" scope="col">Creado</div>
+                        <div class="px-4 py-3 w-4/12 lg:w-3/12 2xl:w-2/12" scope="col">
+                            <span class="sr-only">Acciones</span>
+                        </div>
+                    </div>
+                    @if (_usuarios.Count == 0) {
+                    <div class="border-b dark:border-gray-700">
+                        <div class="px-4 py-3 text-center">No hay usuarios para mostrar</div>
+                    </div>
+                    } else {
+                        @foreach (Usuario u in _usuarios) {
+                            <div class="flex border-b dark:border-gray-700 cursor-default">
+                                <div class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white overflow-hidden w-5/12 my-auto flex flex-col" scope="row">
+                                    <div class="flex-nowrap truncate font-bold text-lg">
+                                        #@u.Id - @u.NombreCompleto
+                                    </div>
+                                </div>
+                                <div class="px-4 py-3 hidden lg:inline lg:w-1/12 truncate overflow-ellipsis my-auto text-center">
+                                    @u.Email
+                                </div>
+                                <div class="px-4 py-3 w-2/12 truncate overflow-ellipsis flex flex-grow-0 flex-col my-auto text-center">
+                                    <span class="align-middle text-2xs">@u.UpdatedAt</span>
+                                </div>
+                                <div class="px-4 py-3 hidden lg:inline lg:w-2/12 truncate overflow-ellipsis my-auto text-center">
+                                    <span class="align-middle">@u.CreatedAt</span>
+                                </div>
+                                <div class="px-4 py-2 gap-1 w-4/12 lg:w-3/12 2xl:w-2/12 flex justify-end my-auto">
+                                    <button class="min-w-9 max-w-9 items-center py-1 px-2 text-sm font-medium border bg-green-400 hover:bg-green-300 border-green-600 dark:bg-green-800 dark:hover:bg-green-600 dark:border-green-800 text-center text-gray-700 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
+                                            id="view-expediente-@u.Id"
+                                            @onclick="() => VerUsuario(u)" type="button">
+                                        <i class="fa-solid fa-eye fa-lg"></i>
+                                    </button>
+                                    <button class="min-w-9 max-w-9 items-center py-1 px-2 text-sm font-medium border bg-amber-400 hover:bg-amber-300 border-amber-600 dark:bg-amber-800 dark:hover:bg-amber-600 dark:border-amber-600 text-center text-gray-700 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
+                                            id="view-expediente-@u.Id"
+                                            @onclick="() => EditarUsuario(u)" type="button">
+                                        <i class="fa-solid fa-pencil fa-lg"></i>
+                                    </button>
+                                    <button class="min-w-9 max-w-9 items-center py-1 px-2 text-sm font-medium border bg-red-400 hover:bg-red-300 border-red-600 dark:bg-red-800 dark:hover:bg-red-600 dark:border-red-600 text-center text-gray-700 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
+                                            id="view-expediente-@u.Id"
+                                            @onclick="() => EliminarUsuarioConfirmar(u)" type="button">
+                                        <i class="fa-solid fa-trash fa-lg"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <nav aria-label="Table navigation" class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4">
+                <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                    Mostrando
+                    <span class="font-semibold text-gray-900 dark:text-white">@(_totalUsuarios > 0 ? ((_page - 1) * 10) + 1 : "0") - @((_page * 10) < _totalUsuarios ? _page * 10 : _totalUsuarios)</span>
+                    de
+                    <span class="font-semibold text-gray-900 dark:text-white">@_totalUsuarios</span>
+                </span>
+                @if (_totalPages > 1) {
+                <ul class="inline-flex items-stretch -space-x-px">
+                    <li>
+                        <div class="flex cursor-pointer items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                             href="#" @onclick="PreviousPage">
+                            <span class="sr-only">Anterior</span>
+                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path clip-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" fill-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    </li>
+                    @for (int i = 1; i <= Math.Min(_totalPages, 5); i++) {
+                    if (i == _page) {
+                    <li>
+                        <a class="flex items-center justify-center text-sm z-10 py-2 px-3 leading-tight text-primary-600 bg-primary-50 border border-primary-300 hover:bg-primary-100 hover:text-primary-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white" href="@($"/expediente/listar/{i}")">@i</a>
+                    </li>
+                    } else {
+                    <li>
+                        <a class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" href="@($"/expediente/listar/{i}")">@i</a>
+                    </li>
+                    }
+                    }
+                    <li>
+                        <div class="flex cursor-pointer items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                             href="#" @onclick="NextPage">
+                            <span class="sr-only">Siguiente</span>
+                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    </li>
+                </ul>
+                }
+            </nav>
+        </div>
+    </div>
+</section>
+
+
+@code {
+    [Parameter] public int? Page { get; set; } = 1;
+
+    private DialogoEliminarUsuario DialogoEliminar     { get; set; } = null!;
+    private DialogoAlerta             DialogoAlertaObjeto { get; set; } = null!;
+    private List<Usuario>          _usuarios      = [];
+    private int                       _totalUsuarios = 0;
+    private string                    _error            = "";
+    private int                       _page             = 0;
+    private int                       _totalPages       = 0;
+    private bool                      HasPreviousPage => _page > 1;
+    private bool                      HasNextPage     => _page < _totalPages;
+
+    protected override void OnInitialized() {
+        try {
+            Init();
+        } catch (Exception e) {
+            _error = e.Message;
+        }
+    }
+
+    protected override void OnParametersSet() {
+        try {
+            _page = Page ?? 1;
+
+            if (_page > _totalPages) {
+                NavigationManager.NavigateTo($"/usuario/listar/{_totalPages}");
+            }
+
+            _usuarios = _usuarioListarCasoDeUso.Ejecutar(_page);
+        } catch (RepositorioException e) {
+            _error = e.Message;
+        }
+    }
+    
+    private void Init() {
+        _totalUsuarios = _usuarioContarTotalCasoDeUso.Ejecutar();
+        _totalPages       = (int)Math.Ceiling((double)_totalUsuarios / 10);
+        _page             = Page ?? 1;
+        _usuarios      = _usuarioListarCasoDeUso.Ejecutar(_page);
+    }
+
+    private void NextPage() {
+        if (!HasNextPage) return;
+
+        Page = _page + 1;
+        NavigationManager.NavigateTo($"/usuario/listar/{Page}");
+    }
+
+    private void PreviousPage() {
+        if (!HasPreviousPage) return;
+
+        Page = _page - 1;
+        NavigationManager.NavigateTo($"/usuario/listar/{Page}");
+    }
+
+    private void VerUsuario(Usuario usuario) {
+        NavigationManager.NavigateTo($"/usuario/{usuario.Id}");
+    }
+
+    private void EditarUsuario(Usuario usuario) {
+        NavigationManager.NavigateTo($"/usuario/{usuario.Id}/editar");
+    }
+    
+    private void EliminarUsuarioConfirmar(Usuario usuario) {
+        DialogoEliminar.Mostrar(usuario);
+    }
+
+    private void EliminarUsuario(Usuario usuario) {
+        try {
+            _usuarioBajaCasoDeUso.Ejecutar(usuario, CurrentSession.Usuario!);
+            Init();
+        } catch (Exception e) {
+            DialogoAlertaObjeto.Mostrar(e.Message, true);
+        } finally {
+            StateHasChanged();
+        }
+    }
+}

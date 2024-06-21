@@ -12,5 +12,9 @@ public interface IRepositorioUsuario
     
     public Usuario? GetUsuario(string email);
     
-    public List<Usuario> GetUsuarios();
+    public List<Usuario> GetUsuarios(int page);
+
+    public Usuario? BuscarPorId(int idUsuario);
+    
+    public int ContarTotal();
 }

@@ -1,0 +1,190 @@
+﻿@using SGE.Aplicacion.CasosDeUso
+@using SGE.Aplicacion.Interfaces.Servicios
+
+@inject UsuarioModificarCasoDeUso UsuarioModificarCasoDeUso
+@inject PermisoListarCasoDeUso    PermisoListarCasoDeUso
+@inject Session                   CurrentSession
+@inject IServicioAutorizacion     ServicioAutorizacion
+@inject IServicioDeClaves ServicioDeClaves
+
+<DialogoAlerta @ref="DialogoAlertaObjeto"/>
+<section class="bg-gray-50 dark:bg-gray-900">
+    <div class="bg-white dark:bg-gray-800 mt-8 max-w-2xl px-6 py-8 mx-auto lg:py-12 sm:rounded-lg shadow-md">
+        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Usuario #@Usuario.Id</h2>
+        <form @onsubmit="ModificarUsuario">
+            <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
+                <div class="w-full">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="nombre">Nombre</label>
+                    @if (IsEditable) {
+                        <input @bind="Usuario.Nombre" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"  
+                               id="nombre" name="nombre" placeholder="Ingrese su nombre..." type="text">
+                    } else {
+                        <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                            id="nombre" name="nombre" readonly type="text" value="@Usuario.Nombre">
+                    }
+                </div>
+                <div class="w-full">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="apellido">Apellido</label>
+                    @if (IsEditable) {
+                        <input @bind="Usuario.Apellido" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"  
+                               id="apellido" name="apellido" placeholder="Ingrese su apellido..." type="text">
+                    } else {
+                        <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                               id="apellido" name="apellido" readonly type="text" value="@Usuario.Apellido">
+                    }
+                </div>
+                <div class="sm:col-span-2">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="email">Email</label>
+                    @if (IsEditable) {
+                    <input @bind="Usuario.Email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                           id="email" name="email" placeholder="Ingrese su Email..." type="email">
+                    } else {
+                    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                           id="email" name="email" readonly type="email" value="@Usuario.Email">
+                    }
+                </div>
+                <div class="w-full">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="contraseña">Contraseña</label>
+                    @if (IsEditable) {
+                        <input @bind="_password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                               id="contraseña" name="contraseña" placeholder="Ingrese su nueva contraseña..." type="password">
+                    } else {
+                        <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                               id="contraseña" name="contraseña" readonly type="password" value="* * * * * * * * * * *">
+                    }
+                </div>
+                <div class="w-full">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="contraseña">Confirme su contraseña</label>
+                    @if (IsEditable) {
+                    <input @bind="_passwordConfirmacion" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                           id="contraseñaConfirmacion" name="contraseñaConfirmacion" placeholder="Confirme su nueva contraseña..." type="password">
+                    } else {
+                    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500  dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                           id="contraseñaConfirmacion" name="contraseñaConfirmacion" readonly type="password" value="* * * * * * * * * * *">
+                    }
+                </div>
+                <div class="w-full">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="created_at">Fecha de creación</label>
+                    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                           id="created_at" name="created_at" readonly type="text" value="@Usuario.CreatedAt"/>
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="updated_at">Fecha de última modificación</label>
+                    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                           id="updated_at" name="updated_at" readonly type="text" value="@Usuario.UpdatedAt"/>
+                </div>
+                @if (CurrentSession.Usuario!.IsAdmin) {
+                    <hr class="col-span-2"/>
+                    <div class="col-span-2">
+                        <h3 class="mb-4 font-semibold text-gray-900 dark:text-white">Permisos</h3>
+
+                        <ul class="w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            @foreach (Permiso permiso in ObtenerPermisosDb()) {
+                                <li class="p-3 flex w-full border-gray-200 rounded-t-lg dark:border-gray-600">
+                                    <div class="flex items-center h-5">
+                                        <input id="permiso-@permiso.Id" 
+                                               checked="@(Usuario.Permisos.Contains(permiso) || (permiso.Nombre=="AdminGeneral" && Usuario.IsAdmin))" disabled="@(!IsEditable)"
+                                               @onchange="eventArgs => { CheckboxClicked(permiso, eventArgs.Value!); }"
+                                               aria-describedby="helper-checkbox-text" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    </div>
+                                    <div class="ms-2 text-sm pl-3">
+                                        <label for="permiso-@permiso.Id" class="font-medium text-gray-900 dark:text-gray-300">@permiso.Nombre</label>
+                                        <p id="helper-checkbox-text" class="font-normal text-xs italic text-gray-500 dark:text-gray-300">@permiso.Descripcion</p>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+            <div class="flex items-center space-x-4">
+                @if (IsEditable) {
+                <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="submit">
+                    Guardar cambios
+                </button>
+                } else {
+                <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                        @onclick="Editar" type="button">
+                    Editar
+                </button>
+                }
+            </div>
+
+        </form>
+    </div>
+</section>
+
+@code {
+    [Parameter] public required Usuario Usuario    { get; set; }
+    [Parameter] public          bool    IsEditable { get; set; }
+
+    private DialogoAlerta DialogoAlertaObjeto { get; set; } = null!;
+
+    private List<Permiso> _permisos { get; set; } = new();
+    private string        _password             = "";
+    private string        _passwordConfirmacion = "";
+    private bool          _passwordCambiada     = false;
+
+    private void CheckboxClicked(Permiso permiso, object checkedValue)
+    {
+        if((bool) checkedValue && !_permisos.Contains(permiso))
+            _permisos.Add(permiso);
+        else if(!(bool) checkedValue && _permisos.Contains(permiso))
+            _permisos.Remove(permiso);
+        
+        Console.WriteLine("CheckboxClicked");
+
+        foreach (Permiso p in _permisos) {
+            Console.WriteLine(p.Nombre);
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        InicializarPermisos();
+        base.OnParametersSet();
+    }
+
+    private void InicializarPermisos()
+    {
+        foreach (Permiso p in Usuario.Permisos) {
+            _permisos.Add(p);
+        }
+    }
+    
+    private void Editar()
+    {
+        IsEditable = true;
+        StateHasChanged();
+    }
+
+    private void ModificarUsuario()
+    {
+
+        if (_password != _passwordConfirmacion) {
+            DialogoAlertaObjeto.Mostrar("Las contraseñas no coinciden", true);
+            return;
+        }
+        
+        try {
+            
+            _passwordCambiada = !string.IsNullOrEmpty(_password) && !string.IsNullOrEmpty(_passwordConfirmacion);
+            
+            if(_passwordCambiada)
+                Usuario.Password = _password;
+
+            Usuario.Permisos = _permisos;
+            
+            IsEditable = false;
+            
+            UsuarioModificarCasoDeUso.Ejecutar(Usuario, CurrentSession.Usuario!, _passwordCambiada);
+            DialogoAlertaObjeto.Mostrar("Usuario modificado correctamente");
+        }
+        catch (Exception e) {
+            DialogoAlertaObjeto.Mostrar(e.Message, true);
+        }
+        StateHasChanged();
+    }
+    
+    private List<Permiso> ObtenerPermisosDb() => PermisoListarCasoDeUso.Ejecutar();
+}

@@ -1,0 +1,34 @@
+﻿@page "/usuario/{Id:int?}/editar"
+@using SGE.Aplicacion.CasosDeUso
+
+@inject UsuarioBuscarPorIdCasoDeUso _usuarioBuscarPorIdCasoDeUso
+@inject NavigationManager           NavigationManager
+@inject Session                     CurrentSession
+
+@if (Usuario == null) {
+    <p>Usuario no encontrado</p>
+} else {
+    <UsuarioCRUD Usuario="@Usuario" IsEditable="true"/>
+}
+
+@code {
+    [Parameter] public int? Id { get; set; }
+
+    private Usuario? UsuarioActual { get; set; }
+    private Usuario? Usuario { get; set; }
+    
+    protected override void OnInitialized()
+    {
+        UsuarioActual = CurrentSession.Usuario;
+        
+        if(!UsuarioActual!.IsAdmin && Id != UsuarioActual!.Id) {
+            NavigationManager.NavigateTo($"/usuario/{UsuarioActual!.Id}/");
+        }
+
+        if (UsuarioActual.IsAdmin && Id == null) {
+            NavigationManager.NavigateTo("/usuarios/listar");
+        }
+        
+        Usuario = _usuarioBuscarPorIdCasoDeUso.Ejecutar(Id!.Value);
+    }
+}

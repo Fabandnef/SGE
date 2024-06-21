@@ -9,4 +9,6 @@ public interface IRepositorioPermiso
     public void Modificar(Permiso permiso);
     
     public void Eliminar(Permiso permiso);
+
+    public List<Permiso> GetPermisos();
 }

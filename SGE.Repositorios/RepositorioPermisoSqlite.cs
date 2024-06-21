@@ -35,4 +35,6 @@ public class RepositorioPermisoSqlite(SgeContext context) : IRepositorioPermiso
             throw new RepositorioException($"Error al eliminar el permiso con id {permiso.Id}. {e.Message}");
         }
     }
+
+    public List<Permiso> GetPermisos() => context.Permisos.ToList();
 }

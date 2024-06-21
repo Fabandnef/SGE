@@ -33,7 +33,7 @@ public class RepositorioUsuarioSqlite(SgeContext context) : IRepositorioUsuario
             context.Usuarios.Remove(usuario);
             context.SaveChanges();
         } catch (Exception e) {
-            throw new RepositorioException($"Error al eliminar el usuario con email {usuario.Email}. {e.Message}");
+            throw new RepositorioException($"Error al eliminar el usuario con id {usuario.Id}. {e.Message}");
         }
     }
 
@@ -42,5 +42,9 @@ public class RepositorioUsuarioSqlite(SgeContext context) : IRepositorioUsuario
         return context.Usuarios.Include("Permisos").AsNoTracking().FirstOrDefault(u => u.Email == email);
     }
 
-    public List<Usuario> GetUsuarios() => context.Usuarios.ToList();
+    public List<Usuario> GetUsuarios(int page) => context.Usuarios.Skip((page - 1) * 10).Take(10).ToList().ToList();
+
+    public int ContarTotal() => context.Usuarios.Count();
+    
+    public Usuario? BuscarPorId(int idUsuario) => context.Usuarios.Include("Permisos").AsNoTracking().FirstOrDefault(u => u.Id == idUsuario);
 }
