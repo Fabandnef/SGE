@@ -1,6 +1,5 @@
 ﻿@page "/register"
 @using SGE.Aplicacion.CasosDeUso
-@using SGE.Aplicacion.Entidades
 
 @inject UsuarioRegistrarCasoDeUso       UsuarioRegistrarCasoDeUso
 @inject NavigationManager               NavigationManager
@@ -16,42 +15,42 @@
                         <form method="post" @onsubmit="DoRegister">
                             <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                                 <div class="sm:col-span-2">
-                                    <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo electrónico</label>
-                                    <input @bind="_email" type="email" name="email" id="email" 
-                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="email">Correo electrónico</label>
+                                    <input @bind="_email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" id="email" name="email"
                                            @onfocus="ClearError"
-                                           placeholder="juan@@ejemplo.com" required="">
+                                           placeholder="juan@@ejemplo.com"
+                                           required="" type="email">
                                 </div>
                                 <div class="w-full">
-                                    <label for="firstname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
-                                    <input @bind="_firstname" type="text" min="3" max="32" name="firstname" id="firstname" 
-                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="firstname">Nombre</label>
+                                    <input @bind="_firstname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" id="firstname" max="32" min="3" name="firstname"
                                            @onfocus="ClearError"
-                                           placeholder="Juan" required="">
+                                           placeholder="Juan"
+                                           required="" type="text">
                                 </div>
                                 <div class="w-full">
-                                    <label for="lastname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellido</label>
-                                    <input @bind="_lastname" type="text" min="3" max="32" name="lastname" id="lastname" 
-                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="lastname">Apellido</label>
+                                    <input @bind="_lastname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" id="lastname" max="32" min="3" name="lastname"
                                            @onfocus="ClearError"
-                                           placeholder="Perez" required="">
+                                           placeholder="Perez"
+                                           required="" type="text">
                                 </div>
                                 <div class="w-full">
-                                    <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contraseña</label>
-                                    <input @bind="_password" type="password" min="6" name="password" id="password" 
-                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="password">Contraseña</label>
+                                    <input @bind="_password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" id="password" min="6" name="password"
                                            @onfocus="ClearError"
-                                           placeholder="Contraseña" required="">
+                                           placeholder="Contraseña"
+                                           required="" type="password">
                                 </div>
                                 <div class="w-full">
-                                    <label for="repeat_password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Repetir contraseña</label>
-                                    <input @bind="_repeatPassword" type="password" min="6" name="repeat_password" id="repeat_password" 
-                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="repeat_password">Repetir contraseña</label>
+                                    <input @bind="_repeatPassword" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" id="repeat_password" min="6" name="repeat_password"
                                            @onfocus="ClearError"
-                                           placeholder="Repetir contraseña" required="">
+                                           placeholder="Repetir contraseña"
+                                           required="" type="password">
                                 </div>
                             </div>
-                            <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
+                            <button class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800" type="submit">
                                 Registrarme
                             </button>
                             <div class="text-center">
@@ -60,7 +59,7 @@
                             <hr class="mt-4"/>
                             <p class="mt-4 text-sm text-center text-gray-600 dark:text-gray-400">
                                 ¿Ya tienes una cuenta?
-                                <a href="login" class="font-medium text-primary-600 dark:text-primary-500 hover:underline">Iniciar sesión</a>
+                                <a class="font-medium text-primary-600 dark:text-primary-500 hover:underline" href="login">Iniciar sesión</a>
                             </p>
                         </form>
                     </div>
@@ -77,25 +76,25 @@
 
 @code {
 
-    private string _email = "";
-    private string _firstname = "";
-    private string _lastname = "";
-    private string _password = "";
+    private string _email          = "";
+    private string _firstname      = "";
+    private string _lastname       = "";
+    private string _password       = "";
     private string _repeatPassword = "";
-    
+
     private string _error = " ";
-    
+
     private void DoRegister() {
         if (_password != _repeatPassword) {
             _error = "Las contraseñas no coinciden";
             return;
         }
-        
+
         if (string.IsNullOrEmpty(_email) || string.IsNullOrEmpty(_firstname) || string.IsNullOrEmpty(_lastname) || string.IsNullOrEmpty(_password)) {
             _error = "Todos los campos son obligatorios";
             return;
         }
-        
+
         if (_password.Length < 6) {
             _error = "La contraseña debe tener al menos 6 caracteres";
             return;
@@ -108,9 +107,8 @@
         } catch (Exception e) {
             _error = e.Message;
         }
-
     }
-    
+
     private void ClearError() {
         _error = "";
     }

@@ -1,5 +1,4 @@
 ﻿@page "/expedientes/{ExpedienteId:int}/tramite/crear"
-
 @using SGE.Aplicacion.CasosDeUso
 @using SGE.Aplicacion.Enumerativos
 
@@ -14,20 +13,20 @@
         <form method="post" @onsubmit="CrearTramite">
             <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg p-3 sm:p-5 grid gap-4 grid-rows-2 grid-cols-1 sm:gap-6">
                 <div>
-                    <label for="etiqueta" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Etiqueta</label>
-                    <select @bind="_tramite.Etiqueta" name="etiqueta" id="etiqueta" class="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required="required">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="etiqueta">Etiqueta</label>
+                    <select @bind="_tramite.Etiqueta" class="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" id="etiqueta" name="etiqueta" required="required">
                         @foreach (EtiquetaTramite etiqueta in Enum.GetValues(typeof(EtiquetaTramite))) {
                             <option value="@etiqueta">@etiqueta</option>
                         }
                     </select>
                 </div>
                 <div>
-                    <label for="contenido" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contenido</label>
-                    <textarea @bind="_tramite.Contenido" name="contenido" id="contenido" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="required" placeholder="Ingrese el contenido"></textarea>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="contenido">Contenido</label>
+                    <textarea @bind="_tramite.Contenido" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="contenido" name="contenido" placeholder="Ingrese el contenido" required="required" rows="4"></textarea>
                 </div>
             </div>
-            <button type="submit"
-                    class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
+            <button class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+                    type="submit">
                 Crear Tramite
             </button>
         </form>
@@ -47,14 +46,12 @@
                                    ExpedienteId = ExpedienteId,
                                };
     }
-    
-    private void CrearTramite()
-    {
+
+    private void CrearTramite() {
         try {
             _tramiteAltaCasoDeUso.Ejecutar(_tramite, CurrentSession.Usuario!);
             NavigationManager.NavigateTo($"/expedientes/{ExpedienteId}");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             DialogoObjeto.Mostrar(e.Message, true);
         }
     }

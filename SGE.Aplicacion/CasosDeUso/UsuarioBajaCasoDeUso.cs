@@ -7,7 +7,7 @@ using SGE.Aplicacion.Interfaces.Servicios;
 namespace SGE.Aplicacion.CasosDeUso;
 
 public class UsuarioBajaCasoDeUso(
-    IRepositorioUsuario repositorioUsuario, 
+    IRepositorioUsuario   repositorioUsuario,
     IServicioAutorizacion servicioAutorizacion
 )
 {
@@ -17,7 +17,7 @@ public class UsuarioBajaCasoDeUso(
         if (!servicioAutorizacion.PoseeElPermiso(usuarioActual, PermisoEnum.ExpedienteBaja)) {
             throw new AutorizacionException("El usuario no tiene permisos para dar de baja un expediente.");
         }
-        
+
         repositorioUsuario.Delete(usuario);
     }
     #endregion

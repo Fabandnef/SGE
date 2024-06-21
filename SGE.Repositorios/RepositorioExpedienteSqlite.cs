@@ -8,6 +8,8 @@ namespace SGE.Repositorios;
 
 public class RepositorioExpedienteSqlite(SgeContext context) : IRepositorioExpediente
 {
+    #region IMPLEMENTACIONES DE INTERFACES -------------------------------------------------------------
+    #region IRepositorioExpediente
     public void ActualizarEstado(int idExpediente, EstadoExpediente estadoExpediente)
     {
         try {
@@ -28,9 +30,10 @@ public class RepositorioExpedienteSqlite(SgeContext context) : IRepositorioExped
     public void Alta(Expediente expediente)
     {
         if (expediente.Id != 0) {
-            throw new RepositorioException("Error al dar de alta un expediente. No se pueden asignar los ID manualmente.");
+            throw new
+                RepositorioException("Error al dar de alta un expediente. No se pueden asignar los ID manualmente.");
         }
-        
+
         try {
             context.Expedientes.Add(expediente);
             context.SaveChanges();
@@ -55,12 +58,15 @@ public class RepositorioExpedienteSqlite(SgeContext context) : IRepositorioExped
         }
     }
 
-    public Expediente? BuscarPorId(int idExpediente) => context.Expedientes.Include("Tramites").Include("UsuarioUltimaModificacion").Include("Tramites.UsuarioUltimaModificacion").FirstOrDefault(e => e.Id == idExpediente);
+    public Expediente? BuscarPorId(int idExpediente)
+        => context.Expedientes.Include("Tramites").Include("UsuarioUltimaModificacion")
+                  .Include("Tramites.UsuarioUltimaModificacion").FirstOrDefault(e => e.Id == idExpediente);
 
-    public List<Expediente> Listar(int pagina) => context.Expedientes.Include("UsuarioUltimaModificacion").Include("Tramites")
-                                                         .Skip((pagina - 1) * 10).Take(10).ToList();
-    
     public int ContarTotal() => context.Expedientes.Count();
+
+    public List<Expediente> Listar(int pagina)
+        => context.Expedientes.Include("UsuarioUltimaModificacion").Include("Tramites")
+                  .Skip((pagina - 1) * 10).Take(10).ToList();
 
     public void Modificar(Expediente expediente)
     {
@@ -70,4 +76,6 @@ public class RepositorioExpedienteSqlite(SgeContext context) : IRepositorioExped
             throw new RepositorioException($"Error al modificar el expediente con id {expediente.Id}. {e.Message}");
         }
     }
+    #endregion
+    #endregion
 }

@@ -1,5 +1,4 @@
 ﻿@page "/tramites/listar/etiqueta/{EtiquetaId:int}/{Page:int?}"
-
 @using SGE.Aplicacion.CasosDeUso
 @using SGE.Aplicacion.Enumerativos
 
@@ -128,8 +127,8 @@
 
 @code {
 
-    [Parameter] public int? Page { get; set; } = 1;
-    [Parameter] public int EtiquetaId { get; set; }
+    [Parameter] public int? Page       { get; set; } = 1;
+    [Parameter] public int  EtiquetaId { get; set; }
 
     private DialogoEliminarTramite DialogoEliminar { get; set; } = null!;
     private Dialogo                DialogoObjeto   { get; set; } = null!;
@@ -211,7 +210,7 @@
             if (!int.TryParse(e.Value!.ToString(), out int etiqueta)) {
                 etiqueta = -1;
             }
-            
+
             if (etiqueta == -1) {
                 NavigationManager.NavigateTo("/tramites/listar");
             }

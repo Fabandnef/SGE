@@ -1,5 +1,4 @@
 ﻿@page "/tramites/listar/{Page:int?}"
-
 @using SGE.Aplicacion.CasosDeUso
 @using SGE.Aplicacion.Enumerativos
 
@@ -18,11 +17,11 @@
             <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                 <div class="w-full md:w-1/2 flex">
                     <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            @onchange="@(ListarPorEtiqueta)" id="etiqueta" name="etiqueta" title="Filtrar por etiqueta...">
-                    <option value="-1">Ver todos</option>
-                    @foreach (EtiquetaTramite etiqueta in Enum.GetValues(typeof(EtiquetaTramite))) {
-                        <option value="@((int)etiqueta)">@etiqueta</option>
-                    }
+                            id="etiqueta" name="etiqueta" @onchange="@(ListarPorEtiqueta)" title="Filtrar por etiqueta...">
+                        <option value="-1">Ver todos</option>
+                        @foreach (EtiquetaTramite etiqueta in Enum.GetValues(typeof(EtiquetaTramite))) {
+                            <option value="@((int)etiqueta)">@etiqueta</option>
+                        }
                     </select>
                 </div>
             </div>
@@ -219,11 +218,11 @@
             if (!int.TryParse(e.Value!.ToString(), out int etiqueta)) {
                 etiqueta = -1;
             }
-            
+
             if (etiqueta == -1) {
                 NavigationManager.NavigateTo("/tramites/listar");
             }
-            
+
             NavigationManager.NavigateTo($"/tramites/listar/etiqueta/{etiqueta}");
         } catch (Exception ex) {
             DialogoObjeto.Mostrar(ex.Message, true);

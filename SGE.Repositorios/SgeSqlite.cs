@@ -7,6 +7,7 @@ namespace SGE.Repositorios;
 
 static public class SgeSqlite
 {
+    #region METODOS PUBLICOS ---------------------------------------------------------------------------
     static public void SetUp()
     {
         using SgeContext context = new();
@@ -31,7 +32,9 @@ static public class SgeSqlite
             Console.WriteLine(ex.Message);
         }
     }
+    #endregion
 
+    #region METODOS ------------------------------------------------------------------------------------
     static private void AddPermisos(SgeContext contexto)
     {
         contexto.Permisos
@@ -69,4 +72,5 @@ static public class SgeSqlite
 
         contexto.SaveChanges();
     }
+    #endregion
 }

@@ -1,15 +1,14 @@
 ﻿@page "/usuarios/listar/{Page:int?}"
-
 @using SGE.Aplicacion.CasosDeUso
 @using SGE.Aplicacion.Excepciones
 
-@inject NavigationManager           NavigationManager
-@inject Session                     CurrentSession
-@inject UsuarioListarCasoDeUso      _usuarioListarCasoDeUso
-@inject UsuarioContarTotalCasoDeUso _usuarioContarTotalCasoDeUso
-@inject UsuarioBajaCasoDeUso        _usuarioBajaCasoDeUso
+@inject NavigationManager               NavigationManager
+@inject Session                         CurrentSession
+@inject UsuarioListarCasoDeUso          _usuarioListarCasoDeUso
+@inject UsuarioContarTotalCasoDeUso     _usuarioContarTotalCasoDeUso
+@inject UsuarioBajaCasoDeUso            _usuarioBajaCasoDeUso
 
-<DialogoEliminarUsuario @ref="DialogoEliminar" OnConfirmado="@(args => EliminarUsuario((Usuario)args))" />
+<DialogoEliminarUsuario OnConfirmado="@(args => EliminarUsuario((Usuario)args))" @ref="DialogoEliminar"/>
 <Dialogo @ref="DialogoObjeto"/>
 <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
     <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
@@ -26,9 +25,9 @@
                         </div>
                     </div>
                     @if (_usuarios.Count == 0) {
-                    <div class="border-b dark:border-gray-700">
-                        <div class="px-4 py-3 text-center">No hay usuarios para mostrar</div>
-                    </div>
+                        <div class="border-b dark:border-gray-700">
+                            <div class="px-4 py-3 text-center">No hay usuarios para mostrar</div>
+                        </div>
                     } else {
                         @foreach (Usuario u in _usuarios) {
                             <div class="flex border-b dark:border-gray-700 cursor-default">
@@ -76,37 +75,37 @@
                     <span class="font-semibold text-gray-900 dark:text-white">@_totalUsuarios</span>
                 </span>
                 @if (_totalPages > 1) {
-                <ul class="inline-flex items-stretch -space-x-px">
-                    <li>
-                        <div class="flex cursor-pointer items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                             href="#" @onclick="PreviousPage">
-                            <span class="sr-only">Anterior</span>
-                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path clip-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" fill-rule="evenodd"/>
-                            </svg>
-                        </div>
-                    </li>
-                    @for (int i = 1; i <= Math.Min(_totalPages, 5); i++) {
-                    if (i == _page) {
-                    <li>
-                        <a class="flex items-center justify-center text-sm z-10 py-2 px-3 leading-tight text-primary-600 bg-primary-50 border border-primary-300 hover:bg-primary-100 hover:text-primary-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white" href="@($"/expediente/listar/{i}")">@i</a>
-                    </li>
-                    } else {
-                    <li>
-                        <a class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" href="@($"/expediente/listar/{i}")">@i</a>
-                    </li>
-                    }
-                    }
-                    <li>
-                        <div class="flex cursor-pointer items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                             href="#" @onclick="NextPage">
-                            <span class="sr-only">Siguiente</span>
-                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"/>
-                            </svg>
-                        </div>
-                    </li>
-                </ul>
+                    <ul class="inline-flex items-stretch -space-x-px">
+                        <li>
+                            <div class="flex cursor-pointer items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                 href="#" @onclick="PreviousPage">
+                                <span class="sr-only">Anterior</span>
+                                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path clip-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" fill-rule="evenodd"/>
+                                </svg>
+                            </div>
+                        </li>
+                        @for (int i = 1; i <= Math.Min(_totalPages, 5); i++) {
+                            if (i == _page) {
+                                <li>
+                                    <a class="flex items-center justify-center text-sm z-10 py-2 px-3 leading-tight text-primary-600 bg-primary-50 border border-primary-300 hover:bg-primary-100 hover:text-primary-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white" href="@($"/expediente/listar/{i}")">@i</a>
+                                </li>
+                            } else {
+                                <li>
+                                    <a class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" href="@($"/expediente/listar/{i}")">@i</a>
+                                </li>
+                            }
+                        }
+                        <li>
+                            <div class="flex cursor-pointer items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                 href="#" @onclick="NextPage">
+                                <span class="sr-only">Siguiente</span>
+                                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"/>
+                                </svg>
+                            </div>
+                        </li>
+                    </ul>
                 }
             </nav>
         </div>
@@ -117,15 +116,15 @@
 @code {
     [Parameter] public int? Page { get; set; } = 1;
 
-    private DialogoEliminarUsuario DialogoEliminar     { get; set; } = null!;
-    private Dialogo             DialogoObjeto { get; set; } = null!;
-    private List<Usuario>          _usuarios      = [];
-    private int                       _totalUsuarios = 0;
-    private string                    _error            = "";
-    private int                       _page             = 0;
-    private int                       _totalPages       = 0;
-    private bool                      HasPreviousPage => _page > 1;
-    private bool                      HasNextPage     => _page < _totalPages;
+    private DialogoEliminarUsuario DialogoEliminar { get; set; } = null!;
+    private Dialogo                DialogoObjeto   { get; set; } = null!;
+    private List<Usuario>          _usuarios = [];
+    private int                    _totalUsuarios;
+    private string                 _error = "";
+    private int                    _page;
+    private int                    _totalPages;
+    private bool                   HasPreviousPage => _page > 1;
+    private bool                   HasNextPage     => _page < _totalPages;
 
     protected override void OnInitialized() {
         try {
@@ -148,11 +147,11 @@
             _error = e.Message;
         }
     }
-    
+
     private void Init() {
         _totalUsuarios = _usuarioContarTotalCasoDeUso.Ejecutar();
-        _totalPages       = (int)Math.Ceiling((double)_totalUsuarios / 10);
-        _page             = Page ?? 1;
+        _totalPages    = (int)Math.Ceiling((double)_totalUsuarios / 10);
+        _page          = Page ?? 1;
         _usuarios      = _usuarioListarCasoDeUso.Ejecutar(_page);
     }
 
@@ -177,7 +176,7 @@
     private void EditarUsuario(Usuario usuario) {
         NavigationManager.NavigateTo($"/usuarios/{usuario.Id}/editar");
     }
-    
+
     private void EliminarUsuarioConfirmar(Usuario usuario) {
         DialogoEliminar.Mostrar(usuario);
     }
@@ -192,4 +191,5 @@
             StateHasChanged();
         }
     }
+
 }

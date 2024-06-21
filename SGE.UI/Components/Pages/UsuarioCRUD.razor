@@ -1,11 +1,10 @@
 ﻿@using SGE.Aplicacion.CasosDeUso
 @using SGE.Aplicacion.Interfaces.Servicios
-
 @inject UsuarioModificarCasoDeUso UsuarioModificarCasoDeUso
 @inject PermisoListarCasoDeUso    PermisoListarCasoDeUso
 @inject Session                   CurrentSession
 @inject IServicioAutorizacion     ServicioAutorizacion
-@inject IServicioDeClaves ServicioDeClaves
+@inject IServicioDeClaves         ServicioDeClaves
 
 <Dialogo @ref="DialogoObjeto"/>
 <section class="bg-gray-50 dark:bg-gray-900">
@@ -16,17 +15,17 @@
                 <div class="w-full">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="nombre">Nombre</label>
                     @if (IsEditable) {
-                        <input @bind="Usuario.Nombre" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"  
+                        <input @bind="Usuario.Nombre" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                id="nombre" name="nombre" placeholder="Ingrese su nombre..." type="text">
                     } else {
                         <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            id="nombre" name="nombre" readonly type="text" value="@Usuario.Nombre">
+                               id="nombre" name="nombre" readonly type="text" value="@Usuario.Nombre">
                     }
                 </div>
                 <div class="w-full">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="apellido">Apellido</label>
                     @if (IsEditable) {
-                        <input @bind="Usuario.Apellido" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"  
+                        <input @bind="Usuario.Apellido" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                id="apellido" name="apellido" placeholder="Ingrese su apellido..." type="text">
                     } else {
                         <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -36,11 +35,11 @@
                 <div class="sm:col-span-2">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="email">Email</label>
                     @if (IsEditable) {
-                    <input @bind="Usuario.Email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                           id="email" name="email" placeholder="Ingrese su Email..." type="email">
+                        <input @bind="Usuario.Email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                               id="email" name="email" placeholder="Ingrese su Email..." type="email">
                     } else {
-                    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                           id="email" name="email" readonly type="email" value="@Usuario.Email">
+                        <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                               id="email" name="email" readonly type="email" value="@Usuario.Email">
                     }
                 </div>
                 <div class="w-full">
@@ -56,11 +55,11 @@
                 <div class="w-full">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="contraseña">Confirme su contraseña</label>
                     @if (IsEditable) {
-                    <input @bind="_passwordConfirmacion" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                           id="contraseñaConfirmacion" name="contraseñaConfirmacion" placeholder="Confirme su nueva contraseña..." type="password">
+                        <input @bind="_passwordConfirmacion" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                               id="contraseñaConfirmacion" name="contraseñaConfirmacion" placeholder="Confirme su nueva contraseña..." type="password">
                     } else {
-                    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500  dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                           id="contraseñaConfirmacion" name="contraseñaConfirmacion" readonly type="password" value="* * * * * * * * * * *">
+                        <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500  dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                               id="contraseñaConfirmacion" name="contraseñaConfirmacion" readonly type="password" value="* * * * * * * * * * *">
                     }
                 </div>
                 <div class="w-full">
@@ -82,14 +81,14 @@
                             @foreach (Permiso permiso in ObtenerPermisosDb()) {
                                 <li class="p-3 flex w-full border-gray-200 rounded-t-lg dark:border-gray-600">
                                     <div class="flex items-center h-5">
-                                        <input id="permiso-@permiso.Id" 
-                                               checked="@(VerificarPermiso(Usuario, permiso))" disabled="@(!IsEditable)"
-                                               @onchange="eventArgs => { CheckboxClicked(permiso, eventArgs.Value!); }"
-                                               aria-describedby="helper-checkbox-text" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <input aria-describedby="helper-checkbox-text"
+                                               checked="@(VerificarPermiso(Usuario, permiso))" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                               disabled="@(!IsEditable)"
+                                               id="permiso-@permiso.Id" @onchange="eventArgs => { CheckboxClicked(permiso, eventArgs.Value!); }" type="checkbox" value="">
                                     </div>
                                     <div class="ms-2 text-sm pl-3">
-                                        <label for="permiso-@permiso.Id" class="font-medium text-gray-900 dark:text-gray-300">@permiso.Nombre</label>
-                                        <p id="helper-checkbox-text" class="font-normal text-xs italic text-gray-500 dark:text-gray-300">@permiso.Descripcion</p>
+                                        <label class="font-medium text-gray-900 dark:text-gray-300" for="permiso-@permiso.Id">@permiso.Nombre</label>
+                                        <p class="font-normal text-xs italic text-gray-500 dark:text-gray-300" id="helper-checkbox-text">@permiso.Descripcion</p>
                                     </div>
                                 </li>
                             }
@@ -99,14 +98,14 @@
             </div>
             <div class="flex items-center space-x-4">
                 @if (IsEditable) {
-                <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="submit">
-                    Guardar cambios
-                </button>
+                    <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="submit">
+                        Guardar cambios
+                    </button>
                 } else {
-                <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                        @onclick="Editar" type="button">
-                    Editar
-                </button>
+                    <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                            @onclick="Editar" type="button">
+                        Editar
+                    </button>
                 }
             </div>
 
@@ -125,21 +124,19 @@
     private string        _passwordConfirmacion = "";
     private bool          _passwordCambiada     = false;
 
-    private void CheckboxClicked(Permiso permiso, object checkedValue)
-    {
+    private void CheckboxClicked(Permiso permiso, object checkedValue) {
         if ((bool)checkedValue) {
             Permisos.Add(permiso);
         } else {
             Permiso? p = Permisos.Find(p => p.Nombre == permiso.Nombre);
+
             if (p != null) {
                 Permisos.Remove(p);
             }
-        } 
-            
+        }
     }
 
-    protected override void OnParametersSet()
-    {
+    protected override void OnParametersSet() {
         InicializarPermisos();
         base.OnParametersSet();
     }
@@ -149,45 +146,41 @@
             Permisos.Add(p);
         }
     }
-    
-    private void Editar()
-    {
+
+    private void Editar() {
         IsEditable = true;
         StateHasChanged();
     }
 
-    private void ModificarUsuario()
-    {
-
+    private void ModificarUsuario() {
         if (_password != _passwordConfirmacion) {
             DialogoObjeto.Mostrar("Las contraseñas no coinciden", true);
             return;
         }
-        
+
         try {
-            
             _passwordCambiada = !string.IsNullOrEmpty(_password) && !string.IsNullOrEmpty(_passwordConfirmacion);
-            
-            if(_passwordCambiada)
+
+            if (_passwordCambiada)
                 Usuario.Password = _password;
 
             Usuario.Permisos.Clear();
             Usuario.Permisos = Permisos;
-            
+
             IsEditable = false;
-            
+
             UsuarioModificarCasoDeUso.Ejecutar(Usuario, CurrentSession.Usuario!, _passwordCambiada);
             DialogoObjeto.Mostrar("Usuario modificado correctamente");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             DialogoObjeto.Mostrar(e.Message, true);
         }
+
         StateHasChanged();
     }
 
     private bool VerificarPermiso(Usuario usuario, Permiso permiso) {
         return usuario.Permisos.Any(p => p.Nombre == permiso.Nombre) || ((permiso.Nombre == "AdminGeneral") && usuario.IsAdmin);
     }
-    
+
     private List<Permiso> ObtenerPermisosDb() => PermisoListarCasoDeUso.Ejecutar();
 }

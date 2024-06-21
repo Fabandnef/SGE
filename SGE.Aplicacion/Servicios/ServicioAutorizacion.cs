@@ -19,7 +19,8 @@ public class ServicioAutorizacion(IRepositorioUsuario repositorioUsuario) : ISer
         // El downside de esto, es que si el permiso está cacheado, y se le quita o se le agregan permisos
         // al usuario, no se va a reflejar en la autorización hasta que el usuario navegue
         // a alguna URL y el sistema refresque los permisos automáticamente. Refrescarlos también acá
-        return usuario.IsAdmin || repositorioUsuario.GetUsuario(usuario.Email)!.Permisos.Any(p => p.Nombre == permisoEnum.ToString());
+        return usuario.IsAdmin ||
+               repositorioUsuario.GetUsuario(usuario.Email)!.Permisos.Any(p => p.Nombre == permisoEnum.ToString());
     }
     #endregion
     #endregion

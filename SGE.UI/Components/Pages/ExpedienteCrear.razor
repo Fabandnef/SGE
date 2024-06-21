@@ -1,29 +1,28 @@
 ﻿@page "/expedientes/crear"
-
 @using SGE.Aplicacion.CasosDeUso
 @using SGE.Aplicacion.Enumerativos
 
-@inject NavigationManager             NavigationManager
+@inject NavigationManager               NavigationManager
 @inject ExpedienteAltaCasoDeUso         _expedienteAltaCasoDeUso
-@inject Session                        CurrentSession
+@inject Session                         CurrentSession
 <section class="bg-gray-50 dark:bg-gray-900">
     <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
         <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Cargar un nuevo expediente</h2>
         <form method="post" @onsubmit="CrearExpediente">
             <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                 <div class="sm:col-span-2">
-                    <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Carátula</label>
-                    <input type="text" name="name" id="name" 
-                           @bind="_caratula" @onfocus="() => _error = string.Empty"
-                           class="@(!string.IsNullOrEmpty(_error) ? "border-red-700 dark:border-red-700" : "border-gray-300 dark:border-gray-600" ) bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                           placeholder="Ingrese una carátula" required="required">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="name">Carátula</label>
+                    <input @bind="_caratula" class="@(!string.IsNullOrEmpty(_error) ? "border-red-700 dark:border-red-700" : "border-gray-300 dark:border-gray-600") bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" id="name"
+                           name="name" @onfocus="() => _error = string.Empty"
+                           placeholder="Ingrese una carátula"
+                           required="required" type="text">
                     <div class="text-center pt-2">
                         <span class="text-sm h-4 block text-red-500 dark:text-red-400">@_error</span>
                     </div>
                 </div>
             </div>
-            <button type="submit" 
-                    class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
+            <button class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+                    type="submit">
                 Crear expediente
             </button>
         </form>
@@ -31,16 +30,16 @@
 </section>
 
 @code {
-    
+
     private string _caratula = string.Empty;
-    private string _error = string.Empty;
+    private string _error    = string.Empty;
 
     private void CrearExpediente() {
         Expediente expediente = new() {
                                           Caratula = _caratula.Trim(),
-                                          Estado = EstadoExpediente.RecienIniciado,
+                                          Estado   = EstadoExpediente.RecienIniciado,
                                       };
-        
+
         try {
             _expedienteAltaCasoDeUso.Ejecutar(expediente, CurrentSession.Usuario!);
             NavigationManager.NavigateTo($"/expedientes/{expediente.Id}");
@@ -48,4 +47,5 @@
             _error = e.Message;
         }
     }
+
 }
