@@ -28,6 +28,10 @@ public class UsuarioValidador : IUsuarioValidador
             error += "La contraseña no puede estar vacía ni pueden ser solo espacios en blanco.";
         }
 
+        if (usuario.Password.Length < 6) {
+            error += "La contraseña debe tener al menos 6 caracteres.";
+        }
+
         return string.IsNullOrWhiteSpace(error);
     }
     #endregion
