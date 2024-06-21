@@ -56,8 +56,10 @@ public class RepositorioTramiteSqlite(SgeContext context) : IRepositorioTramite
         }
     }
 
-    public List<Tramite> ObtenerPorEtiqueta(EtiquetaTramite etiquetaTramite)
-        => context.Tramites.Include("UsuarioUltimaModificacion").Where(t => t.Etiqueta == etiquetaTramite).ToList();
+    public List<Tramite> ObtenerPorEtiqueta(EtiquetaTramite etiquetaTramite, int pagina = 1)
+        => context.Tramites.Include("UsuarioUltimaModificacion")
+                  .Where(t => t.Etiqueta == etiquetaTramite)
+                  .Skip((pagina - 1) * 10).Take(10).ToList();
 
     public Tramite? ObtenerPorId(int idTramite) => context.Tramites.Include("UsuarioUltimaModificacion").FirstOrDefault(t => t.Id == idTramite);
 

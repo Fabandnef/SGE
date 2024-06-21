@@ -1,0 +1,25 @@
+﻿@page "/usuarios"
+
+@inject Session                         CurrentSession
+@inject NavigationManager               NavigationManager
+
+@code {
+
+    protected override void OnInitialized() {
+        switch (CurrentSession.Usuario) {
+            case null:
+                NavigationManager.NavigateTo("/");
+                break;
+
+            case { IsAdmin: true, }:
+                NavigationManager.NavigateTo($"/usuarios/listar");
+                break;
+            
+            default:
+                NavigationManager.NavigateTo($"/usuarios/{CurrentSession.Usuario.Id}");
+                break;
+        }
+
+    }
+
+}

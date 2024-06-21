@@ -83,7 +83,7 @@
                                 <li class="p-3 flex w-full border-gray-200 rounded-t-lg dark:border-gray-600">
                                     <div class="flex items-center h-5">
                                         <input id="permiso-@permiso.Id" 
-                                               checked="@(Usuario.Permisos.Contains(permiso) || (permiso.Nombre=="AdminGeneral" && Usuario.IsAdmin))" disabled="@(!IsEditable)"
+                                               checked="@(VerificarPermiso(Usuario, permiso))" disabled="@(!IsEditable)"
                                                @onchange="eventArgs => { CheckboxClicked(permiso, eventArgs.Value!); }"
                                                aria-describedby="helper-checkbox-text" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                     </div>
@@ -120,23 +120,22 @@
 
     private Dialogo DialogoObjeto { get; set; } = null!;
 
-    private List<Permiso> _permisos { get; set; } = new();
+    private List<Permiso> Permisos { get; set; } = new();
     private string        _password             = "";
     private string        _passwordConfirmacion = "";
     private bool          _passwordCambiada     = false;
 
     private void CheckboxClicked(Permiso permiso, object checkedValue)
     {
-        if((bool) checkedValue && !_permisos.Contains(permiso))
-            _permisos.Add(permiso);
-        else if(!(bool) checkedValue && _permisos.Contains(permiso))
-            _permisos.Remove(permiso);
-        
-        Console.WriteLine("CheckboxClicked");
-
-        foreach (Permiso p in _permisos) {
-            Console.WriteLine(p.Nombre);
-        }
+        if ((bool)checkedValue) {
+            Permisos.Add(permiso);
+        } else {
+            Permiso? p = Permisos.Find(p => p.Nombre == permiso.Nombre);
+            if (p != null) {
+                Permisos.Remove(p);
+            }
+        } 
+            
     }
 
     protected override void OnParametersSet()
@@ -145,10 +144,9 @@
         base.OnParametersSet();
     }
 
-    private void InicializarPermisos()
-    {
-        foreach (Permiso p in Usuario.Permisos) {
-            _permisos.Add(p);
+    private void InicializarPermisos() {
+        foreach (Permiso p in ObtenerPermisosDb().Where(p => Usuario.Permisos.Any(permiso => permiso.Nombre == p.Nombre))) {
+            Permisos.Add(p);
         }
     }
     
@@ -173,7 +171,8 @@
             if(_passwordCambiada)
                 Usuario.Password = _password;
 
-            Usuario.Permisos = _permisos;
+            Usuario.Permisos.Clear();
+            Usuario.Permisos = Permisos;
             
             IsEditable = false;
             
@@ -184,6 +183,10 @@
             DialogoObjeto.Mostrar(e.Message, true);
         }
         StateHasChanged();
+    }
+
+    private bool VerificarPermiso(Usuario usuario, Permiso permiso) {
+        return usuario.Permisos.Any(p => p.Nombre == permiso.Nombre) || ((permiso.Nombre == "AdminGeneral") && usuario.IsAdmin);
     }
     
     private List<Permiso> ObtenerPermisosDb() => PermisoListarCasoDeUso.Ejecutar();

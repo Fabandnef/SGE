@@ -20,7 +20,17 @@ public class RepositorioUsuarioSqlite(SgeContext context) : IRepositorioUsuario
     public void Update(Usuario usuario)
     {
         try {
-            context.Usuarios.Update(usuario);
+            Usuario usuarioDb = context.Usuarios.Include("Permisos").FirstOrDefault(u => u.Id == usuario.Id)!;
+            context.Entry(usuarioDb).CurrentValues.SetValues(usuario);
+            
+            usuarioDb.Permisos.Clear();
+            
+            foreach (Permiso permiso in usuario.Permisos) {
+                usuarioDb.Permisos.Add(context.Permisos.Find(permiso.Id)!);
+            }
+            
+            context.Update(usuarioDb);
+            
             context.SaveChanges();
         } catch (Exception e) {
             throw new RepositorioException($"Error al actualizar el usuario con email {usuario.Email}. {e.Message}");
