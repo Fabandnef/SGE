@@ -1,7 +1,5 @@
 ﻿@using SGE.Aplicacion.CasosDeUso
-@using SGE.Aplicacion.Enumerativos
 @using SGE.Aplicacion.Interfaces.Servicios
-@using SGE.Aplicacion.Servicios
 
 @inject UsuarioModificarCasoDeUso UsuarioModificarCasoDeUso
 @inject PermisoListarCasoDeUso    PermisoListarCasoDeUso
@@ -84,7 +82,10 @@
                             @foreach (Permiso permiso in ObtenerPermisosDb()) {
                                 <li class="p-3 flex w-full border-gray-200 rounded-t-lg dark:border-gray-600">
                                     <div class="flex items-center h-5">
-                                        <input id="permiso-@permiso.Id" checked="@(Usuario.Permisos.Contains(permiso) || (permiso.Nombre=="AdminGeneral" && Usuario.IsAdmin))" disabled="@(!IsEditable)" aria-describedby="helper-checkbox-text" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <input id="permiso-@permiso.Id" 
+                                               checked="@(Usuario.Permisos.Contains(permiso) || (permiso.Nombre=="AdminGeneral" && Usuario.IsAdmin))" disabled="@(!IsEditable)"
+                                               @onchange="eventArgs => { CheckboxClicked(permiso, eventArgs.Value!); }"
+                                               aria-describedby="helper-checkbox-text" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                     </div>
                                     <div class="ms-2 text-sm pl-3">
                                         <label for="permiso-@permiso.Id" class="font-medium text-gray-900 dark:text-gray-300">@permiso.Nombre</label>
@@ -118,10 +119,38 @@
     [Parameter] public          bool    IsEditable { get; set; }
 
     private DialogoAlerta DialogoAlertaObjeto { get; set; } = null!;
-    
-    private string _password = "";
-    private string _passwordConfirmacion = "";
-    private bool _passwordCambiada = false;
+
+    private List<Permiso> _permisos { get; set; } = new();
+    private string        _password             = "";
+    private string        _passwordConfirmacion = "";
+    private bool          _passwordCambiada     = false;
+
+    private void CheckboxClicked(Permiso permiso, object checkedValue)
+    {
+        if((bool) checkedValue && !_permisos.Contains(permiso))
+            _permisos.Add(permiso);
+        else if(!(bool) checkedValue && _permisos.Contains(permiso))
+            _permisos.Remove(permiso);
+        
+        Console.WriteLine("CheckboxClicked");
+
+        foreach (Permiso p in _permisos) {
+            Console.WriteLine(p.Nombre);
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        InicializarPermisos();
+        base.OnParametersSet();
+    }
+
+    private void InicializarPermisos()
+    {
+        foreach (Permiso p in Usuario.Permisos) {
+            _permisos.Add(p);
+        }
+    }
     
     private void Editar()
     {
@@ -143,6 +172,8 @@
             
             if(_passwordCambiada)
                 Usuario.Password = _password;
+
+            Usuario.Permisos = _permisos;
             
             IsEditable = false;
             
