@@ -32,7 +32,7 @@ public class Program
         
         // SINGLETONS
         // Session almacena los datos de la sesión del usuario
-        builder.Services.AddSingleton<Session>();
+        builder.Services.AddScoped<Session>();
         
         // SCOPED
         // Usuario es la entidad que representa al usuario
@@ -60,6 +60,12 @@ public class Program
         builder.Services.AddTransient<ExpedienteModificarCasoDeUso>();
         builder.Services.AddTransient<ExpedienteBuscarPorIdConTramitesCasoDeUso>();
         builder.Services.AddTransient<TramiteAltaCasoDeUso>();
+        builder.Services.AddTransient<TramiteBajaCasoDeUso>();
+        builder.Services.AddTransient<TramiteBuscarPorIdCasoDeUso>();
+        builder.Services.AddTransient<TramiteConsultaPorEtiquetaCasoDeUso>();
+        builder.Services.AddTransient<TramiteContarTotalCasoDeUso>();
+        builder.Services.AddTransient<TramiteListarCasoDeUso>();
+        builder.Services.AddTransient<TramiteModificacionCasoDeUso>();
         builder.Services.AddTransient<UsuarioLoginCasoDeUso>();
         builder.Services.AddTransient<UsuarioRegistrarCasoDeUso>();
         builder.Services.AddTransient<UsuarioRefrescarCasoDeUso>();
@@ -69,8 +75,6 @@ public class Program
         builder.Services.AddTransient<UsuarioListarCasoDeUso>();
         builder.Services.AddTransient<UsuarioContarTotalCasoDeUso>();
         builder.Services.AddTransient<UsuarioBajaCasoDeUso>();
-        
-
         //Servicios
         builder.Services.AddTransient<ServicioActualizacionEstado>();
         builder.Services.AddTransient<EspecificacionCambioEstado>();

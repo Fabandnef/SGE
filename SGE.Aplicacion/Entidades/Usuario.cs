@@ -20,6 +20,8 @@ public class Usuario : ITimestampable
     
     public string NombreCompleto => $"{Nombre} {Apellido}";
     
+    public string Iniciales => $"{Nombre[0]}{Apellido[0]}";
+    
     public required string Email { get; set; }
     
     public required string Password { get; set; }

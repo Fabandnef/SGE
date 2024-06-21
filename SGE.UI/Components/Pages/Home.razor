@@ -1,24 +1,10 @@
 ﻿@page "/"
 
-@using SGE.Aplicacion.Entidades
 @inherits LayoutComponentBase
-@inject NavigationManager               NavigationManager
+
 @inject Session                         CurrentSession
 
 <PageTitle>Home</PageTitle>
 @if (CurrentSession.Usuario == null) {
     <Login/>
-} else {
-    <h1>@CurrentSession.Usuario.Nombre</h1>
-    <a href="#" @onclick="Logout">Logout</a>
-}
-
-
-@code {
-
-    private void Logout() {
-        CurrentSession.Usuario = null;
-        NavigationManager.NavigateTo("/", true);
-    }
-
 }

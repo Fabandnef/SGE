@@ -1,4 +1,4 @@
-﻿@page "/expediente/{Id:int?}/editar"
+﻿@page "/expedientes/{Id:int?}/editar"
 @using SGE.Aplicacion.CasosDeUso
 
 @inject ExpedienteBuscarPorIdConTramitesCasoDeUso _expedienteBuscarPorIdConTramitesCasoDeUso
@@ -17,7 +17,7 @@
 
     protected override void OnInitialized() {
         if (Id == null) {
-            NavigationManager.NavigateTo("/expediente/listar");
+            NavigationManager.NavigateTo("/expedientes/listar");
             return;
         }
         

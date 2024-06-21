@@ -1,7 +1,5 @@
-﻿using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Metadata;
 using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Interfaces.Repositorios;
 
@@ -10,10 +8,10 @@ namespace SGE.Repositorios;
 public sealed class SgeContext : DbContext
 {
     public DbSet<Expediente> Expedientes { get; set; }
-    public DbSet<Tramite> Tramites { get; set; }
-    public DbSet<Usuario> Usuarios { get; set; }
-    public DbSet<Permiso> Permisos { get; set; }
-    
+    public DbSet<Tramite>    Tramites    { get; set; }
+    public DbSet<Usuario>    Usuarios    { get; set; }
+    public DbSet<Permiso>    Permisos    { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite("data source=SGE.sqlite");
@@ -30,17 +28,17 @@ public sealed class SgeContext : DbContext
                 editedTimestampable.UpdatedAt = DateTime.Now;
             }
         }
-        
+
         return base.SaveChanges();
     }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Expediente>()
                     .HasOne(expediente => expediente.UsuarioUltimaModificacion)
                     .WithMany()
                     .HasForeignKey(expediente => expediente.IdUsuarioUltimaModificacion);
-        
+
         modelBuilder.Entity<Tramite>()
                     .HasOne(tramite => tramite.UsuarioUltimaModificacion)
                     .WithMany()

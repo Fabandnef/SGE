@@ -2,8 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using SGE.Aplicacion.Entidades;
 using SGE.Aplicacion.Enumerativos;
-using SGE.Aplicacion.Interfaces.Servicios;
-using SGE.Aplicacion.Servicios;
 
 namespace SGE.Repositorios;
 
@@ -14,17 +12,16 @@ static public class SgeSqlite
         using SgeContext context = new();
 
         try {
-
 //            context.Database.EnsureDeleted();
-            
+
             if (!context.Database.EnsureCreated()) {
                 return;
             }
-            
+
             DbConnection connection = context.Database.GetDbConnection();
             connection.Open();
-            using (DbCommand command = connection.CreateCommand())
-            {
+
+            using (DbCommand command = connection.CreateCommand()) {
                 command.CommandText = "PRAGMA journal_mode=DELETE;";
                 command.ExecuteNonQuery();
             }

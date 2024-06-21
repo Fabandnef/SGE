@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using SGE.Aplicacion.Enumerativos;
-
-namespace SGE.Aplicacion.Entidades;
+﻿namespace SGE.Aplicacion.Entidades;
 
 public class Permiso
 {

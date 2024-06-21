@@ -1,11 +1,8 @@
-﻿@implements IDisposable
-@using SGE.Aplicacion.CasosDeUso
+﻿@inherits LayoutComponentBase
+@implements IDisposable
 
-@inherits LayoutComponentBase
-
-@inject Session                   CurrentSession
-@inject NavigationManager         NavigationManager
-@inject UsuarioRefrescarCasoDeUso UsuarioRefrescarCasoDeUso
+@inject Session           CurrentSession
+@inject NavigationManager NavigationManager
 <div class="h-full w-full flex flex-col">
     <NavBar OnToggleMenu="ToggleMenu" Usuario="@Usuario"/>
 
@@ -38,9 +35,7 @@
          && !string.IsNullOrEmpty(currentUri)
          && !currentUri.StartsWith("login")
          && !currentUri.StartsWith("register")) {
-            NavigationManager.NavigateTo("/", true);
-        } else if (CurrentSession.Usuario != null) {
-            CurrentSession.Usuario = UsuarioRefrescarCasoDeUso.Ejecutar(CurrentSession.Usuario);
+            NavigationManager.NavigateTo("/");
         }
 
         NavigationManager.RegisterLocationChangingHandler(LocationChangingHandler);
@@ -52,17 +47,11 @@
         string currentUri = NavigationManager.ToBaseRelativePath(NavigationManager.Uri).ToLower();
 
         if ((CurrentSession.Usuario == null) && !currentUri.StartsWith("login") && !currentUri.StartsWith("register")) {
-            NavigationManager.NavigateTo("/login", true);
+            NavigationManager.NavigateTo("/login");
         }
 
         if ((CurrentSession.Usuario != null) && (currentUri.StartsWith("login") || currentUri.StartsWith("register"))) {
-            NavigationManager.NavigateTo("/", true);
-        }
-        
-        // Si está logueado, refrescar los permisos
-        // (Entity guarda en caché los objetos de la DB en el contexto)
-        if (CurrentSession.Usuario != null) {
-            CurrentSession.Usuario = UsuarioRefrescarCasoDeUso.Ejecutar(CurrentSession.Usuario);
+            NavigationManager.NavigateTo("/");
         }
     }
 
