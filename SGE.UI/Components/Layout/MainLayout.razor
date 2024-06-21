@@ -38,6 +38,8 @@
             NavigationManager.NavigateTo("/");
         }
 
+        // Esto sirve para interrumpir la carga de páginas y que no pueda acceder a una zona
+        // protegida sin estar logueado.
         NavigationManager.RegisterLocationChangingHandler(LocationChangingHandler);
         NavigationManager.LocationChanged += LocationChanged;
         base.OnInitialized();

@@ -6,7 +6,6 @@
 @inject Session                             CurrentSession
 @inject TramiteListarCasoDeUso              _tramiteListarCasoDeUso
 @inject TramiteContarTotalCasoDeUso         _tramiteContarTotalCasoDeUso
-@inject TramiteConsultaPorEtiquetaCasoDeUso _tramiteConsultaPorEtiquetaCasoDeUso
 @inject TramiteBajaCasoDeUso                _tramiteBajaCasoDeUso
 
 <DialogoEliminarTramite OnConfirmado="@(args => EliminarTramite((Tramite)args))" @ref="DialogoEliminar"/>
@@ -168,8 +167,6 @@
     }
 
     private void Init() {
-        // get parameter "etiqueta" from url query
-        string uri = NavigationManager.GetUriWithQueryParameter("etiqueta", "0");
         _totalTramites = _tramiteContarTotalCasoDeUso.Ejecutar();
         _totalPages    = (int)Math.Ceiling((double)_totalTramites / 10);
         _page          = Page ?? 1;
