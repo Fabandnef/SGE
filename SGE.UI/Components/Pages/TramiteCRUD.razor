@@ -1,28 +1,41 @@
 ﻿@using SGE.Aplicacion.CasosDeUso
+@using SGE.Aplicacion.Enumerativos
 
-@inject TramiteModificacionCasoDeUso              TramiteModificacionCasoDeUso
-@inject Session                                   CurrentSession
+@inject TramiteModificacionCasoDeUso TramiteModificacionCasoDeUso
+@inject Session                      CurrentSession
 
 <Dialogo @ref="DialogoObjeto"/>
 <section class="bg-gray-50 dark:bg-gray-900">
     <div class="bg-white dark:bg-gray-800 mt-8 max-w-2xl px-6 py-8 mx-auto lg:py-12 sm:rounded-lg shadow-md">
-        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tramite #@Tramite.Id</h2>
+        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tramite #@Tramite.Id (Expediente #@Tramite.ExpedienteId)</h2>
         <form @onsubmit="ModificarTramite">
             <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
                 <div class="sm:col-span-2">
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="caratula">Carátula</label>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="caratula">Contenido</label>
                     @if (IsEditable) {
-                        <input @bind="Tramite.Contenido" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" id="caratula"
-                               name="caratula" placeholder="Ingrese una carátula para el Tramite..." @ref="_inputContenido" type="text">
+                        <input @bind="Tramite.Contenido" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                               id="contenido" name="contenido" placeholder="Ingrese una carátula para el Tramite..." @ref="_inputContenido" type="text">
                     } else {
                         <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                               id="caratula" name="caratula" readonly type="text" value="@Tramite.Contenido">
+                               id="contenido" name="contenido" readonly type="text" value="@Tramite.Contenido">
                     }
                 </div>
                 <div class="w-full">
-                    <label class="block  mb-2 text-sm font-medium text-gray-900 dark:text-white" for="estado">Estado</label>
-                    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                           id="estado" name="estado" readonly type="text" value="@Tramite.Etiqueta.ToString()"/>
+                    <label class="block  mb-2 text-sm font-medium text-gray-900 dark:text-white" for="estado">Etiqueta</label>
+                    <select @bind="_etiquetaForm" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                            id="etiqueta" name="etiqueta" readonly type="text">
+                        @foreach (EtiquetaTramite etiqueta in Enum.GetValues(typeof(EtiquetaTramite))) {
+                            @if (etiqueta == Tramite.Etiqueta) {
+                                <option value="@((int)etiqueta)" selected>@etiqueta</option>
+                            } else {
+                                @if (IsEditable) {
+                                    <option value="@((int)etiqueta)">@etiqueta</option>
+                                } else {
+                                    <option value="@((int)etiqueta)" disabled>@etiqueta</option>
+                                }
+                            }
+                        }
+                    </select>
                 </div>
                 <div class="w-full">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="created_at">Fecha de creación</label>
@@ -41,14 +54,14 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     @if (IsEditable) {
-                    <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="submit">
-                        Guardar cambios
-                    </button>
+                        <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="submit">
+                            Guardar cambios
+                        </button>
                     } else {
-                    <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                            @onclick="Editar" type="button">
-                        Editar
-                    </button>
+                        <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                                @onclick="Editar" type="button">
+                            Editar
+                        </button>
                     }
                 </div>
             </div>
@@ -57,11 +70,13 @@
 </section>
 
 @code{
-    [Parameter] public required Tramite Tramite { get; set; }
-    [Parameter] public          bool       IsEditable { get; set; }
+    [Parameter] public required Tramite Tramite    { get; set; }
+    [Parameter] public          bool    IsEditable { get; set; }
 
     private Dialogo          DialogoObjeto { get; set; } = null!;
     private ElementReference _inputContenido;
+
+    private int _etiquetaForm;
 
     protected override Task OnAfterRenderAsync(bool firstRender) {
         if (!IsEditable) return base.OnAfterRenderAsync(firstRender);
@@ -79,6 +94,7 @@
     private void ModificarTramite() {
         try {
             IsEditable = false;
+            Tramite.Etiqueta = (EtiquetaTramite)_etiquetaForm;
             TramiteModificacionCasoDeUso.Ejecutar(Tramite, CurrentSession.Usuario!);
             DialogoObjeto.Mostrar("Tramite modificado correctamente.");
             StateHasChanged();

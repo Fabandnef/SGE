@@ -69,7 +69,7 @@
         try {
             Usuario    usuario    = UsuarioLoginCasoDeUso.Ejecutar(_email, _password);
             CurrentSession.Usuario = usuario;
-            NavigationManager.NavigateTo("/expedientes/listar", true);
+            NavigationManager.NavigateTo("/expedientes/listar");
         } catch (Exception e) {
             DialogoObjeto.Mostrar(e.Message, true);
         }

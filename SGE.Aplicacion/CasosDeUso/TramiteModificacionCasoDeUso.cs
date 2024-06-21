@@ -29,7 +29,7 @@ public class TramiteModificacionCasoDeUso(
         tramite.IdUsuarioUltimaModificacion = usuario.Id;
 
         repositorioTramite.Modificar(tramite);
-        servicioActualizacionEstado.ActualizarEstado(tramite);
+        servicioActualizacionEstado.ActualizarEstado(tramite.ExpedienteId);
     }
     #endregion
 }

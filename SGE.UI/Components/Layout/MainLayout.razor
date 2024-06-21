@@ -1,9 +1,8 @@
-﻿@using SGE.Aplicacion.CasosDeUso
+﻿@inherits LayoutComponentBase
+@implements IDisposable
 
-@inherits LayoutComponentBase
-
-@inject Session                   CurrentSession
-@inject NavigationManager         NavigationManager
+@inject Session           CurrentSession
+@inject NavigationManager NavigationManager
 <div class="h-full w-full flex flex-col">
     <NavBar OnToggleMenu="ToggleMenu" Usuario="@Usuario"/>
 
@@ -36,10 +35,42 @@
          && !string.IsNullOrEmpty(currentUri)
          && !currentUri.StartsWith("login")
          && !currentUri.StartsWith("register")) {
-            NavigationManager.NavigateTo("/", true);
+            NavigationManager.NavigateTo("/");
         }
-        
+
+        NavigationManager.RegisterLocationChangingHandler(LocationChangingHandler);
+        NavigationManager.LocationChanged += LocationChanged;
         base.OnInitialized();
+    }
+
+    void LocationChanged(object? sender, LocationChangedEventArgs e) {
+        string currentUri = NavigationManager.ToBaseRelativePath(NavigationManager.Uri).ToLower();
+
+        if ((CurrentSession.Usuario == null) && !currentUri.StartsWith("login") && !currentUri.StartsWith("register")) {
+            NavigationManager.NavigateTo("/login");
+        }
+
+        if ((CurrentSession.Usuario != null) && (currentUri.StartsWith("login") || currentUri.StartsWith("register"))) {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
+    private ValueTask LocationChangingHandler(LocationChangingContext arg) {
+        if (!arg.IsNavigationIntercepted) {
+            return ValueTask.CompletedTask;
+        }
+
+        string currentUri = NavigationManager.ToBaseRelativePath(arg.TargetLocation).ToLower();
+
+        if ((CurrentSession.Usuario == null) && !currentUri.StartsWith("login") && !currentUri.StartsWith("register")) {
+            arg.PreventNavigation();
+        }
+
+        return ValueTask.CompletedTask;
+    }
+
+    void IDisposable.Dispose() {
+        NavigationManager.LocationChanged -= LocationChanged;
     }
 
 }

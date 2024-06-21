@@ -18,7 +18,7 @@
             </li>
             <li class="@(!PuedeVerUsuariosMenu ? "hidden" : "")">
                 <a aria-controls="dropdown-sales" class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                   href="/usuarios" type="button">
+                   href="@(IsAdmin ? "/usuarios/listar" : "/usuarios/" + CurrentSession.Usuario?.Id)" type="button">
                     <i class="fa fa-duotone fa-user menu-icon"></i>
                     <span class="flex-1 ml-3 text-left whitespace-nowrap">Usuarios</span>
                 </a>
@@ -153,7 +153,8 @@
     private bool   ShowExpedientesMenu    { get; set; } = false;
     private bool   ShowTramitesMenu       { get; set; } = false;
     private bool   ShowUsuariosMenu       { get; set; } = false;
-    private bool   PuedeVerUsuariosMenu   => CurrentSession.Usuario is { IsAdmin: true, };
+    private bool   PuedeVerUsuariosMenu   => CurrentSession.Usuario != null;
+    private bool   IsAdmin                => CurrentSession.Usuario is { IsAdmin: true };
     private string ExpedientesMenuVisible => ShowExpedientesMenu ? "" : "hidden";
     private string TramitesMenuVisible    => ShowTramitesMenu ? "" : "hidden";
     private string UsuariosMenuVisible    => ShowUsuariosMenu && PuedeVerUsuariosMenu ? "" : "hidden";

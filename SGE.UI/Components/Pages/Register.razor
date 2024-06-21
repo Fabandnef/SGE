@@ -104,7 +104,7 @@
         try {
             Usuario usuario = UsuarioRegistrarCasoDeUso.Ejecutar(_firstname, _lastname, _email, _password);
             CurrentSession.Usuario = usuario;
-            NavigationManager.NavigateTo("/", true);
+            NavigationManager.NavigateTo("/");
         } catch (Exception e) {
             _error = e.Message;
         }

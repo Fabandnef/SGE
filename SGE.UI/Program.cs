@@ -32,7 +32,7 @@ public class Program
         
         // SINGLETONS
         // Session almacena los datos de la sesión del usuario
-        builder.Services.AddSingleton<Session>();
+        builder.Services.AddScoped<Session>();
         
         // SCOPED
         // Usuario es la entidad que representa al usuario
@@ -59,6 +59,7 @@ public class Program
         builder.Services.AddTransient<ExpedienteBuscarPorIdConTramitesCasoDeUso>();
         builder.Services.AddTransient<TramiteAltaCasoDeUso>();
         builder.Services.AddTransient<TramiteBajaCasoDeUso>();
+        builder.Services.AddTransient<TramiteBuscarPorIdCasoDeUso>();
         builder.Services.AddTransient<TramiteConsultaPorEtiquetaCasoDeUso>();
         builder.Services.AddTransient<TramiteContarTotalCasoDeUso>();
         builder.Services.AddTransient<TramiteListarCasoDeUso>();
