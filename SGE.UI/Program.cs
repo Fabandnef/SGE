@@ -68,7 +68,6 @@ public class Program
         builder.Services.AddTransient<TramiteModificacionCasoDeUso>();
         builder.Services.AddTransient<UsuarioLoginCasoDeUso>();
         builder.Services.AddTransient<UsuarioRegistrarCasoDeUso>();
-        builder.Services.AddTransient<UsuarioRefrescarCasoDeUso>();
         builder.Services.AddTransient<UsuarioModificarCasoDeUso>();
         builder.Services.AddTransient<UsuarioBuscarPorIdCasoDeUso>();
         builder.Services.AddTransient<PermisoListarCasoDeUso>();
