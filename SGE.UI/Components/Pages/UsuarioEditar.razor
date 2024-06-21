@@ -1,4 +1,4 @@
-﻿@page "/usuario/{Id:int?}/editar"
+﻿@page "/usuarios/{Id:int?}/editar"
 @using SGE.Aplicacion.CasosDeUso
 
 @inject UsuarioBuscarPorIdCasoDeUso _usuarioBuscarPorIdCasoDeUso
@@ -22,7 +22,7 @@
         UsuarioActual = CurrentSession.Usuario;
         
         if(!UsuarioActual!.IsAdmin && Id != UsuarioActual!.Id) {
-            NavigationManager.NavigateTo($"/usuario/{UsuarioActual!.Id}/");
+            NavigationManager.NavigateTo($"/usuarios/{UsuarioActual!.Id}/");
         }
 
         if (UsuarioActual.IsAdmin && Id == null) {

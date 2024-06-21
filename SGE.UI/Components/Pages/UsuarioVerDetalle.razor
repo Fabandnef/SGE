@@ -26,7 +26,7 @@
         }
 
         if (UsuarioActual.IsAdmin && (Id == null)) {
-            NavigationManager.NavigateTo("/usuario/listar");
+            NavigationManager.NavigateTo("/usuarios/listar");
         }
 
         Usuario = _usuarioBuscarPorIdCasoDeUso.Ejecutar(Id ?? UsuarioActual.Id);
