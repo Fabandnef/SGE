@@ -41,8 +41,10 @@ public class Program
         builder.Services.AddScoped<IRepositorioExpediente, RepositorioExpedienteSqlite>();
         builder.Services.AddScoped<IRepositorioTramite, RepositorioTramiteSqlite>();
         builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuarioSqlite>();
+        builder.Services.AddScoped<IRepositorioPermiso, RepositorioPermisoSqlite>();
         builder.Services.AddScoped<IExpedienteValidador, ExpedienteValidador>();
         builder.Services.AddScoped<ITramiteValidador, TramiteValidador>();
+        builder.Services.AddScoped<IUsuarioValidador, UsuarioValidador>();
         // Servicios
         builder.Services.AddScoped<IServicioDeClaves, ServicioDeClaves>();
         builder.Services.AddScoped<IServicioAutorizacion, ServicioAutorizacionProvisorio>();
@@ -61,6 +63,13 @@ public class Program
         builder.Services.AddTransient<UsuarioLoginCasoDeUso>();
         builder.Services.AddTransient<UsuarioRegistrarCasoDeUso>();
         builder.Services.AddTransient<UsuarioRefrescarCasoDeUso>();
+        builder.Services.AddTransient<UsuarioModificarCasoDeUso>();
+        builder.Services.AddTransient<UsuarioBuscarPorIdCasoDeUso>();
+        builder.Services.AddTransient<PermisoListarCasoDeUso>();
+        builder.Services.AddTransient<UsuarioListarCasoDeUso>();
+        builder.Services.AddTransient<UsuarioContarTotalCasoDeUso>();
+        builder.Services.AddTransient<UsuarioBajaCasoDeUso>();
+        
 
         //Servicios
         builder.Services.AddTransient<ServicioActualizacionEstado>();

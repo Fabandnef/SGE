@@ -14,5 +14,9 @@ public interface IRepositorioUsuario
 
     public Usuario Refresh(Usuario usuario);
     
-    public List<Usuario> GetUsuarios();
+    public List<Usuario> GetUsuarios(int page);
+
+    public Usuario? BuscarPorId(int idUsuario);
+    
+    public int ContarTotal();
 }
