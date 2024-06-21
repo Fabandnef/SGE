@@ -5,7 +5,7 @@ using SGE.Aplicacion.Interfaces.Repositorios;
 
 namespace SGE.Repositorios;
 
-internal class RepositorioPermisoSqlite(SgeContext context) : IRepositorioPermiso
+public class RepositorioPermisoSqlite(SgeContext context) : IRepositorioPermiso
 {
     public void Agregar(Permiso permiso)
     {
@@ -36,4 +36,6 @@ internal class RepositorioPermisoSqlite(SgeContext context) : IRepositorioPermis
             throw new RepositorioException($"Error al eliminar el permiso con id {permiso.Id}. {e.Message}");
         }
     }
+
+    public List<Permiso> GetPermisos() => context.Permisos.ToList();
 }
