@@ -32,7 +32,7 @@
                                 @onclick="() => Toggle(0)"
                         >
                             <span>¿Cómo crear un expediente?</span>
-                            <svg data-accordion-icon="" class="w-6 h-6 @(_flechas[0] ? "" : "rotate-180") shrink-0" fill="currentColor"
+                            <svg data-accordion-icon="" class="w-6 h-6 @(_flechas[0] ? "rotate-180" : "") shrink-0" fill="currentColor"
                                  viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd"
                                       d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -53,7 +53,7 @@
                                 @onclick="() => Toggle(1)"
                         >
                             <span>¿Cómo crear un trámite?</span>
-                            <svg data-accordion-icon="" class="w-6 h-6 @(_flechas[1] ? "" : "rotate-180") shrink-0" fill="currentColor"
+                            <svg data-accordion-icon="" class="w-6 h-6 @(_flechas[1] ? "rotate-180" : "") shrink-0" fill="currentColor"
                                  viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd"
                                       d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -74,7 +74,7 @@
                                 @onclick="() => Toggle(2)"
                         >
                             <span>¿Cómo fue desarrollado?</span>
-                            <svg data-accordion-icon="" class="w-6 h-6 @(_flechas[2] ? "" : "rotate-180") shrink-0" fill="currentColor"
+                            <svg data-accordion-icon="" class="w-6 h-6 @(_flechas[2] ? "rotate-180" : "") shrink-0" fill="currentColor"
                                  viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd"
                                       d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -95,7 +95,7 @@
                                 @onclick="() => Toggle(3)"
                         >
                             <span>¿Qué gestor de base de datos utiliza?</span>
-                            <svg data-accordion-icon="" class="w-6 h-6 @(_flechas[3] ? "" : "rotate-180") shrink-0" fill="currentColor"
+                            <svg data-accordion-icon="" class="w-6 h-6 @(_flechas[3] ? "rotate-180" : "") shrink-0" fill="currentColor"
                                  viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd"
                                       d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -127,8 +127,8 @@
                 _acordiones[i] = false;
                 
             } else {
-                _flechas[index]        = true;
-                _acordiones[index] = true;
+                _flechas[index] = !_flechas[index];
+                _acordiones[index] = !_acordiones[index];
             }
         }
         StateHasChanged();
