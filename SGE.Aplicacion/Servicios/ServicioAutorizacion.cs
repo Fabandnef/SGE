@@ -9,7 +9,7 @@ namespace SGE.Aplicacion.Servicios;
 ///     Clase que implementa la interfaz IServicioAutorizacion. Permite autorizar a un usuario
 ///     a realizar ciertas acciones dentro del sistema.
 /// </summary>
-public class ServicioAutorizacionProvisorio(IRepositorioUsuario repositorioUsuario) : IServicioAutorizacion
+public class ServicioAutorizacion(IRepositorioUsuario repositorioUsuario) : IServicioAutorizacion
 {
     #region IMPLEMENTACIONES DE INTERFACES -------------------------------------------------------------
     #region IServicioAutorizacion

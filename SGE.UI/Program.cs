@@ -47,7 +47,7 @@ public class Program
         builder.Services.AddScoped<IUsuarioValidador, UsuarioValidador>();
         // Servicios
         builder.Services.AddScoped<IServicioDeClaves, ServicioDeClaves>();
-        builder.Services.AddScoped<IServicioAutorizacion, ServicioAutorizacionProvisorio>();
+        builder.Services.AddScoped<IServicioAutorizacion, ServicioAutorizacion>();
         
         // TRANSIENT
         // SgeContext es el contexto de la base de datos
