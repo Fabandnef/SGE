@@ -19,91 +19,92 @@
         <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6 ">
             <h2
                 class="mb-6 lg:mb-8 text-3xl lg:text-4xl tracking-tight font-extrabold text-center text-gray-900 dark:text-white">
-                Preguntas frecuentes</h2>
+                Preguntas frecuentes
+            </h2>
             <div class="mx-auto max-w-screen-md">
-                <div id="accordion-flush" data-accordion="collapse"
-                     data-active-classes="bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                     data-inactive-classes="text-gray-500 dark:text-gray-400">
-                    <h2 id="accordion-flush-heading-1" class="dark:bg-gray-800">
-                        <button type="button"
-                                class="flex justify-between items-center py-5 w-full font-medium text-left text-gray-900 bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                                data-accordion-target="#accordion-flush-body-1" aria-expanded="true"
-                                aria-controls="accordion-flush-body-1"
+                <div data-accordion="collapse" data-active-classes="bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                     data-inactive-classes="text-gray-500 dark:text-gray-400"
+                     id="accordion-flush">
+                    <h2 class="dark:bg-gray-800" id="accordion-flush-heading-1">
+                        <button aria-controls="accordion-flush-body-1"
+                                aria-expanded="true"
+                                class="flex justify-between items-center py-5 w-full font-medium text-left text-gray-900 bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white" data-accordion-target="#accordion-flush-body-1"
                                 @onclick="() => Toggle(0)"
-                        >
+                                type="button">
                             <span>¿Cómo crear un expediente?</span>
-                            <svg data-accordion-icon="" class="w-6 h-6 @(_flechas[0] ? "rotate-180" : "") shrink-0" fill="currentColor"
+                            <svg class="w-6 h-6 @(_flechas[0] ? "rotate-180" : "") shrink-0" data-accordion-icon="" fill="currentColor"
                                  viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
+                                <path clip-rule="evenodd"
                                       d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                      clip-rule="evenodd"></path>
+                                      fill-rule="evenodd">
+                                </path>
                             </svg>
                         </button>
                     </h2>
-                    <div id="accordion-flush-body-1" class="" aria-labelledby="accordion-flush-heading-1">
+                    <div aria-labelledby="accordion-flush-heading-1" class="" id="accordion-flush-body-1">
                         <div class="@(_acordiones[0] ? "block" : "hidden") py-5 border-b border-gray-200 dark:border-gray-700">
                             <p class="mb-2 text-gray-500 dark:text-gray-400">Para crear un expediente se debe clickear "Expedientes" en el menú de navegación izquierdo y luego clickear el botón "Agregar expediente"</p>
                         </div>
                     </div>
-                    <h2 id="accordion-flush-heading-2" class="dark:bg-gray-800">
-                        <button type="button"
-                                class="flex justify-between items-center py-5 w-full font-medium text-left text-gray-900 bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                                data-accordion-target="#accordion-flush-body-2" aria-expanded="true"
-                                aria-controls="accordion-flush-body-2"
+                    <h2 class="dark:bg-gray-800" id="accordion-flush-heading-2">
+                        <button aria-controls="accordion-flush-body-2"
+                                aria-expanded="true"
+                                class="flex justify-between items-center py-5 w-full font-medium text-left text-gray-900 bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white" data-accordion-target="#accordion-flush-body-2"
                                 @onclick="() => Toggle(1)"
-                        >
+                                type="button">
                             <span>¿Cómo crear un trámite?</span>
-                            <svg data-accordion-icon="" class="w-6 h-6 @(_flechas[1] ? "rotate-180" : "") shrink-0" fill="currentColor"
+                            <svg class="w-6 h-6 @(_flechas[1] ? "rotate-180" : "") shrink-0" data-accordion-icon="" fill="currentColor"
                                  viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
+                                <path clip-rule="evenodd"
                                       d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                      clip-rule="evenodd"></path>
+                                      fill-rule="evenodd">
+                                </path>
                             </svg>
                         </button>
                     </h2>
-                    <div id="accordion-flush-body-2" class="" aria-labelledby="accordion-flush-heading-2">
+                    <div aria-labelledby="accordion-flush-heading-2" class="" id="accordion-flush-body-2">
                         <div class="@(_acordiones[1] ? "block" : "hidden") py-5 border-b border-gray-200 dark:border-gray-700">
                             <p class="mb-2 text-gray-500 dark:text-gray-400">Para crear un trámite se debe primero crear un expediente (vea el primer FAQ) y luego, dentro del expediente, seleccionar la opción "Agregar trámite"</p>
                         </div>
                     </div>
-                    <h2 id="accordion-flush-heading-3" class="dark:bg-gray-800">
-                        <button type="button"
-                                class="flex justify-between items-center py-5 w-full font-medium text-left text-gray-900 bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                                data-accordion-target="#accordion-flush-body-3" aria-expanded="true"
-                                aria-controls="accordion-flush-body-3"
+                    <h2 class="dark:bg-gray-800" id="accordion-flush-heading-3">
+                        <button aria-controls="accordion-flush-body-3"
+                                aria-expanded="true"
+                                class="flex justify-between items-center py-5 w-full font-medium text-left text-gray-900 bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white" data-accordion-target="#accordion-flush-body-3"
                                 @onclick="() => Toggle(2)"
-                        >
+                                type="button">
                             <span>¿Cómo fue desarrollado?</span>
-                            <svg data-accordion-icon="" class="w-6 h-6 @(_flechas[2] ? "rotate-180" : "") shrink-0" fill="currentColor"
+                            <svg class="w-6 h-6 @(_flechas[2] ? "rotate-180" : "") shrink-0" data-accordion-icon="" fill="currentColor"
                                  viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
+                                <path clip-rule="evenodd"
                                       d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                      clip-rule="evenodd"></path>
+                                      fill-rule="evenodd">
+                                </path>
                             </svg>
                         </button>
                     </h2>
-                    <div id="accordion-flush-body-3" class="" aria-labelledby="accordion-flush-heading-3">
+                    <div aria-labelledby="accordion-flush-heading-3" class="" id="accordion-flush-body-3">
                         <div class="@(_acordiones[2] ? "block" : "hidden") py-5 border-b border-gray-200 dark:border-gray-700">
                             <p class="mb-2 text-gray-500 dark:text-gray-400">Se usó arquitectura limpia, separando lógica de aplicación, repositorios, e interfaz en 3 proyectos diferentes, referenciados entre si, y aprovechando la inyección de dependencias del blazor y la inversión de dependencia a abstracciones de interfaces para lograr una compatibilidad fluida, sin generar una dependencia fuerte entre ningún proyecto.</p>
                         </div>
                     </div>
-                    <h2 id="accordion-flush-heading-4" class="dark:bg-gray-800">
-                        <button type="button"
-                                class="flex justify-between items-center py-5 w-full font-medium text-left text-gray-900 bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                                data-accordion-target="#accordion-flush-body-4" aria-expanded="true"
-                                aria-controls="accordion-flush-body-4"
+                    <h2 class="dark:bg-gray-800" id="accordion-flush-heading-4">
+                        <button aria-controls="accordion-flush-body-4"
+                                aria-expanded="true"
+                                class="flex justify-between items-center py-5 w-full font-medium text-left text-gray-900 bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white" data-accordion-target="#accordion-flush-body-4"
                                 @onclick="() => Toggle(3)"
-                        >
+                                type="button">
                             <span>¿Qué gestor de base de datos utiliza?</span>
-                            <svg data-accordion-icon="" class="w-6 h-6 @(_flechas[3] ? "rotate-180" : "") shrink-0" fill="currentColor"
+                            <svg class="w-6 h-6 @(_flechas[3] ? "rotate-180" : "") shrink-0" data-accordion-icon="" fill="currentColor"
                                  viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
+                                <path clip-rule="evenodd"
                                       d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                      clip-rule="evenodd"></path>
+                                      fill-rule="evenodd">
+                                </path>
                             </svg>
                         </button>
                     </h2>
-                    <div id="accordion-flush-body-4" class="" aria-labelledby="accordion-flush-heading-3">
+                    <div aria-labelledby="accordion-flush-heading-3" class="" id="accordion-flush-body-4">
                         <div class="@(_acordiones[3] ? "block" : "hidden") py-5 border-b border-gray-200 dark:border-gray-700">
                             <p class="mb-2 text-gray-500 dark:text-gray-400">Utiliza SQLite el cual es un sistema de gestión de bases de datos relacional.</p>
                         </div>
@@ -115,23 +116,21 @@
 </section>
 
 @code {
-    private bool[] _flechas = new bool[4];
-    private bool[] _acordiones = new bool[4];
+    readonly private bool[] _flechas    = new bool[4];
+    readonly private bool[] _acordiones = new bool[4];
 
-    private void Toggle(int index)
-    {
-        for(int i = 0; i < _flechas.Length; i++)
-        {
+    private void Toggle(int index) {
+        for (int i = 0; i < _flechas.Length; i++) {
             if (i != index) {
                 _flechas[i]    = false;
                 _acordiones[i] = false;
-                
             } else {
-                _flechas[index] = !_flechas[index];
+                _flechas[index]    = !_flechas[index];
                 _acordiones[index] = !_acordiones[index];
             }
         }
+
         StateHasChanged();
     }
-    
+
 }

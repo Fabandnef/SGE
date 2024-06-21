@@ -3,7 +3,7 @@
 @inherits LayoutComponentBase
 
 @inject Session                         CurrentSession
-@inject NavigationManager NavigationManager
+@inject NavigationManager               NavigationManager
 <PageTitle>Home</PageTitle>
 @if (CurrentSession.Usuario == null) {
     <Login/>

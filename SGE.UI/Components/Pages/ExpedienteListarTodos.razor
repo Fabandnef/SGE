@@ -1,6 +1,5 @@
 ﻿@page "/expedientes/listar/{Page:int?}"
 @using SGE.Aplicacion.CasosDeUso
-@using SGE.Aplicacion.Excepciones
 
 @inject NavigationManager               NavigationManager
 @inject Session                         CurrentSession
@@ -147,7 +146,7 @@
         try {
             Init();
         } catch (Exception e) {
-            DialogoObjeto.Mostrar(e.Message);
+            DialogoObjeto.Mostrar(e.Message, true);
         }
     }
 
@@ -160,8 +159,8 @@
             }
 
             _expedientes = _expedienteListarCasoDeUso.Ejecutar(_page);
-        } catch (RepositorioException e) {
-            DialogoObjeto.Mostrar(e.Message);
+        } catch (Exception e) {
+            DialogoObjeto.Mostrar(e.Message, true);
         }
     }
 

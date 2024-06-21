@@ -120,7 +120,6 @@
     private Dialogo                DialogoObjeto   { get; set; } = null!;
     private List<Usuario>          _usuarios = [];
     private int                    _totalUsuarios;
-    private string                 _error = "";
     private int                    _page;
     private int                    _totalPages;
     private bool                   HasPreviousPage => _page > 1;
@@ -130,7 +129,7 @@
         try {
             Init();
         } catch (Exception e) {
-            _error = e.Message;
+            DialogoObjeto.Mostrar(e.Message, true);
         }
     }
 
@@ -143,8 +142,8 @@
             }
 
             _usuarios = _usuarioListarCasoDeUso.Ejecutar(_page);
-        } catch (RepositorioException e) {
-            _error = e.Message;
+        } catch (Exception e) {
+            DialogoObjeto.Mostrar(e.Message, true);
         }
     }
 

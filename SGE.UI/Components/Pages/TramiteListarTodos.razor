@@ -2,11 +2,11 @@
 @using SGE.Aplicacion.CasosDeUso
 @using SGE.Aplicacion.Enumerativos
 
-@inject NavigationManager                   NavigationManager
-@inject Session                             CurrentSession
-@inject TramiteListarCasoDeUso              _tramiteListarCasoDeUso
-@inject TramiteContarTotalCasoDeUso         _tramiteContarTotalCasoDeUso
-@inject TramiteBajaCasoDeUso                _tramiteBajaCasoDeUso
+@inject NavigationManager               NavigationManager
+@inject Session                         CurrentSession
+@inject TramiteListarCasoDeUso          _tramiteListarCasoDeUso
+@inject TramiteContarTotalCasoDeUso     _tramiteContarTotalCasoDeUso
+@inject TramiteBajaCasoDeUso            _tramiteBajaCasoDeUso
 
 <DialogoEliminarTramite OnConfirmado="@(args => EliminarTramite((Tramite)args))" @ref="DialogoEliminar"/>
 <Dialogo @ref="DialogoObjeto"/>
