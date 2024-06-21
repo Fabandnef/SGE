@@ -10,7 +10,7 @@
 @inject UsuarioBajaCasoDeUso        _usuarioBajaCasoDeUso
 
 <DialogoEliminarUsuario @ref="DialogoEliminar" OnConfirmado="@(args => EliminarUsuario((Usuario)args))" />
-<DialogoAlerta @ref="DialogoAlertaObjeto"/>
+<Dialogo @ref="DialogoObjeto"/>
 <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
     <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
         <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
@@ -133,7 +133,7 @@
     [Parameter] public int? Page { get; set; } = 1;
 
     private DialogoEliminarUsuario DialogoEliminar     { get; set; } = null!;
-    private DialogoAlerta             DialogoAlertaObjeto { get; set; } = null!;
+    private Dialogo             DialogoObjeto { get; set; } = null!;
     private List<Usuario>          _usuarios      = [];
     private int                       _totalUsuarios = 0;
     private string                    _error            = "";
@@ -202,7 +202,7 @@
             _usuarioBajaCasoDeUso.Ejecutar(usuario, CurrentSession.Usuario!);
             Init();
         } catch (Exception e) {
-            DialogoAlertaObjeto.Mostrar(e.Message, true);
+            DialogoObjeto.Mostrar(e.Message, true);
         } finally {
             StateHasChanged();
         }

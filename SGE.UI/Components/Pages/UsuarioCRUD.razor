@@ -7,7 +7,7 @@
 @inject IServicioAutorizacion     ServicioAutorizacion
 @inject IServicioDeClaves ServicioDeClaves
 
-<DialogoAlerta @ref="DialogoAlertaObjeto"/>
+<Dialogo @ref="DialogoObjeto"/>
 <section class="bg-gray-50 dark:bg-gray-900">
     <div class="bg-white dark:bg-gray-800 mt-8 max-w-2xl px-6 py-8 mx-auto lg:py-12 sm:rounded-lg shadow-md">
         <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Usuario #@Usuario.Id</h2>
@@ -118,7 +118,7 @@
     [Parameter] public required Usuario Usuario    { get; set; }
     [Parameter] public          bool    IsEditable { get; set; }
 
-    private DialogoAlerta DialogoAlertaObjeto { get; set; } = null!;
+    private Dialogo DialogoObjeto { get; set; } = null!;
 
     private List<Permiso> _permisos { get; set; } = new();
     private string        _password             = "";
@@ -162,7 +162,7 @@
     {
 
         if (_password != _passwordConfirmacion) {
-            DialogoAlertaObjeto.Mostrar("Las contraseñas no coinciden", true);
+            DialogoObjeto.Mostrar("Las contraseñas no coinciden", true);
             return;
         }
         
@@ -178,10 +178,10 @@
             IsEditable = false;
             
             UsuarioModificarCasoDeUso.Ejecutar(Usuario, CurrentSession.Usuario!, _passwordCambiada);
-            DialogoAlertaObjeto.Mostrar("Usuario modificado correctamente");
+            DialogoObjeto.Mostrar("Usuario modificado correctamente");
         }
         catch (Exception e) {
-            DialogoAlertaObjeto.Mostrar(e.Message, true);
+            DialogoObjeto.Mostrar(e.Message, true);
         }
         StateHasChanged();
     }
