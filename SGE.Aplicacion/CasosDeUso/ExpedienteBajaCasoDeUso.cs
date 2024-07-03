@@ -8,7 +8,6 @@ namespace SGE.Aplicacion.CasosDeUso;
 
 public class ExpedienteBajaCasoDeUso(
     IRepositorioExpediente repositorioExpediente,
-    IRepositorioTramite    repositorioTramite,
     IServicioAutorizacion  servicioAutorizacion
 )
 {
@@ -20,7 +19,6 @@ public class ExpedienteBajaCasoDeUso(
         }
 
         repositorioExpediente.Baja(idExpediente);
-        repositorioTramite.BajaPorExpediente(idExpediente);
     }
     #endregion
 }

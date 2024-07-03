@@ -31,28 +31,42 @@ public class Program
         // INYECCIÓN DE DEPENDENCIAS
         // -------------------------
 
-        // SINGLETONS
+        // -------------------------
+        // SCOPED
+        // -------------------------
+        
         // Session almacena los datos de la sesión del usuario
+        // Es scoped, para mantener viva la sessión en las mismas request
+        // pero iniciar una nueva en requests nuevas. Es horrendo, pero 
+        // así funciona el framework este.
         builder.Services.AddScoped<Session>();
 
-        // SCOPED
+        // -------------------------
+        // TRANSIENT
+        // -------------------------
+        
+        // Las inyecciones transient crean un objeto nuevo cada vez que se solicita
+        // por lo que no se comparte entre diferentes solicitudes. Esto es necesario
+        // para laburar con la base de datos, porque el contexto de la base de datos
+        // es una porquería con los tracking que hace, y es un dolor de cabeza modificar
+        // o eliminar entidades que se han traido en un contexto anterior.
+        
         // Usuario es la entidad que representa al usuario
-        builder.Services.AddScoped<Usuario>();
-
+        builder.Services.AddTransient<Usuario>();
+        
         // Repositorios
-        builder.Services.AddScoped<IRepositorioExpediente, RepositorioExpedienteSqlite>();
-        builder.Services.AddScoped<IRepositorioTramite, RepositorioTramiteSqlite>();
-        builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuarioSqlite>();
-        builder.Services.AddScoped<IRepositorioPermiso, RepositorioPermisoSqlite>();
-        builder.Services.AddScoped<IExpedienteValidador, ExpedienteValidador>();
-        builder.Services.AddScoped<ITramiteValidador, TramiteValidador>();
-        builder.Services.AddScoped<IUsuarioValidador, UsuarioValidador>();
+        builder.Services.AddTransient<IRepositorioExpediente, RepositorioExpedienteSqlite>();
+        builder.Services.AddTransient<IRepositorioTramite, RepositorioTramiteSqlite>();
+        builder.Services.AddTransient<IRepositorioUsuario, RepositorioUsuarioSqlite>();
+        builder.Services.AddTransient<IRepositorioPermiso, RepositorioPermisoSqlite>();
+        builder.Services.AddTransient<IExpedienteValidador, ExpedienteValidador>();
+        builder.Services.AddTransient<ITramiteValidador, TramiteValidador>();
+        builder.Services.AddTransient<IUsuarioValidador, UsuarioValidador>();
 
         // Servicios
-        builder.Services.AddScoped<IServicioDeClaves, ServicioDeClaves>();
-        builder.Services.AddScoped<IServicioAutorizacion, ServicioAutorizacion>();
+        builder.Services.AddTransient<IServicioDeClaves, ServicioDeClaves>();
+        builder.Services.AddTransient<IServicioAutorizacion, ServicioAutorizacion>();
 
-        // TRANSIENT
         // SgeContext es el contexto de la base de datos
         builder.Services.AddTransient<SgeContext>();
 
@@ -80,7 +94,7 @@ public class Program
         builder.Services.AddTransient<UsuarioContarTotalCasoDeUso>();
         builder.Services.AddTransient<UsuarioBajaCasoDeUso>();
 
-        //Servicios
+        // Servicios sin interfaz
         builder.Services.AddTransient<ServicioActualizacionEstado>();
         builder.Services.AddTransient<EspecificacionCambioEstado>();
 
