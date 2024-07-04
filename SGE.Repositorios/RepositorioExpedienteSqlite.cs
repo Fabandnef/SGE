@@ -71,6 +71,7 @@ public class RepositorioExpedienteSqlite(SgeContext context) : IRepositorioExped
     public void Modificar(Expediente expediente)
     {
         try {
+            context.Expedientes.Update(expediente);
             context.SaveChanges();
         } catch (Exception e) {
             throw new RepositorioException($"Error al modificar el expediente con id {expediente.Id}. {e.Message}");

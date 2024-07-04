@@ -54,6 +54,7 @@ public class RepositorioTramiteSqlite(SgeContext context) : IRepositorioTramite
     public void Modificar(Tramite tramite)
     {
         try {
+            context.Tramites.Update(tramite);
             context.SaveChanges();
         } catch (Exception e) {
             throw new RepositorioException($"Error al modificar el trámite con id {tramite.Id}. {e.Message}");

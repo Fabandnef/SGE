@@ -48,12 +48,30 @@
     void LocationChanged(object? sender, LocationChangedEventArgs e) {
         string currentUri = NavigationManager.ToBaseRelativePath(NavigationManager.Uri).ToLower();
 
-        if ((CurrentSession.Usuario == null) && !currentUri.StartsWith("login") && !currentUri.StartsWith("register")) {
-            NavigationManager.NavigateTo("/login");
-        }
+        switch (CurrentSession.Usuario) {
+            case null: {
+                if (!currentUri.StartsWith("login") && !currentUri.StartsWith("register")) {
+                    NavigationManager.NavigateTo("/login");
+                }
 
-        if ((CurrentSession.Usuario != null) && (currentUri.StartsWith("login") || currentUri.StartsWith("register"))) {
-            NavigationManager.NavigateTo("/");
+                break;
+            }
+
+            case { IsAdmin: false, }: {
+                if (currentUri.StartsWith("login") && currentUri.StartsWith("register")) {
+                    NavigationManager.NavigateTo("/");
+                }
+
+                break;
+            }
+                
+            case { IsAdmin: true, }: {
+                if (currentUri.StartsWith("login")) {
+                    NavigationManager.NavigateTo("/");
+                }
+
+                break;
+            }
         }
     }
 
