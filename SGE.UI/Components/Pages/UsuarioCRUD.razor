@@ -1,6 +1,7 @@
 ﻿@using SGE.Aplicacion.CasosDeUso
 @using SGE.Aplicacion.Interfaces.Servicios
 @inject UsuarioModificarCasoDeUso UsuarioModificarCasoDeUso
+@inject NavigationManager         NavigationManager
 @inject PermisoListarCasoDeUso    PermisoListarCasoDeUso
 @inject Session                   CurrentSession
 @inject IServicioAutorizacion     ServicioAutorizacion
@@ -119,7 +120,7 @@
 
     private Dialogo DialogoObjeto { get; set; } = null!;
 
-    private List<Permiso> Permisos { get; set; } = new();
+    private List<Permiso> Permisos { get; set; } = [];
     private string        _password             = "";
     private string        _passwordConfirmacion = "";
     private bool          _passwordCambiada     = false;
@@ -171,6 +172,7 @@
 
             UsuarioModificarCasoDeUso.Ejecutar(Usuario, CurrentSession.Usuario!, _passwordCambiada);
             DialogoObjeto.Mostrar("Usuario modificado correctamente");
+            NavigationManager.NavigateTo($"/usuarios/listar");
         } catch (Exception e) {
             DialogoObjeto.Mostrar(e.Message, true);
         }
