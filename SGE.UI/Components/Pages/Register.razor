@@ -90,7 +90,7 @@
             return;
         }
 
-        if (string.IsNullOrEmpty(_email) || string.IsNullOrEmpty(_firstname) || string.IsNullOrEmpty(_lastname) || string.IsNullOrEmpty(_password)) {
+        if (string.IsNullOrWhiteSpace(_email) || string.IsNullOrWhiteSpace(_firstname) || string.IsNullOrWhiteSpace(_lastname) || string.IsNullOrWhiteSpace(_password)) {
             _error = "Todos los campos son obligatorios";
             return;
         }

@@ -10,7 +10,7 @@ public class UsuarioLoginCasoDeUso(IServicioDeClaves servicioDeClaves, IReposito
     #region METODOS PUBLICOS ---------------------------------------------------------------------------
     public Usuario Ejecutar(string email, string password)
     {
-        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password)) {
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password)) {
             throw new AutorizacionException("El email y la contraseña son obligatorios.");
         }
 
